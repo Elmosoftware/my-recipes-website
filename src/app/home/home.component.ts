@@ -15,7 +15,7 @@ export class HomeComponent implements OnInit {
   private helper: Helper;
   public procastinationRandomUrl: string;
 
-  constructor(private cache: Cache) {
+  constructor(public cache: Cache) {
   }
 
   ngOnInit() {

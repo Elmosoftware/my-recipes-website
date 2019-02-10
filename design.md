@@ -261,3 +261,41 @@ Hay que probar si es posible. La otra alternativa es que Cloudinary permita hace
 
 De todas formas el paquete https://github.com/expressjs/multer permite configurar un memory storage.
 
+
+Cambios por migración a Heroku
+================================
+
+Nuevos DNS names:
+https://micocina.herokuapp.com/
+https://micocina-api.herokuapp.com/
+
+Cambios a la API:
+-----------------
+Ahora para lanzar la app:
+    npm start
+Para lanzarla con la  config de prod:
+    npm run startProd
+Para depurar:
+    Poner los puntos de interrupción y lanzar la tarea "Attach"
+
+Cambios al Website:
+-------------------
+Trabajar en desarrollo como siempre, (levantar la app con el script de powershell).
+
+Antes de deployar a heroku tenemos que emular el deploy con estos pasos:
+ - npm run postinstall
+    Esto va a crer la carpeta \dist con la app lista precompilada.
+ - npm start
+    Esto va a iniciar el server node tal como heroku lo va a haceren prod.
+        OJO!, la app va a correr con la configuración de PROD!!!! de todas formas no vamos a poder loguearnos como un usuario, porque la configuración de callback en Auth0 sigue apuntando al itio productivo verdadero.
+
+Orden tareas Feb 10th 2019:
+-----------------------
+v- Update Node and NPM versions.
+v- Deployar a Heroku la API
+v- Probar la app en local
+v- Investigar deploy de Angular Apps a Heroku
+ - Deployar la app a heroku
+ - Probar ambiente PROD
+ - D O C U M E N T A R TODO!!!
+ - continuar con desarrollo de Historia de Imagenes en Mis Recetas.

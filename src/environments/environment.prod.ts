@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
-  appURL: "https://misrecetas.now.sh",
-  apiURL: "https://misrecetas-api.now.sh/api/",
+  appURL: "https://micocina.herokuapp.com",
+  apiURL: "https://micocina-api.herokuapp.com/api/",
   apiManagementEndpoint: "management/",
   apiMediaEndpoint: "media/",
   authSettings: {
@@ -10,7 +10,7 @@ export const environment = {
     audience: 'https://elmosoftware.auth0.com/api/v2/', 
     dbConnection: "Username-Password-Authentication",
     responseType: 'token id_token',
-    redirectURI: 'https://misrecetas.now.sh/auth-callback',
+    redirectURI: 'https://micocina.herokuapp.com/auth-callback',
     scope: 'openid profile email update:users update:current_user_metadata' //Standard Open ID Claims so calls 
     //to \userinfo endpoint can return user data. Also this allows us to update users data like, metadata, change email, etc.
   },
