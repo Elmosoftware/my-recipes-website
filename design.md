@@ -286,8 +286,8 @@ Antes de deployar a heroku tenemos que emular el deploy con estos pasos:
  - npm run postinstall
     Esto va a crer la carpeta \dist con la app lista precompilada.
  - npm start
-    Esto va a iniciar el server node tal como heroku lo va a haceren prod.
-        OJO!, la app va a correr con la configuración de PROD!!!! de todas formas no vamos a poder loguearnos como un usuario, porque la configuración de callback en Auth0 sigue apuntando al itio productivo verdadero.
+    Esto va a iniciar el server node tal como heroku lo va a hacer en prod.
+        **OJO!: la app va a correr con la configuración de PROD!!!! de todas formas no vamos a poder loguearnos como un usuario, porque la configuración de callback en Auth0 sigue apuntando al sitio productivo verdadero.**
 
 Orden tareas Feb 10th 2019:
 -----------------------
@@ -295,7 +295,7 @@ v- Update Node and NPM versions.
 v- Deployar a Heroku la API
 v- Probar la app en local
 v- Investigar deploy de Angular Apps a Heroku
- - Deployar la app a heroku
- - Probar ambiente PROD
- - D O C U M E N T A R TODO!!!
+v- Deployar la app a heroku
+v- Probar ambiente PROD
+v- D O C U M E N T A R TODO!!!
  - continuar con desarrollo de Historia de Imagenes en Mis Recetas.

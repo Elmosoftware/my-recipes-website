@@ -6,18 +6,13 @@
         {
             "label": "Production Build",
             "type": "npm",
-            "script": "build",
+            "script": "postinstall",
             "problemMatcher": []
         },
         {
-            "label": "Production RUN (WATCH OUT!!: Will run with PRODUCTION SETTINGS!!)",
-            "type": "shell",
-            "command": "http-server",
-            "args": [
-                "./dist",
-                "-p 8080",
-                "--cors"
-              ]
+            "label": "Production RUN (WATCH OUT!!: PROD SETTINGS!!, user auth not possible.)",
+            "type": "npm",
+            "script": "startProd"
         },
         {
             "label": "Staging Build and Run",

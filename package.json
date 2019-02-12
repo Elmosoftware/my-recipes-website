@@ -8,6 +8,7 @@
     "build": "ng build",
     "postinstall": "ng build --aot -prod",
     "buildAndRunStage": "ng serve --target=production --environment=dev --port=8080 --watch=false",
+    "startProd": "set NODE_ENV=production && node server.js",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
