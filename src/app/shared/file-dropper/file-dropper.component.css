@@ -1,0 +1,21 @@
+.dropZone{
+    border: 2px dashed;
+}
+
+.dropZoneActive {
+    border-color: #0069d9;
+    color: #0069d9;
+    cursor: crosshair;
+}
+
+.dropZoneInactive{
+   border-color: #87afda;
+    color: #87afda;
+}
+
+.dropZoneDisabled{
+    border-color: #6c757d;
+    color: #6c757d;
+}
+
+

@@ -13,12 +13,17 @@ import { UnauthorizedErrorPageComponent } from './error-pages/unauthorized/unaut
 import { MyRecipesComponent } from './my-recipes/my-recipes.component';
 import { NotFoundErrorPageComponent } from './error-pages/not-found/not-found.component';
 import { AboutComponent } from './about/about.component';
+import { TestNewStuffComponent } from './test-new-stuff/test-new-stuff.component';
 
 const routes: Routes = [
   { 
     path: '', 
     redirectTo: '/home', 
     pathMatch: 'full' 
+  },
+  { 
+    path: 'test', 
+    component: TestNewStuffComponent 
   },
   { 
     path: 'home', 

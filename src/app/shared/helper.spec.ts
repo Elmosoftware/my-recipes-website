@@ -32,5 +32,28 @@ describe("Helper Class", () => {
             expect(h.estimatedFriendlyTime(180)).toBe("3 horas");
         });
     });
+    describe("getFileExtension", () => {
+        it("Must return '' when the file is ''", () => {
+            expect(h.getFileExtension("")).toBe("");
+        });
+        it("Must return '' when the file is a null reference", () => {
+            expect(h.getFileExtension(null)).toBe("");
+        });
+        it("Must return '' when the file is a undefined", () => {
+            expect(h.getFileExtension(undefined)).toBe("");
+        });
+        it("Must return '' when the file has no extension", () => {
+            expect(h.getFileExtension("filewithoutextension")).toBe("");
+        });
+        it("Must return the file extension on a normal file", () => {
+            expect(h.getFileExtension("filewithextension.ext")).toBe(".ext");
+        });
+        it("Must return the last file extension on file with multiple dots in the name", () => {
+            expect(h.getFileExtension("filewithextension.ext1.ext2.finalext")).toBe(".finalext");
+        });
+        it("Must return the file extension on a file without name", () => {
+            expect(h.getFileExtension(".ext")).toBe(".ext");
+        });
+    });
 });
 

@@ -36,6 +36,8 @@ import { NotFoundErrorPageComponent } from "./error-pages/not-found/not-found.co
 import { MyRecipesComponent } from './my-recipes/my-recipes.component';
 import { CarouselComponent } from './shared/carousel/carousel.component';
 import { AboutComponent } from './about/about.component';
+import { FileDropperComponent } from './shared/file-dropper/file-dropper.component';
+import { TestNewStuffComponent } from './test-new-stuff/test-new-stuff.component';
 
 //Services
 import { SubscriptionService } from "./services/subscription.service";
@@ -57,6 +59,7 @@ import { EditRecipeDirectionDialog } from "./standard-dialogs/edit-recipe-direct
 
 @NgModule({
   declarations: [
+    TestNewStuffComponent,
     AppComponent,
     HomeComponent,
     SearchComponent,
@@ -78,7 +81,8 @@ import { EditRecipeDirectionDialog } from "./standard-dialogs/edit-recipe-direct
     NotFoundErrorPageComponent,
     MyRecipesComponent,
     CarouselComponent,
-    AboutComponent
+    AboutComponent,
+    FileDropperComponent
   ],
   imports: [
     FormsModule,

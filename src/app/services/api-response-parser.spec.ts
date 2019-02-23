@@ -1,16 +1,30 @@
 import { TestBed, inject } from '@angular/core/testing';
-import { APIResponseParser } from "./api-response-parser";
+import { APIResponseParser, APIResponseProgress, EMPTY_RESPONSE } from "./api-response-parser";
 
 
 describe("APIResponseParser Class", () => {
     describe("Constructor", () => {
         it("Parsing a response of error = null and payload = []", () => {
 
-            let parser = new APIResponseParser({ error: null, payload: [] })
+            let parser = new APIResponseParser(EMPTY_RESPONSE)
             
             expect(parser.error).toEqual(null);
             expect(Array.isArray(parser.entities)).toEqual(true);
             expect(parser.entities.length).toEqual(0);
+            expect(parser.headers).toEqual({});
+            expect(parser.progress).toEqual(null);
+        });
+        it("Parsing a response of error = null and payload = [] with progress", () => {
+
+            let parser = new APIResponseParser(EMPTY_RESPONSE, true, new APIResponseProgress(true,100,99999))
+            
+            expect(parser.error).toEqual(null);
+            expect(Array.isArray(parser.entities)).toEqual(true);
+            expect(parser.entities.length).toEqual(0);
+            expect(parser.headers).toEqual({});
+            expect(parser.progress.isDone).toEqual(true);
+            expect(parser.progress.percentage).toEqual(100);
+            expect(parser.progress.totalBytes).toEqual(99999);
         });
         it("Exception thrown. When we received an error from the API.", () => {
             var b = 

@@ -33,6 +33,6 @@ export class HomeComponent implements OnInit {
   }
 
   get contactEmailLink(): string {
-    return `mailto:${environment.contactEmail}`
+    return `mailto:${environment.appSettings.contactEmail}`
   }
 }

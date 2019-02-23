@@ -115,4 +115,15 @@ export class Helper {
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
+
+    getFileExtension(fileName: string) :string {
+        const sep: string = ".";
+        let ret: string = "";
+
+        if (fileName && fileName.indexOf(sep) != -1) {
+            ret = sep + fileName.split(sep).pop();
+        }
+
+        return ret;
+    }
 }

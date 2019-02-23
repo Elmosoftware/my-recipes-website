@@ -1,0 +1,15 @@
+<div class="my-5">
+  <button (click)="switchEnabled()">Switch enabled</button>
+  Upload is now enabled? : "{{ uploadEnabled }}"
+  <button (click)="switchAutoReset()">Switch autoReset</button>
+  autoReset is now enabled? : "{{ autoResetEnabled }}"
+</div>
+
+<!-- TEST FILEDROPPING -->
+<app-file-dropper #fileDropper (filesDropped)="handleDrop($event)" [progress]="uploadProgress" [enabled]="uploadEnabled"
+  [autoReset]="autoResetEnabled"></app-file-dropper>
+<!-- TEST FILEDROPPING -->
+
+<div class="my-5">
+  <button (click)="reset()">Reset the form</button>
+</div>
