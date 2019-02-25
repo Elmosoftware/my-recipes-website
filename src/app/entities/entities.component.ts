@@ -1,6 +1,5 @@
 import { Component, OnInit, Inject, NgZone } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material';
-import { Observable } from 'rxjs/Rx';
 import { ToasterHelperService } from "../services/toaster-helper-service";
 import { Router, ActivatedRoute, Params, Data } from "@angular/router";
 import { CommonModule, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';

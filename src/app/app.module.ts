@@ -11,7 +11,11 @@ import { ErrorHandler } from '@angular/core';
 import { ToastrModule } from 'ngx-toastr';
 import { NgxSelectModule } from "ngx-select-ex";
 import { NgxPageScrollModule } from 'ngx-page-scroll';
-import { NgProgressModule, NgProgressInterceptor } from 'ngx-progressbar';
+import { NgxPageScrollCoreModule } from 'ngx-page-scroll-core';
+// import { NgProgressModule } from '@ngx-progressbar/core';
+// import { NgProgressHttpModule } from '@ngx-progressbar/http';
+import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
+import { LoadingBarModule } from '@ngx-loading-bar/core';
 
 //Support Classes and Modules
 import { CustomErrorHandler } from "./custom-error-handler";
@@ -102,10 +106,22 @@ import { EditRecipeDirectionDialog } from "./standard-dialogs/edit-recipe-direct
       timeOut: 5000
     }),
     NgxSelectModule,
-    NgxPageScrollModule,
     WizardModule,
     HttpClientModule,
-    NgProgressModule,
+    // NgProgressModule,
+    // // .withConfig({
+    // //   trickleSpeed: 300,
+    // //   min: 8,
+    // //   thick: true,
+    // //   spinner: true,
+    // //   spinnerPosition: "left",
+    // //   meteor: false
+    // // }),
+    // NgProgressHttpModule,
+    LoadingBarModule,
+    LoadingBarHttpClientModule,
+    NgxPageScrollModule,
+    NgxPageScrollCoreModule,
     InfiniteScrollingModule
   ],
   entryComponents: [
@@ -125,7 +141,6 @@ import { EditRecipeDirectionDialog } from "./standard-dialogs/edit-recipe-direct
     StandardDialogService,
     Cache,
     ToasterHelperService,
-    { provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },
     MediaService
   ],
   bootstrap: [AppComponent]

@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpEvent, HttpEventType } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map'
-import 'rxjs/add/operator/catch'
+import { Observable } from 'rxjs';
+import { of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
+// import 'rxjs/add/operator/map'
+// import 'rxjs/add/operator/catch'
 // import 'rxjs/add/operator/shareReplay'
 // import { shareReplay, map } from 'rxjs/operators';
 
@@ -28,15 +30,23 @@ export class MediaService {
 
     //We will cache the upload settings value:
     if (this.uploadPicturesSettings) {
-      return Observable.of(this.uploadPicturesSettings);
+      // return Observable.of(this.uploadPicturesSettings);
+      return of(this.uploadPicturesSettings);
     }
     else {
       return this.http.get(this.getUrl("upload"), { headers: this.buildAPIHeaders() })
-        .map(data => {
-          let respData = new APIResponseParser(data);
-          this.uploadPicturesSettings = respData.entities;
-          return this.uploadPicturesSettings;
-        });
+        // .map(data => {
+        //   let respData = new APIResponseParser(data);
+        //   this.uploadPicturesSettings = respData.entities;
+        //   return this.uploadPicturesSettings;
+        // });
+        .pipe(
+          map(data => {
+            let respData = new APIResponseParser(data);
+            this.uploadPicturesSettings = respData.entities;
+            return this.uploadPicturesSettings;
+          })
+        );
     }
   }
 
@@ -90,18 +100,36 @@ export class MediaService {
    */
   getDynamicHomePagePictures(): Observable<object> {
     return this.http.get(this.getUrl("carousel"), { headers: this.buildAPIHeaders() })
-      .catch((err) => {
-        //This svc must be error safe. So, if the call to the service fail in some way,
-        //we can use the alternative site pictures for the Carousel in the assets folder:
-        console.warn(`There was an error trying to get dynamic carousel pictures. Falling back to the static ones.`)
-        return Observable.of({ error: null, payload: homePageCarouselData.fallbackPictures });
-      })
-      .map(data => {
-        let respData = new APIResponseParser(data, false);
+      .pipe(
+        catchError((err) => {
+          //This svc must be error safe. So, if the call to the service fail in some way,
+          //we can use the alternative site pictures for the Carousel in the assets folder:
+          console.warn(`There was an error trying to get dynamic carousel pictures. Falling back to the static ones.`)
+          // return Observable.of({ error: null, payload: homePageCarouselData.fallbackPictures });
+          return of({ error: null, payload: homePageCarouselData.fallbackPictures });
+        }),
+        map(data => {
+          let respData = new APIResponseParser(data, false);
 
-        return this.buildCarouselItems(respData.entities);
-      });
+          return this.buildCarouselItems(respData.entities);
+        })
+      );
   }
+  // getDynamicHomePagePictures(): Observable<object> {
+  //   return this.http.get(this.getUrl("carousel"), { headers: this.buildAPIHeaders() })
+  //     .catch((err) => {
+  //       //This svc must be error safe. So, if the call to the service fail in some way,
+  //       //we can use the alternative site pictures for the Carousel in the assets folder:
+  //       console.warn(`There was an error trying to get dynamic carousel pictures. Falling back to the static ones.`)
+  //       // return Observable.of({ error: null, payload: homePageCarouselData.fallbackPictures });
+  //       return of({ error: null, payload: homePageCarouselData.fallbackPictures });
+  //     })
+  //     .map(data => {
+  //       let respData = new APIResponseParser(data, false);
+
+  //       return this.buildCarouselItems(respData.entities);
+  //     });
+  // }
 
   /*
  "cloudName": "elmosoftware",
@@ -124,28 +152,57 @@ export class MediaService {
   private validateUpload(files: FileList): Observable<object> {
 
     return this.getUploadPicturesSettings()
-      .map((uploadSettings: any) => {
+      .pipe(
+        map((uploadSettings: any) => {
 
-        if (files.length > uploadSettings.maxUploadsPerCall) {
-          throw new Error(`You cannot upload more than ${uploadSettings.maxUploadsPerCall} files each time.`)
-        }
-
-        for (let i = 0; i < files.length; i++) {
-          let file = files[i];
-          let fileExt = this.helper.getFileExtension(file.name);
-
-          if (file.size > Number(uploadSettings.maxFilesSize)) {
-            throw new Error(`At least one of the files size is higher than allowed. File Name:"${file.name}", Size:${file.size}, Allowed MAX size:${uploadSettings.maxFilesSize}.`);
+          if (files.length > uploadSettings.maxUploadsPerCall) {
+            throw new Error(`You cannot upload more than ${uploadSettings.maxUploadsPerCall} files each time.`)
           }
 
-          if (!uploadSettings.supportedFileFormats.includes(fileExt)) {
-            throw new Error(`File type is not supported.File name: "${file.name}", Supported file types:"${uploadSettings.supportedFileFormats.join(", ")}".`);
-          }
-        }
+          for (let i = 0; i < files.length; i++) {
+            let file = files[i];
+            let fileExt = this.helper.getFileExtension(file.name);
 
-        return Observable.of({ valid: true });
-      });
+            if (file.size > Number(uploadSettings.maxFilesSize)) {
+              throw new Error(`At least one of the files size is higher than allowed. File Name:"${file.name}", Size:${file.size}, Allowed MAX size:${uploadSettings.maxFilesSize}.`);
+            }
+
+            if (!uploadSettings.supportedFileFormats.includes(fileExt)) {
+              throw new Error(`File type is not supported.File name: "${file.name}", Supported file types:"${uploadSettings.supportedFileFormats.join(", ")}".`);
+            }
+          }
+
+          // return Observable.of({ valid: true });
+          return of({ valid: true });
+        })
+      );
   }
+  // private validateUpload(files: FileList): Observable<object> {
+
+  //   return this.getUploadPicturesSettings()
+  //     .map((uploadSettings: any) => {
+
+  //       if (files.length > uploadSettings.maxUploadsPerCall) {
+  //         throw new Error(`You cannot upload more than ${uploadSettings.maxUploadsPerCall} files each time.`)
+  //       }
+
+  //       for (let i = 0; i < files.length; i++) {
+  //         let file = files[i];
+  //         let fileExt = this.helper.getFileExtension(file.name);
+
+  //         if (file.size > Number(uploadSettings.maxFilesSize)) {
+  //           throw new Error(`At least one of the files size is higher than allowed. File Name:"${file.name}", Size:${file.size}, Allowed MAX size:${uploadSettings.maxFilesSize}.`);
+  //         }
+
+  //         if (!uploadSettings.supportedFileFormats.includes(fileExt)) {
+  //           throw new Error(`File type is not supported.File name: "${file.name}", Supported file types:"${uploadSettings.supportedFileFormats.join(", ")}".`);
+  //         }
+  //       }
+
+  //       // return Observable.of({ valid: true });
+  //       return of({ valid: true });
+  //     });
+  // }
 
   /**
    * Returns the random index of the first caption to include with the Carousel pictures.

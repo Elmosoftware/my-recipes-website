@@ -1,8 +1,9 @@
-import { Component, OnInit, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl } from "@angular/forms";
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+// import 'rxjs/add/operator/debounceTime';
+// import 'rxjs/add/operator/distinctUntilChanged';
 
 import { EntityServiceFactory } from "../services/entity-service-factory";
 import { EntityService, EntityServiceQueryParams } from '../services/entity-service';
@@ -51,13 +52,16 @@ export class SearchBoxComponent implements OnInit {
       this.searchTextBox.setValue(this.selectedValue.term, { emitEvent: false });
     }
 
+    // this.searchTextBox.valueChanges
+    //   .debounceTime(300)
+    //   .distinctUntilChanged()
+    //   .subscribe(value => { this.valueChangeHandle(value) });
     this.searchTextBox.valueChanges
-      .debounceTime(300)
-      .distinctUntilChanged()
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged()
+      )
       .subscribe(value => { this.valueChangeHandle(value) });
-  }
-
-  afterViewInit() {
   }
 
   parseInput() {

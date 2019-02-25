@@ -56,9 +56,15 @@ export class MyRecipesComponent implements OnInit {
   reset() {
     this.svcInfScroll = new InfiniteScrollingService<Recipe>(PAGE_SIZE);
     this.resetMealTypesFilterCounters();
-    this.onDataFeed = this.svcInfScroll.dataFeed.subscribe(ph => { this.onDataFeedHandler(ph) })
+    // this.onDataFeed = this.svcInfScroll.dataFeed.subscribe(ph => { this.onDataFeedHandler(ph) })
+    this.onDataFeed = this.svcInfScroll.dataFeed;
 
-    if(this.isAnyFilterSet){
+    this.onDataFeed
+      .subscribe((ph: PagingHelper) => {
+        this.onDataFeedHandler(ph)
+      });
+
+    if (this.isAnyFilterSet) {
       this.getRecipes(this.svcInfScroll.pageSize, 0);
     }
   }
@@ -83,7 +89,7 @@ export class MyRecipesComponent implements OnInit {
   //This method gets called every time the list of filter options changes
   toggleMealType(id) {
 
-    if(Object.keys(this.mealTypesFilter).indexOf(id) == -1){
+    if (Object.keys(this.mealTypesFilter).indexOf(id) == -1) {
       this.mealTypesFilter[id] = 0; //The number is the count.
     }
     else {
@@ -100,7 +106,7 @@ export class MyRecipesComponent implements OnInit {
     this.reset();
   }
 
-  get isAnyFilterSet() : boolean {
+  get isAnyFilterSet(): boolean {
     return Object.keys(this.mealTypesFilter).length > 0;
   }
 
@@ -108,26 +114,26 @@ export class MyRecipesComponent implements OnInit {
     return Object.keys(this.mealTypesFilter);
   }
 
-  resetMealTypesFilterCounters() :void{
-    Object.keys(this.mealTypesFilter).forEach(id =>{
+  resetMealTypesFilterCounters(): void {
+    Object.keys(this.mealTypesFilter).forEach(id => {
       this.mealTypesFilter[id] = 0;
     })
   }
 
-  setMealTypeFilterCounters(recipes: Recipe[]): void{
-    recipes.forEach( r => {
+  setMealTypeFilterCounters(recipes: Recipe[]): void {
+    recipes.forEach(r => {
       this.mealTypesFilter[r.mealType._id]++;
     });
   }
 
-  getMealTypeFilterCountById(id: string): string{
+  getMealTypeFilterCountById(id: string): string {
     let ret: string = "";
 
-    if(this.mealTypesFilter[id]){
+    if (this.mealTypesFilter[id]) {
       ret = String(this.mealTypesFilter[id]);
 
       //If not all the results has been retrieved yet:
-      if(this.svcInfScroll.count != this.svcInfScroll.totalCount){
+      if (this.svcInfScroll.count != this.svcInfScroll.totalCount) {
         ret += "...";
       }
       ret = `(${ret})`;
@@ -136,29 +142,29 @@ export class MyRecipesComponent implements OnInit {
     return ret;
   }
 
-  getFooter(r: Recipe): string{
+  getFooter(r: Recipe): string {
     let ret: string;
 
-    if(r.lastUpdateOn){
+    if (r.lastUpdateOn) {
       ret = "Última actualización: " + this.helper.friendlyTimeFromNow(r.lastUpdateOn);
     }
-    else{
+    else {
       ret = "Creada: " + this.helper.friendlyCalendarTime(r.createdOn);
     }
 
     return ret;
   }
 
-  getFooterPublishingData(r: Recipe): string{
+  getFooterPublishingData(r: Recipe): string {
     let ret: string = "Aún no publicada";
 
-    if(r.publishedOn){
+    if (r.publishedOn) {
       ret = this.helper.friendlyTimeFromNow(r.publishedOn);
     }
 
     return ret;
   }
-  
+
   private getRecipes(top: number = 0, skip: number = 0) {
 
     let q: EntityServiceQueryParams = new EntityServiceQueryParams();
@@ -174,7 +180,7 @@ export class MyRecipesComponent implements OnInit {
     q.fields = "-ingredients -directions";
     q.filter = JSON.stringify({
       mealType: { $in: this.getMealTypesFilter() }
-      });
+    });
     q.pub = (this.notPublishedOnlyFilter) ? QUERY_PARAM_PUB.notpub : QUERY_PARAM_PUB.all;
     q.owner = QUERY_PARAM_OWNER.me;
 
@@ -193,16 +199,16 @@ export class MyRecipesComponent implements OnInit {
       });
   }
 
-  viewRecipe(id:string){
+  viewRecipe(id: string) {
     this.helper.removeTooltips(this.zone);
-    this.router.navigate([`/recipe-view/${id}`],)
+    this.router.navigate([`/recipe-view/${id}`])
   }
 
-  editRecipe(id: string){
+  editRecipe(id: string) {
     this.helper.removeTooltips(this.zone);
     this.router.navigate([`/recipe/${id}`]);
   }
-  
+
   localErrorHandler(item: ErrorLog) {
     this.toast.showError(item.getUserMessage());
   }
@@ -253,5 +259,5 @@ export class MyRecipesComponent implements OnInit {
       }
     }
   } 
-  */  
+  */
 }

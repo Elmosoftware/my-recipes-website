@@ -1,6 +1,6 @@
-import { Component, OnInit, AfterViewInit, NgZone } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
-import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+// import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 
 import { EntityServiceFactory } from "../services/entity-service-factory";
 import { EntityService } from "../services/entity-service";
@@ -66,17 +66,6 @@ export class RecipeViewComponent implements OnInit {
         });
   }
  
-  ngAfterViewInit() {
-    // this.zone.runOutsideAngular(() => {
-      
-    //   $(document).ready(function () {
-    //     console.log("running outside angular!");
-    //     $(document.body).tooltip({ selector: '[data-toggle="tooltip"]', trigger : 'hover' });
-    //   });
-
-    // })
-  }
-
   get isOwner() :boolean {
     let ret: boolean = false;
 

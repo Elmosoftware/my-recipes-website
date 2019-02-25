@@ -1,7 +1,6 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
-import { MatDialog, MAT_DIALOG_DATA } from '@angular/material';
-import { Observable } from 'rxjs/Rx';
+// import { MatDialog, MAT_DIALOG_DATA } from '@angular/material';
 
 import { StandardDialogService } from "../standard-dialogs/standard-dialog.service";
 import { ToasterHelperService } from '../services/toaster-helper-service';

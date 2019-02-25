@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ToasterHelperService } from '../services/toaster-helper-service';
@@ -60,12 +60,15 @@ export class SearchComponent implements OnInit {
     this.parseQueryparams();
   }
 
-  afterViewInit() {
-  }
-
   resetSearch() {
     this.svcInfScroll = new InfiniteScrollingService<Recipe>(PAGE_SIZE);
-    this.onDataFeed = this.svcInfScroll.dataFeed.subscribe(ph => { this.onDataFeedHandler(ph) })
+    // this.onDataFeed = this.svcInfScroll.dataFeed.subscribe(ph => { this.onDataFeedHandler(ph) })
+    this.onDataFeed = this.svcInfScroll.dataFeed;
+    
+    this.onDataFeed
+      .subscribe((ph: PagingHelper) => { 
+        this.onDataFeedHandler(ph) 
+      });
   }
 
   parseQueryparams() {
