@@ -3,17 +3,14 @@ import { HttpClient, HttpHeaders, HttpEvent, HttpEventType } from '@angular/comm
 import { Observable } from 'rxjs';
 import { of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-// import 'rxjs/add/operator/map'
-// import 'rxjs/add/operator/catch'
-// import 'rxjs/add/operator/shareReplay'
-// import { shareReplay, map } from 'rxjs/operators';
-
+import { Cloudinary } from "cloudinary-core";
 
 import { environment } from "../../environments/environment";
 import { Helper } from "../shared/helper";
 import { APIResponseParser, APIResponseProgress, EMPTY_RESPONSE } from "./api-response-parser";
 import { CarouselItem } from "../shared/carousel/carousel.component";
 import { homePageCarouselData } from "../static/homePageCarouselData";
+import { AuthService } from './auth-service';
 
 @Injectable()
 export class MediaService {
@@ -21,25 +18,23 @@ export class MediaService {
   private helper: Helper;
   private uploadPicturesSettings: any;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, 
+    private auth: AuthService) {
     this.helper = new Helper();
     this.uploadPicturesSettings = null;
   }
 
+  /**
+   * Returns the upload settings directly from the /media endpoint.
+   */
   getUploadPicturesSettings(): Observable<object> {
 
     //We will cache the upload settings value:
     if (this.uploadPicturesSettings) {
-      // return Observable.of(this.uploadPicturesSettings);
       return of(this.uploadPicturesSettings);
     }
     else {
       return this.http.get(this.getUrl("upload"), { headers: this.buildAPIHeaders() })
-        // .map(data => {
-        //   let respData = new APIResponseParser(data);
-        //   this.uploadPicturesSettings = respData.entities;
-        //   return this.uploadPicturesSettings;
-        // });
         .pipe(
           map(data => {
             let respData = new APIResponseParser(data);
@@ -50,16 +45,25 @@ export class MediaService {
     }
   }
 
+  getTransformationURL(publicId: string, cloudName: string, mediaTransformation: object): string {
+    let url: string;
+    let cl = new Cloudinary({ cloud_name: cloudName, secure: true });
+
+    url = cl.url(publicId, mediaTransformation);
+
+    return url;
+  }
+  
   /**
    * Upload submitted pictures to the CDN provider and returns a list of the picture URLS and public ids.
    * @param files List of files to upload.
    */
-  uploadPictures(files: FileList, callback: Function): void {
+  uploadPictures(files: FileList, transformation: object, callback: Function): void {
 
     let data = new FormData();
 
     this.validateUpload(files)
-      .subscribe((value) => {
+      .subscribe((value: any) => {
 
         for (let i = 0; i < files.length; i++) {
           let file = files[i];
@@ -77,8 +81,14 @@ export class MediaService {
                   new APIResponseProgress(false, 0, 0));
                 break;
               case HttpEventType.Response:
-                respData = new APIResponseParser(event.body, true); //, 
-                // new APIResponseProgress(true, 100, event["total"]));
+                respData = new APIResponseParser(event.body, true);
+                
+                if (transformation) {
+                  respData.entities.forEach((ent: any) => {
+                    ent.url = this.getTransformationURL(ent.publicId, ent.cloudName, transformation);
+                  })
+                }
+
                 break;
               case HttpEventType.UploadProgress: {
                 respData = new APIResponseParser(EMPTY_RESPONSE, false,
@@ -173,7 +183,7 @@ export class MediaService {
           }
 
           // return Observable.of({ valid: true });
-          return of({ valid: true });
+          return of({ valid: true, settings: uploadSettings });
         })
       );
   }
@@ -278,6 +288,18 @@ export class MediaService {
       ret.set("Content-Type", "application/json");
     }
 
+    if (this.auth.isAuthenticated) {
+      ret = ret.append("Authorization", "Bearer " + this.auth.userProfile.accessToken);
+    }
+
     return ret;
   }
 }
+
+export const MediaTransformations = {
+  none: {},
+  uploadedPicturesView: {
+    height: 250,
+    crop: "scale"
+  }
+};

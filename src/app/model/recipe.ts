@@ -2,6 +2,7 @@ import { Entity } from "./entity";
 import { Level } from "./level";
 import { MealType } from "./mealtype";
 import { RecipeIngredient } from "./recipe-ingredient";
+import { RecipePicture } from "./recipe-picture";
 
 export class Recipe extends Entity {
 
@@ -14,6 +15,7 @@ export class Recipe extends Entity {
         this.mealType = null;
         this.ingredients = [];
         this.directions = [];
+        this.pictures = [];
     }
 
     name: string;
@@ -23,4 +25,5 @@ export class Recipe extends Entity {
     mealType: MealType;
     ingredients: RecipeIngredient[];
     directions: string[];
+    pictures: RecipePicture[];
 }

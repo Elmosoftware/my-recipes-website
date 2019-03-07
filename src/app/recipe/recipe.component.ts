@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
-// import { MatDialog, MAT_DIALOG_DATA } from '@angular/material';
+import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
+import { environment } from "../../environments/environment";
 
 import { StandardDialogService } from "../standard-dialogs/standard-dialog.service";
 import { ToasterHelperService } from '../services/toaster-helper-service';
@@ -10,12 +11,21 @@ import { SubscriptionService } from "../services/subscription.service";
 import { ErrorLog } from '../model/error-log';
 import { EntityServiceFactory } from "../services/entity-service-factory";
 import { EntityService, EntityServiceQueryParams } from "../services/entity-service";
+import { MediaService, MediaTransformations } from "../services/media-service";
 import { WordAnalyzerService } from "../services/word-analyzer-service";
 import { APIResponseParser } from "../services/api-response-parser";
 import { Recipe } from "../model/recipe";
 import { RecipeIngredient } from "../model/recipe-ingredient";
+import { RecipePicture, PictureId, PictureAttributes } from "../model/recipe-picture";
 import { Entity } from "../model/entity";
 import { Cache, CACHE_MEMBERS } from "../shared/cache/cache";
+import { FileDropperComponent } from '../shared/file-dropper/file-dropper.component';
+
+const enum UPLOAD_STATUS {
+  Ready = "READY",
+  InProgress = "IN-PROGRESS",
+  Error = "ERROR"
+}
 
 @Component({
   selector: 'app-recipe',
@@ -27,6 +37,9 @@ export class RecipeComponent implements OnInit, AfterViewInit {
   @ViewChild('wizard')
   wizard: WizardComponent;
 
+  @ViewChild("fileDropper")
+  fileDropper: FileDropperComponent
+
   isNewRecipe: boolean;
   isCompleted: boolean;
   isPublished: boolean;
@@ -36,20 +49,27 @@ export class RecipeComponent implements OnInit, AfterViewInit {
   wordAnalyzer: WordAnalyzerService;
   svcRecipe: EntityService;
   svcIngredient: EntityService;
+  svcRecipeIngredient: EntityService;
+  svcRecipePicture: EntityService;
   helper: Helper;
   missingIngredients: string[];
   compatibleUnits: Entity[];
   newRecipeIngredient: RecipeIngredient;
   newDirection: string;
+  uploadProgress: number;
+  uploadStatus: UPLOAD_STATUS;
+  deletedPictures: RecipePicture[];
+  deletedIngredients: RecipeIngredient[];
 
   constructor(private zone: NgZone,
     private route: ActivatedRoute,
     private subs: SubscriptionService,
     private dlgSvc: StandardDialogService,
     private svcFactory: EntityServiceFactory,
+    private svcMedia: MediaService,
     private toast: ToasterHelperService,
     private cache: Cache) {
-    }
+  }
 
   precaching() {
     //When editing a recipe seems like the dropdowns are not binding correctly the values if the list of items is not ready.
@@ -69,6 +89,8 @@ export class RecipeComponent implements OnInit, AfterViewInit {
     this.helper = new Helper();
     this.svcRecipe = this.svcFactory.getService("Recipe");
     this.svcIngredient = this.svcFactory.getService("Ingredient");
+    this.svcRecipeIngredient = this.svcFactory.getService("RecipeIngredient");
+    this.svcRecipePicture = this.svcFactory.getService("RecipePicture");
     this.globalErrorSubscription = this.subs.getGlobalErrorEmitter().subscribe(item => this.localErrorHandler(item));
     this.resetForm();
   }
@@ -118,6 +140,9 @@ export class RecipeComponent implements OnInit, AfterViewInit {
     this.compatibleUnits = [];
     this.newRecipeIngredient = new RecipeIngredient();
     this.newDirection = "";
+    this.uploadStatus = UPLOAD_STATUS.Ready;
+    this.deletedPictures = [];
+    this.deletedIngredients = [];
   }
 
   //#region Cache helper methods
@@ -242,7 +267,12 @@ export class RecipeComponent implements OnInit, AfterViewInit {
         ingredientId = recipeIngredient.ingredient._id;
       }
 
-      return id != ingredientId
+      //If the ingredient was already saved, we need to mark it for deletion as soon the Recipe is saved:
+      if (id == ingredientId && recipeIngredient._id) {
+        this.deletedIngredients.push(recipeIngredient);
+      }
+
+      return id != ingredientId;
     })
   }
 
@@ -326,7 +356,7 @@ export class RecipeComponent implements OnInit, AfterViewInit {
       let unit = this.getUnitFromCache(this.model.ingredients[i].unit)
       let unitAbbrev: string = (unit) ? (unit as any).abbrev : "";
 
-      direction = this.wordAnalyzer.searchAndReplaceWord(direction, 
+      direction = this.wordAnalyzer.searchAndReplaceWord(direction,
         new Map([[ingredient, `<abbr title="Utilizando ${amount}${unitAbbrev} en esta preparación.">${ingredient}</abbr>`]]));
     })
 
@@ -362,7 +392,7 @@ export class RecipeComponent implements OnInit, AfterViewInit {
     if (this.model) {
       //If not yet, we cached the current list of ingredients set in the "Ingredientes" form step:
       this.model.ingredients.forEach(item => {
-        
+
         let ing: Entity = this.getIngredientFromCache(item.ingredient);
 
         if (ing) {
@@ -373,6 +403,92 @@ export class RecipeComponent implements OnInit, AfterViewInit {
 
     return ret;
   }
+  //#endregion
+
+  //#region "Fotos" tab methods
+
+  get maxPicturesPerRecipe(): number {
+    return environment.appSettings.maxPicturesPerRecipe;
+  }
+
+  get remainingPictures(): number {
+    return environment.appSettings.maxPicturesPerRecipe - this.uploadedPictures;
+  }
+
+  get uploadedPictures(): number {
+    return ((this.modelIsReady) ? this.model.pictures.length : 0);
+  }
+
+  handleFileDrop($event: FileList) {
+    console.log("DROPPED!!!");
+
+    if ($event.length > this.remainingPictures) {
+      this.toast.showWarning(`Intentaste agregar ${$event.length} imagenes, mientras que tu limite restante es de solo ${this.remainingPictures}${(this.remainingPictures > 1) ? "imagen" : "imagenes"}.`,
+        "Limite de imágenes excedido");
+      return;
+    }
+
+    this.toast.showInformation("Tus imagenes están siendo cargadas, aguarda un momento por favor ...")
+    this.uploadStatus = UPLOAD_STATUS.InProgress;
+
+    this.svcMedia.uploadPictures($event, MediaTransformations.uploadedPicturesView, (respData) => {
+
+      if (respData.progress) {
+        console.log(`Isdone:${respData.progress.isDone}, %:${respData.progress.percentage}, total:${respData.progress.totalBytes}`);
+        this.uploadProgress = respData.progress.percentage;
+      }
+      else {
+        if (respData.error) {
+          this.toast.showError("Por favor reintenta esta operación luego.", "Ocurrió un error al intentar subir tus imagenes.")
+          this.uploadStatus = UPLOAD_STATUS.Error;
+        }
+        else {
+          //Here we create the new RecipePicture and we add it to the Recipe:
+          respData.entities.forEach((pic) => {
+            let newRecipePicture = new RecipePicture();
+            newRecipePicture.pictureId = new PictureId(pic.publicId, pic.cloudName);
+            newRecipePicture.attributes = new PictureAttributes();
+            newRecipePicture.attributes.width = pic.width;
+            newRecipePicture.attributes.height = pic.height;
+            newRecipePicture.transformationURL = pic.url;
+            this.model.pictures.push(newRecipePicture);
+          })
+          this.uploadStatus = UPLOAD_STATUS.Ready;
+        }
+      }
+    });
+  }
+
+  handleDeletePicture(picture: RecipePicture) {
+
+    this.helper.removeTooltips(this.zone);
+
+    //If the picture was already saved, (mean was not just added):
+    if (picture._id) {
+      this.deletedPictures.push(picture); //We add it to the list of pictures to be deleted when the Recipe is saved.
+    }
+
+    this.model.pictures = this.model.pictures.filter((p: RecipePicture) => {
+      //return p._id != picture._id
+      return p.pictureId.publicId != picture.pictureId.publicId;
+    })
+  }
+
+  drop(event: CdkDragDrop<RecipePicture[]>) {
+    this.helper.removeTooltips(this.zone);
+    moveItemInArray(this.model.pictures, event.previousIndex, event.currentIndex);
+  }
+
+  selectedCoverChange(selectedCover: RecipePicture) {
+    this.model.pictures.forEach((item: RecipePicture) => {
+      item.isCover = Boolean(item.pictureId.publicId == selectedCover.pictureId.publicId);
+    })
+  }
+
+  get coverPicture(): RecipePicture {
+    return this.model.pictures.find((pic: RecipePicture) => { return pic.isCover })
+  }
+
   //#endregion
 
   get friendlyPublishDate(): string {
@@ -396,18 +512,50 @@ export class RecipeComponent implements OnInit, AfterViewInit {
       this.model.publishedOn = (this.isPublished) ? new Date() : null;
     }
 
-    //We need to keep in sync the published attribute of the Recipe with the ones in the RecipeIngredients:
-    this.model.ingredients.forEach( ing => {
+    //We need to keep in sync the published attribute of the Recipe with the ones in the RecipeIngredients and RecipePictures:
+    this.model.ingredients.forEach(ing => {
       ing.publishedOn = this.model.publishedOn;
     })
+
+    this.model.pictures.forEach(pic => {
+      pic.publishedOn = this.model.publishedOn;
+    })
+
+    //If there is no cover picture, we will auto select the last in the list:
+    if (this.model.pictures.length > 0 && !this.coverPicture) {
+      this.model.pictures[this.model.pictures.length - 1].isCover = true;
+    }
+
+    //If some pictures already saved in the Recipe has been deleted, we proceed to delete the entity too:
+    if (this.deletedPictures.length > 0) {
+      this.deletedPictures.forEach((pic: RecipePicture) => {
+        this.svcRecipePicture.delete(pic._id)
+        .subscribe(data =>{
+          console.log(`The RecipePicture with id:${pic._id}, was successfully deleted.`)
+        }, (err) =>{
+          console.error(`We were unable to delete the RecipePicture with id:${pic._id}. This is not a critical issue.`)
+        })
+      })
+    }
+
+    //The same for ingredients:
+    if (this.deletedIngredients.length > 0) {
+      this.deletedIngredients.forEach((ing: RecipeIngredient) => {
+        this.svcRecipeIngredient.delete(ing._id)
+        .subscribe(data =>{
+          console.log(`The RecipeIngredient with id:${ing._id}, was successfully deleted.`)
+        }, (err) =>{
+          console.error(`We were unable to delete the RecipeIngredient with id:${ing._id}. This is not a critical issue.`)
+        })
+      })
+    }
 
     //Saving the Recipe:
     this.svcRecipe.save(this.model)
       .subscribe(data => {
 
         let respData = new APIResponseParser(data);
-        console.log(`After Save the Recipe!`);
-        console.log(`Error:"${respData.error}", Payload:"${respData.entities}"`);
+        console.log(`Recipe saved sucessfully!`);
 
         if (!respData.error) {
           this.toast.showSuccess("Los cambios se guardaron con éxito!");
@@ -428,6 +576,12 @@ export class RecipeComponent implements OnInit, AfterViewInit {
   }
 
   localErrorHandler(item: ErrorLog) {
+
+    //If the error occurred during a file upload:
+    if (this.uploadStatus == UPLOAD_STATUS.InProgress) {
+      this.uploadStatus = UPLOAD_STATUS.Error;
+    }
+
     this.toast.showError(item.getUserMessage());
   }
 }

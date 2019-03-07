@@ -5,6 +5,7 @@ import { MealType } from "./mealtype";
 import { Unit } from "./unit";
 import { Ingredient } from "./ingredient";
 import { RecipeIngredient } from "./recipe-ingredient";
+import { RecipePicture } from "./recipe-picture";
 import { Recipe } from "./recipe";
 import { CACHE_MEMBERS } from "../shared/cache/cache";
 
@@ -16,6 +17,7 @@ export class EntityFactory {
         Unit: new EntityDef(Unit, "units", () => { return new Unit(); }, CACHE_MEMBERS.Units),
         Ingredient: new EntityDef(Ingredient, "ingredients", () => { return new Ingredient(); }, CACHE_MEMBERS.Ingredients),
         RecipeIngredient: new EntityDef(RecipeIngredient, "recipeingredients", () => { return new RecipeIngredient(); }),
+        RecipePicture: new EntityDef(RecipePicture, "recipepictures", () => { return new RecipePicture(); }),
         Recipe: new EntityDef(Recipe, "recipes", () => { return new Recipe(); }, CACHE_MEMBERS.LatestRecipes)
     };
 

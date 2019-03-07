@@ -6,6 +6,8 @@ import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from "@angular/forms";
 import { MatDialogModule, MatDialogRef, MatAutocompleteModule, MatInputModule} from '@angular/material';
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatRadioModule } from '@angular/material/radio';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ErrorHandler } from '@angular/core';
 import { ToastrModule } from 'ngx-toastr';
@@ -122,7 +124,9 @@ import { EditRecipeDirectionDialog } from "./standard-dialogs/edit-recipe-direct
     LoadingBarHttpClientModule,
     NgxPageScrollModule,
     NgxPageScrollCoreModule,
-    InfiniteScrollingModule
+    InfiniteScrollingModule,
+    DragDropModule,
+    MatRadioModule
   ],
   entryComponents: [
     ConfirmDialogComponent,
