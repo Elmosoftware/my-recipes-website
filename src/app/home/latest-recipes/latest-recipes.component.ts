@@ -5,6 +5,8 @@ import { SubscriptionService } from "../../services/subscription.service";
 import { ErrorLog } from '../../model/error-log';
 import { Helper } from "../../shared/helper";
 import { Cache } from "../../shared/cache/cache";
+import { RecipePicture } from '../../model/recipe-picture';
+import { MediaService } from "../../services/media-service";
 
 @Component({
   selector: 'app-latest-recipes',
@@ -18,7 +20,8 @@ export class LatestRecipesComponent implements OnInit {
 
   constructor(private subs: SubscriptionService,
     public cache: Cache,
-    private toast: ToasterHelperService) {
+    public toast: ToasterHelperService, 
+    public svcMedia: MediaService) {
   }
 
   ngOnInit() {
@@ -28,6 +31,10 @@ export class LatestRecipesComponent implements OnInit {
 
   ngOnDestroy() {
     this.globalErrorSubscription.unsubscribe();
+  }
+
+  getCover(pictures: RecipePicture[]): string{
+    return this.svcMedia.getCoverPictureCircleThumb(pictures);
   }
 
   localErrorHandler(item: ErrorLog) {

@@ -2,11 +2,17 @@
   <div class="carousel-inner" role="listbox">
     <div *ngFor="let item of items; let i = index" class="carousel-item" [ngClass]="{'active': (i == 0), '': (i != 0) }">
       <img class="d-block img-fluid carousel-image" [src]="item.imageSrc">
-      <div class="carousel-caption carousel-caption-container">
-        <img *ngIf="item.captionImageSrc" class="carousel-center-logo" [src]="item.captionImageSrc" alt="My Recipes Website">
-        <h3 class="carousel-center-text text-responsive">{{item.captionText}}</h3>
-        <small *ngIf="item.authorName" class="carousel-logo-credits text-right d-block ">Foto de 
-          <a class="carousel-logo-credits" target="_blank" [href]="(item.authorURL) ? item.authorURL : ''">{{item.authorName}}</a></small>
+      <div *ngIf="item.captionImageSrc || item.captionText || item.authorName">
+        <div class="carousel-caption carousel-caption-container">
+          <img *ngIf="item.captionImageSrc" class="carousel-center-logo" [src]="item.captionImageSrc"
+            alt="My Recipes Website">
+          <div *ngIf="item.captionText">
+            <h3 class="carousel-center-text text-responsive">{{item.captionText}}</h3>
+          </div>
+          <small *ngIf="item.authorName" class="carousel-logo-credits text-right d-block ">Foto de
+            <a class="carousel-logo-credits" target="_blank"
+              [href]="(item.authorURL) ? item.authorURL : ''">{{item.authorName}}</a></small>
+        </div>
       </div>
     </div>
   </div>

@@ -4,10 +4,11 @@
     <div class="container my-3">
       <div class="row">
         <div *ngFor="let recipe of cache.latestRecipes" class="col-md-4">
+          <img class="my-2" [src]="getCover(recipe.pictures)">
           <h3>{{ recipe.name }}</h3>
           <p [innerHtml]="helper.getShortText(recipe.description)"></p>
           <p>
-            <a class="btn btn-secondary" routerLink="/recipe-view/{{recipe._id}}" role="button">View details »</a>
+            <a class="btn btn-secondary" routerLink="/recipe-view/{{recipe._id}}" role="button">Ver detalles »</a>
           </p>
         </div>
       </div>

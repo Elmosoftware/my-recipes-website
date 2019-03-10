@@ -1,81 +1,24 @@
-<div class="my-5">
-  <button (click)="switchEnabled()">Switch enabled</button>
-  Upload is now enabled? : "{{ uploadEnabled }}"
-  <button (click)="switchAutoReset()">Switch autoReset</button>
-  autoReset is now enabled? : "{{ autoResetEnabled }}"
-</div>
-
-<!-- TEST FILEDROPPING -->
-<app-file-dropper #fileDropper (filesDropped)="handleDrop($event)" [progress]="uploadProgress" [enabled]="uploadEnabled"
-  [autoReset]="autoResetEnabled"></app-file-dropper>
-<!-- TEST FILEDROPPING -->
-
-<div class="my-5">
-  <button (click)="reset()">Reset the form</button>
-</div>
-
-
-<hr>
-
-<!-- <mat-radio-group class="example-radio-group" [(ngModel)]="favoriteSeason">
-    <mat-radio-button class="example-radio-button" *ngFor="let season of seasons" [value]="season">
-      {{season}}
-    </mat-radio-button>
-  </mat-radio-group>
-  <div class="example-selected-value">Your favorite season is: {{favoriteSeason}}</div> -->
-
-<!-- <mat-radio-button class="example-radio-button" *ngFor="let item of items" (change)="selectedCoverChange(item)">
-      {{item.publicId}}
-    </mat-radio-button>
-   -->
-
-   <!-- <div cdkDropList class="example-list" (cdkDropListDropped)="dropSample($event)">
-      <div class="example-box" *ngFor="let movie of movies" cdkDrag>{{movie}}</div>
-    </div> -->
-
-
-<hr>
-<!-- TEST CdK DRAG DROP 
-<div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
-  <div class="example-box" *ngFor="let item of items" cdkDrag>
-    <img class="sampleImageInList" [src]="getRecipePictureURL(item)">
-    <small>{{item.caption}}</small>
-  </div>
-</div>
--->
-
-<div cdkDropList class="container uploadedImageContainer my-2" (cdkDropListDropped)="drop($event)">
-  <div cdkDrag *ngFor="let item of items">
-      <div  class="row uploadedImage" [ngStyle]="{ 'backgroundImage': getRecipePictureURL(item)}">
-        <div class="col-4 my-5">
-          <mat-radio-button [checked]="item.isCover" (change)="selectedCoverChange(item)" data-toggle="tooltip"
-            data-placement="right" title="Seleccionar como la imagen de portada de mi receta."></mat-radio-button>
-        </div>
-        <div class="col-4">
-        </div>
-        <div class="col-4 my-5 text-right">
-          <button type="button" class="btn btn-primary btn-sm" (click)="deleteRecipePicture(item)" data-toggle="tooltip"
-            data-placement="left" title="Eliminar esta imagen.">
-            <i class="fa fa-times" aria-hidden="true"></i>
-          </button>
-        </div>
-        <div class="col-12 mt-5 mb-3">
-          <div class="form-group">
-            <input type="text" class="form-control" placeholder="'Asi debe quedar la masa....''" [(ngModel)]="item.caption"
-              name="caption" required maxlength="75" autocomplete="off" data-toggle="tooltip" data-placement="top"
-              title="Ingrese aqui opcionalmente, un texto  descriptivo que acompañará la imagen." #caption="ngModel">
-          </div>
+<a id="recently-added"></a>
+<div *ngIf="cache.latestRecipes && cache.latestRecipes.length; else noData">
+  <div class="jumbotron recently-added-section">
+    <div class="container my-3">
+      <div class="row">
+        <div *ngFor="let recipe of cache.latestRecipes" class="col-md-4">
+          <img class="my-2" [src]="getCover(recipe.pictures)">
+          <h3>{{ recipe.name }}</h3>
+          <p [innerHtml]="helper.getShortText(recipe.description)"></p>
+          <p>
+            <a class="btn btn-secondary" routerLink="/recipe-view/{{recipe._id}}" role="button">Ver detalles »</a>
+          </p>
         </div>
       </div>
+    </div>
   </div>
 </div>
-
-
-<p>
-  Value:
-</p>
-<p>
-  {{ this.itemsAsString() }}
-</p>
-
-<hr>
+<ng-template #noData>
+  <div class="col-md-12 my-lg-5 my-sm-2">
+    <h3 class="text-center my-5">Aún no hay ninguna receta creada!</h3>
+    <h6 class="my-1">¿Que esperas para
+      <a routerLink="/recipe">crear una nueva</a>?</h6>
+  </div>
+</ng-template>

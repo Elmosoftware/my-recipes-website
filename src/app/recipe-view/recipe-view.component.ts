@@ -1,17 +1,19 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
-// import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 
 import { EntityServiceFactory } from "../services/entity-service-factory";
 import { EntityService } from "../services/entity-service";
 import { APIResponseParser } from "../services/api-response-parser";
-import { Entity } from "../model/entity";
+import { Recipe } from "../model/recipe";
+import { RecipePicture } from '../model/recipe-picture';
 import { Helper } from "../shared/helper";
 import { ErrorLog } from '../model/error-log';
 import { StandardDialogService, ConfirmDialogConfiguration } from "../standard-dialogs/standard-dialog.service";
 import { ToasterHelperService } from '../services/toaster-helper-service';
 import { SubscriptionService } from "../services/subscription.service";
+import { MediaService } from "../services/media-service";
 import { AuthService } from '../services/auth-service';
+import { CarouselItem } from '../shared/carousel/carousel.component';
 
 @Component({
   selector: 'app-recipe-view',
@@ -21,13 +23,15 @@ import { AuthService } from '../services/auth-service';
 export class RecipeViewComponent implements OnInit {
 
   globalErrorSubscription: any;
-  model: Entity;
+  // model: Entity;
+  model: Recipe;
   modelIsReady: boolean;
   svc: EntityService;
   helper: Helper;
   preparationMode: boolean;
   lastStepDone: number;
   shoppingList: string[];
+  carouselPictures: CarouselItem[];
 
   constructor(private svcAuth: AuthService,
     private router: Router,
@@ -36,7 +40,8 @@ export class RecipeViewComponent implements OnInit {
     private dlgSvc: StandardDialogService,
     private svcFac: EntityServiceFactory,
     private toast: ToasterHelperService,
-    private zone: NgZone) { }
+    private zone: NgZone,
+    private svcMedia: MediaService) { }
 
   ngOnInit() {
     this.globalErrorSubscription = this.subs.getGlobalErrorEmitter().subscribe(item => this.localErrorHandler(item));
@@ -56,7 +61,8 @@ export class RecipeViewComponent implements OnInit {
             this.model = null;
           }
           else {
-            this.model = response.entities[0];
+            this.model = (response.entities[0] as Recipe);
+            this.buildCarouselPictureList();
           }
 
           this.modelIsReady = true;
@@ -74,6 +80,21 @@ export class RecipeViewComponent implements OnInit {
     }
     
     return ret;
+  }
+
+  buildCarouselPictureList(): void {
+    this.carouselPictures = [];
+
+    if (this.model && this.model.pictures) {
+      
+      this.model.pictures.forEach((pic: RecipePicture) => {
+        let item: CarouselItem = new CarouselItem();
+
+        item.imageSrc = this.svcMedia.getTransformationURL(pic.pictureId.publicId, pic.pictureId.cloudName)
+        item.captionText = pic.caption
+        this.carouselPictures.push(item);
+      })   
+    }
   }
 
   enablePreparationMode(): void {
