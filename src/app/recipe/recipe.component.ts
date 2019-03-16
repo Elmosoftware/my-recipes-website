@@ -10,7 +10,7 @@ import { WizardComponent } from "../shared/wizard/wizard.component";
 import { SubscriptionService } from "../services/subscription.service";
 import { ErrorLog } from '../model/error-log';
 import { EntityServiceFactory } from "../services/entity-service-factory";
-import { EntityService, EntityServiceQueryParams } from "../services/entity-service";
+import { EntityService, EntityServiceQueryParams, QUERY_PARAM_OWNER } from "../services/entity-service";
 import { MediaService, MediaTransformations } from "../services/media-service";
 import { WordAnalyzerService } from "../services/word-analyzer-service";
 import { APIResponseParser } from "../services/api-response-parser";
@@ -100,6 +100,10 @@ export class RecipeComponent implements OnInit, AfterViewInit {
 
   resetForm(forceNewRecipe: boolean = false) {
 
+    let q: EntityServiceQueryParams = new EntityServiceQueryParams();
+    q.pop = "true";
+    q.owner = QUERY_PARAM_OWNER.me; //We need to ensure the user can edit only his own recipes.
+
     this.isNewRecipe = !this.route.snapshot.paramMap.get("id") || forceNewRecipe;
 
     //If the form was already completed once, we will reset the wizard:
@@ -110,7 +114,8 @@ export class RecipeComponent implements OnInit, AfterViewInit {
     this.isCompleted = false;
 
     if (!this.isNewRecipe) {
-      this.svcRecipe.get(this.route.snapshot.paramMap.get("id"), new EntityServiceQueryParams("true"))
+      //this.svcRecipe.get(this.route.snapshot.paramMap.get("id"), new EntityServiceQueryParams("true"))
+      this.svcRecipe.get(this.route.snapshot.paramMap.get("id"), q)
         .subscribe(
           data => {
             let response: APIResponseParser = new APIResponseParser(data);
