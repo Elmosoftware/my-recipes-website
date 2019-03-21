@@ -587,6 +587,6 @@ export class RecipeComponent implements OnInit, AfterViewInit {
       this.uploadStatus = UPLOAD_STATUS.Error;
     }
 
-    this.toast.showError(item.getUserMessage());
+    this.toast.showError(item);
   }
 }

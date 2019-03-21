@@ -210,7 +210,7 @@ export class MyRecipesComponent implements OnInit {
   }
 
   localErrorHandler(item: ErrorLog) {
-    this.toast.showError(item.getUserMessage());
+    this.toast.showError(item);
   }
 
   /*

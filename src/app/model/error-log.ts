@@ -6,6 +6,7 @@ export class ErrorLog extends Entity {
         super();
         this.timestamp = new Date().toISOString();
         this.user = "anonymous"
+        this.innerExceptions = [];
     }
 
     timestamp: string = "";
@@ -16,7 +17,8 @@ export class ErrorLog extends Entity {
     httpStatusText: string = "";
     message: string = "";
     userMessage: string = "";
-    innerException: string = "";
+    isUserError: boolean = false;
+    innerExceptions: any[];
     stack: string = "";
 
     getUserMessage(): string{

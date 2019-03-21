@@ -80,7 +80,7 @@ export class EntitiesComponent implements OnInit {
   }
 
   localErrorHandler(item: ErrorLog) {
-    this.toast.showError(item.getUserMessage());
+    this.toast.showError(item);
   }
 
   openDialog(entityId: string): void {
@@ -94,8 +94,15 @@ export class EntitiesComponent implements OnInit {
 
       this.svc.get(entityId, query)
         .subscribe(data => {
-          let ent = new APIResponseParser(data).entities[0];
-          this.editAndSave(ent);
+          let ents = new APIResponseParser(data).entities;
+
+          if (ents && ents.length > 0) {
+            this.editAndSave(ents[0]);
+          }
+          else{
+            this.toast.showWarning("Al parecer el item que intentas editar ya no existe! Estamos actualizando los datos, intenta nuevamente.");
+            this.dataRefresh();
+          }          
         },
           err => {
             throw err
@@ -130,9 +137,10 @@ export class EntitiesComponent implements OnInit {
               //   this.cache.invalidateOne(this.svc.getCacheKey() as CACHE_MEMBERS)
               // }
             }
-          }, err => {
-            throw err
-          });
+          }); 
+          // , err => {
+          //   throw err
+          // });
       }
     });
   }
