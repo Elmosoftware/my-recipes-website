@@ -50,7 +50,7 @@
         <li class="nav-item dropdown">
           <div class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="true" id="dropdown02">
             <i *ngIf="authSvc.isAuthenticated; else notAuthUserImage">
-              <img class="rounded-circle profile-picture" [src]="authSvc.userProfile.picture" [alt]="authSvc.userProfile.name"
+              <img class="rounded-circle profile-picture" [src]="authSvc.userProfile.user.details.picture" [alt]="authSvc.userProfile.user.name"
                 data-toggle="tooltip" data-placement="bottom" [title]="authSvc.userProfile.userNameAndAccount">
             </i>
             <ng-template #notAuthUserImage>
@@ -61,7 +61,7 @@
             <div *ngIf="!authSvc.isAuthenticated" class="dropdown-item" (click)="login()">
               <i class="fa fa-sign-in fa-fw"></i> Iniciar sesión
             </div>
-            <div *ngIf="authSvc.isAuthenticated && !authSvc.userProfile.isSocial">
+            <div *ngIf="authSvc.isAuthenticated && !authSvc.userProfile.user.details.isSocial">
               <div class="dropdown-item" (click)="changePassword()">
                 <i class="fa fa-gear fa-fw"></i> Cambiar contraseña
               </div>

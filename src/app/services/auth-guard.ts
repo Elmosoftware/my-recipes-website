@@ -27,12 +27,12 @@ export class AuthGuard implements CanActivate {
 
       //If the user is already logged in, we will check for other constraints:
 
-      if (adminOnly && !this.authSvc.userProfile.isAdmin) {
+      if (adminOnly && !this.authSvc.userProfile.user.details.isAdmin) {
         ret = false;
         msg = `Administrator privileges are required to navigate to ${state.url}`;
       }
 
-      if (allowSocialUsers == false && this.authSvc.userProfile.isSocial) {
+      if (allowSocialUsers == false && this.authSvc.userProfile.user.details.isSocial) {
         ret = false;
         msg = `Social users are not allowed to navigate to ${state.url}`;
       }

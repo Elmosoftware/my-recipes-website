@@ -1,17 +1,20 @@
-export class Entity {    
-    public _id: string;
+import { EntityBase } from "./entity-base";
+import { User } from "./user";
+
+/**
+ * This class Extends "*EntityBase*" class by adding audit fields.
+ */
+export class Entity extends EntityBase {    
     public createdOn: Date;
-    public createdBy: string;
+    public createdBy: User;
     public lastUpdateOn: Date;
     public lastUpdateBy: string;
-    public publishedOn: Date;
 
     constructor(){
-        this._id = "";
+        super();
         this.createdOn = null;
-        this.createdBy = "";
+        this.createdBy = null;
         this.lastUpdateOn = null;
         this.lastUpdateBy = "";
-        this.publishedOn = null;
     }
 }

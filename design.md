@@ -277,7 +277,6 @@ v- continuar con desarrollo de Imagenes en Mis Recetas.
 
 ======================================================================
 
-
 P  I  C  T  U  R  E  S
 -------------------------
 
@@ -305,3 +304,42 @@ De todas formas el paquete https://github.com/expressjs/multer permite configura
 TODO:
 v-Agregar autenticación al endpoint /upload
 v-Agregar al media-service la capacidad de filtrar cuantos picture se pueden subir y el peso, (similar al lado servidor).
+
+==========================================================================
+
+U S E R  E N T I T Y
+---------------------
+
+User {
+    _id: ObjectId,
+    providerId: string,
+    name: string,
+    email: string,
+    userDetailsId: ObjectId
+}
+
+UserDetails{
+    _id: ObjectId,
+    user: ObjectId,
+    providerName: string;
+    lastLogin: Date;
+    isSocial: boolean;
+    picture: string;
+    emailVerified: boolean;
+    isAdmin: boolean;
+}
+
+Steps for the auth process:
+
+- After the user authenticates or signup in the provide page, a call to "/auth-callback" take place and the token is 
+retrieved by the App.
+- The app calls "api/management/user/{Provider user id in the token}" to get user details.
+- In that endpoint we need to follow this logic:
+    IF user exists with providerId == token.userId THEN
+        We update the entity "User" and "UserDetails" with the data provided by the Auth provider endpoint.
+    ELSE
+        We create the User and UserDetails
+    ENDIF
+
+    We return the User and UserDetails.
+

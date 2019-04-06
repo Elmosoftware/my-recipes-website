@@ -23,7 +23,6 @@ import { CarouselItem } from '../shared/carousel/carousel.component';
 export class RecipeViewComponent implements OnInit {
 
   globalErrorSubscription: any;
-  // model: Entity;
   model: Recipe;
   modelIsReady: boolean;
   svc: EntityService;
@@ -76,7 +75,7 @@ export class RecipeViewComponent implements OnInit {
     let ret: boolean = false;
 
     if (this.model && this.svcAuth.isAuthenticated) {
-      ret = this.model.createdBy == this.svcAuth.userProfile.userId || this.model.lastUpdateBy == this.svcAuth.userProfile.userId;
+      ret = this.model.createdBy._id == this.svcAuth.userProfile.user._id;
     }
     
     return ret;

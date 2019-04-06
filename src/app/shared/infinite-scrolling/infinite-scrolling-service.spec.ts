@@ -122,7 +122,14 @@ describe("InfiniteScrollingService Class", () => {
         });
         it(`Adding 1st page and scrolling down.`, (done) => {
 
-            let ev: EventEmitter<PagingHelper> = svc.dataFeed.subscribe((ph: PagingHelper) => {
+            // let ev: EventEmitter<PagingHelper> = svc.dataFeed.subscribe((ph: PagingHelper) => {
+            //     expect(ph.top).toEqual(PAGE_SIZE);
+            //     expect(ph.skip).toEqual(PAGE_SIZE);
+            //     done();
+            // })
+            let ev = svc.dataFeed;
+            
+            ev.subscribe((ph: PagingHelper) => {
                 expect(ph.top).toEqual(PAGE_SIZE);
                 expect(ph.skip).toEqual(PAGE_SIZE);
                 done();
@@ -136,7 +143,9 @@ describe("InfiniteScrollingService Class", () => {
 
             let dataFeedCount: number = 1;
 
-            let ev: EventEmitter<PagingHelper> = svc.dataFeed.subscribe((ph: PagingHelper) => {
+            let ev = svc.dataFeed;
+            
+            ev.subscribe((ph: PagingHelper) => {
                 expect(ph.top).toEqual(PAGE_SIZE);
                 expect(ph.skip).toEqual(PAGE_SIZE * dataFeedCount);
                 
@@ -170,7 +179,9 @@ describe("InfiniteScrollingService Class", () => {
 
             let dataFeedCount: number = 1;
 
-            let ev: EventEmitter<PagingHelper> = svc.dataFeed.subscribe((ph: PagingHelper) => {
+            let ev = svc.dataFeed;
+            
+            ev.subscribe((ph: PagingHelper) => {
                 expect(ph.top).toEqual(PAGE_SIZE);
                 expect(ph.skip).toEqual(PAGE_SIZE * dataFeedCount);
                 
@@ -213,7 +224,9 @@ describe("InfiniteScrollingService Class", () => {
 
             let dataFeedCount: number = 1;
 
-            let ev: EventEmitter<PagingHelper> = svc.dataFeed.subscribe((ph: PagingHelper) => {
+            let ev = svc.dataFeed;
+            
+            ev.subscribe((ph: PagingHelper) => {
                 expect(ph.top).toEqual(PAGE_SIZE);
                 expect(ph.skip).toEqual(PAGE_SIZE * dataFeedCount);
                 
@@ -265,7 +278,9 @@ describe("InfiniteScrollingService Class", () => {
 
             let dataFeedCount: number = 1;
 
-            let ev: EventEmitter<PagingHelper> = svc.dataFeed.subscribe((ph: PagingHelper) => {
+            let ev = svc.dataFeed;
+            
+            ev.subscribe((ph: PagingHelper) => {
                 expect(ph.top).toEqual(PAGE_SIZE);
                 expect(ph.skip).toEqual(PAGE_SIZE * dataFeedCount);
                 
@@ -425,7 +440,9 @@ describe("InfiniteScrollingService Class", () => {
 
             let dataFeedCount: number = 1;
 
-            let ev: EventEmitter<PagingHelper> = svc.dataFeed.subscribe((ph: PagingHelper) => {
+            let ev = svc.dataFeed;
+            
+            ev.subscribe((ph: PagingHelper) => {
                 expect(ph.top).toEqual(PAGE_SIZE);
                 expect(ph.skip).toEqual(PAGE_SIZE * dataFeedCount);
                 

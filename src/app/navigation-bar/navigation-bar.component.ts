@@ -41,7 +41,7 @@ export class NavigationBarComponent implements OnInit {
   }
 
   get isAdminUser() : boolean {
-    return this.authSvc.isAuthenticated && this.authSvc.userProfile.isAdmin;
+    return this.authSvc.isAuthenticated && this.authSvc.userProfile.user.details.isAdmin;
   }
 
   onSearchHandler($event: SearchService) {
@@ -56,7 +56,7 @@ export class NavigationBarComponent implements OnInit {
 
     this.dlgSvc.showConfirmDialog(new ConfirmDialogConfiguration("Confirmación de cambio de contraseña",
       `Si confirmas tu intención de cambiar tu contraseña de acceso, se te enviará un correo 
-      a <i>${this.authSvc.userProfile.email}</i> con las instrucciones detalladas para crear tu nueva contraseña.
+      a <i>${this.authSvc.userProfile.user.email}</i> con las instrucciones detalladas para crear tu nueva contraseña.
       <p>Recuerda que el mensaje de cambio de contraseña tiene un tiempo de validez, pasado el cual, el correo
        ya no será válido y deberás volver a iniciar el proceso.</p>`,
       "Si, deseo cambiar mi contraseña", "No, continuaré con la actual")).subscribe(result => {

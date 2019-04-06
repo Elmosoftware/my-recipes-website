@@ -1,4 +1,5 @@
 import { Entity } from "./entity";
+import { EntityBase } from './entity-base';
 
 export class APIResponse {
     
@@ -8,5 +9,5 @@ export class APIResponse {
     }
 
     error: Error | null;
-    entities: Entity[];
+    entities: Entity[] | EntityBase[];
 }

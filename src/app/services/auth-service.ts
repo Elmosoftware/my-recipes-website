@@ -5,6 +5,7 @@ import * as auth0 from 'auth0-js';
 
 import { environment } from "../../environments/environment";
 import { APIResponseParser } from "../services/api-response-parser";
+import { User } from "../model/user";
 
 (window as any).global = window;
 
@@ -30,14 +31,14 @@ export class AuthService {
     audience: environment.authSettings.audience
   });
 
-  private _userProfileData: UserProfile
+  private _userProfile: UserProfile
 
   /**
    * Return the User profile for the authenticated user.
    * If there is no authenticated user, this attribute will return a null value.
    */
   public get userProfile(): UserProfile {
-    return this._userProfileData;
+    return this._userProfile;
   }
 
   /**
@@ -112,7 +113,7 @@ export class AuthService {
     }
 
     this.auth0.changePassword({
-      email: this._userProfileData.email,
+      email: this._userProfile.user.email,
       connection: environment.authSettings.dbConnection
     }, (err) => {
       callback(err);
@@ -120,80 +121,34 @@ export class AuthService {
   }
 
   /**
-   * Return the user preferences for current user.
-   */
-  public getUserPreferences(): UserPreferences {
-
-    if (!this.isAuthenticated) {
-      throw this._getNotAuthenticatedError("get user preferences");
-    }
-
-    return new UserPreferences(this._userProfileData.name, this._userProfileData.email);
-  }
-
-  /**
    * 
-   * @param pref New user preferences like, email, name, etc..
-   * @param callback Function callback to be invoked as soon the asynchronous process ends. 
+   * @param user New user preferences like, email, name, etc..
+   * @param cb Function callback to be invoked as soon the asynchronous process ends. 
    * This function will receive a single parameter with the error details. If this parameter is null or empty 
    * means the update was successful.
    */
-  public updateUserPreferences(pref: UserPreferences, callback: Function) {
-
-    let userObj: any = {};
-    let dataChanged: boolean = false;
+  public updateUserPreferences(user: User, cb: Function) {
 
     if (!this.isAuthenticated) {
-      callback(this._getNotAuthenticatedError("update user preferences"));
-      return;
+      throw this._getNotAuthenticatedError("update user preferences");
     }
 
-    //If the user email changed:
-    if (pref.email != this._userProfileData.email) {
-      userObj.email = pref.email;
-      userObj.email_verified = false;
-      dataChanged = true;
-    }
-
-    //If the user name changed:
-    if (pref.name != this._userProfileData.name) {
-      if (this._userProfileData.isSocial) {
-        userObj.name = pref.name;
-      }
-      else {
-        userObj.user_metadata = { fullName: pref.name };
-      }
-      dataChanged = true;
-    }
-
-    //TODO: This feature, (to change the user role), need to be build as a separate feature.
-    // if (pref.isAdmin != this._userProfileData.isAdmin) {
-    //   userObj.app_metadata = { role: (pref.isAdmin) ? "ADMIN" : "USER" }; 
-    // } tes
-
-    if (dataChanged) {
-      this.http.put(this._buildManagementAPIURL("user", this._userProfileData.userId), userObj,
-        { headers: this._buildManagementAPIHeaders(this._userProfileData.accessToken) })
-        .subscribe((data) => {
-          let response: APIResponseParser = new APIResponseParser(data); //If there is an API error, this will throw.  
-
-          this._setSession(null, response.entities);
-          callback(true);
-        },
-          err => {
-            throw err
-          });
-    }
-    else {
-      callback(true); //If no data was changed, no need to call the API, but we sent a true to the frontend anyway :-)
-    }
+    this.http.put(this._buildManagementAPIURL("user"), user,
+      { headers: this._buildManagementAPIHeaders(this._userProfile.accessToken) })
+      .subscribe((data) => {
+        new APIResponseParser(data); //If there is an API error, this will throw.  
+        this._setSession(null, user);
+        cb(null, this._userProfile.user);
+      }, err => {
+        throw err
+      });
   }
 
   /**
    * Returns a boolean value indicating if there is a current authenticated user with a valid session.
    */
   public get isAuthenticated(): boolean {
-    return this._userProfileData && this._userProfileData.sessionExpiresAt > new Date();
+    return this._userProfile && this._userProfile.sessionExpiresAt > new Date();
   }
 
   /**
@@ -219,15 +174,15 @@ export class AuthService {
     if (authResult && authResult.idTokenPayload && authResult.idTokenPayload.sub) {
 
       //Use access token to retrieve user's profile and set session:
-      this.http.get(this._buildManagementAPIURL("user", authResult.idTokenPayload.sub),
+      this.http.get(this._buildManagementAPIURL("login"),
         { headers: this._buildManagementAPIHeaders(authResult.accessToken) })
         .subscribe((data) => {
           let response: APIResponseParser = new APIResponseParser(data); //This will throw if there is an API error
 
           //Sometimes, (and because the async nature of the auth process), at this point the session and the user profile was 
-          //already set. So, we check before to re-create the session twice :-)
+          //already set. So, we check that before to re-create the session twice :-)
           if (!this.isAuthenticated) {
-            this._setSession(authResult, response.entities);
+            this._setSession(authResult, response.entities[0] as any);
           }
 
           if (cb) {
@@ -247,7 +202,7 @@ export class AuthService {
    * Erase the stored user session and profile data.
    */
   private _removeSession() {
-    this._userProfileData = null;
+    this._userProfile = null;
   }
 
   /**
@@ -257,49 +212,30 @@ export class AuthService {
    * Otherwise this method will @throws An error indicating that the @param authResult can't be null.
    * @param authResult Authentication data received afte the authentication 
    * process, (includes tokens, user id, session expiration, etc.)
-   * @param profile Full user profile.
+   * @param user User object with all the user required information.
    */
-  private _setSession(authResult = null, profile) {
+  private _setSession(authResult = null, user: User) {
 
     try {
-      if (!authResult && !this._userProfileData) {
+      if (!authResult && !this._userProfile) {
         throw new Error("You can't establish session data without the authentication tokens.")
       }
 
-      if (!this._userProfileData) {
-        this._userProfileData = new UserProfile();
+      if (!this._userProfile) {
+        this._userProfile = new UserProfile();
       }
 
       if (authResult) {
-        this._userProfileData.accessToken = authResult.accessToken;
-        this._userProfileData.idToken = authResult.idToken;
-        this._userProfileData.sessionExpiresAt = new Date((authResult.expiresIn * 1000) + Date.now());
+        this._userProfile.accessToken = authResult.accessToken;
+        this._userProfile.idToken = authResult.idToken;
+        this._userProfile.sessionExpiresAt = new Date((authResult.expiresIn * 1000) + Date.now());
       }
 
-      this._userProfileData.userId = profile.user_id;
-      this._userProfileData.isSocial = profile.identities[0].isSocial;
-      this._userProfileData.provider = profile.identities[0].provider;
-      this._userProfileData.createdAt = profile.created_at;
-      this._userProfileData.updatedAt = profile.updated_at;
-      this._userProfileData.lastLogin = profile.last_login;
-      this._userProfileData.email = profile.email;
-      this._userProfileData.emailVerified = profile.email_verified;
-      this._userProfileData.picture = profile.picture;
+      this.userProfile.user = user;
 
-      if (this._userProfileData.isSocial) {
-        this._userProfileData.name = profile.name;
-      }
-      else {
-        this._userProfileData.name = profile.user_metadata.fullName
-      }
-
-      if (profile.app_metadata) {
-        this._userProfileData.isAdmin = (profile.app_metadata.role && profile.app_metadata.role.toLowerCase() == "admin");
-      }
-
-      console.log(`User "${this._userProfileData.name}" (${this._userProfileData.email}) successfully logged in. (Session expires at ${this._userProfileData.sessionExpiresAt})`)
+      console.log(`User "${this._userProfile.user.name}" (${this._userProfile.user.email}) successfully logged in. 
+        (Session expires at ${this._userProfile.sessionExpiresAt})`)
     } catch (error) {
-
       this._removeSession();
       throw new Error(`There was an error while trying to gather the user authentication data. \n
         Following error details: ${error.message}`);
@@ -350,33 +286,18 @@ export class UserProfile {
   constructor() {
   }
 
-  userId: string;
+  user: User;
   idToken: string;
   accessToken: string;
-  provider: string;
-  createdAt: Date;
-  updatedAt: Date;
-  lastLogin: Date;
-  name: string;
-  isSocial: boolean;
-  picture: string;
-  email: string;
-  emailVerified: boolean;
-  isAdmin: boolean;
   sessionExpiresAt: Date;
 
   get userNameAndAccount(): string {
-    return this.name + " (" + this.email + ")."
+    let ret = ""
+
+    if (this.user) {
+      ret = this.user.name + " (" + this.user.email + ")."  
+    }
+    
+    return ret;
   }
-}
-
-export class UserPreferences {
-
-  constructor(name: string, email: string) {
-    this.name = name;
-    this.email = email;
-  }
-
-  name: string;
-  email: string;
 }

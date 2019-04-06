@@ -38,24 +38,5 @@
       <button class="btn btn-primary" type="button" [disabled]="!(userPrefForm.valid && userPrefForm.dirty && (email.pristine || (email.dirty && emailConf.value == email.value)))"
         (click)="save()">Guardar</button>
     </div>
-    <!-- <div>valid:{{ userPrefForm.valid }}</div>
-          <div>invalid:{{ userPrefForm.invalid }}</div>
-          <div>pristine:{{ userPrefForm.pristine }}</div>
-          <div>dirty:{{ userPrefForm.dirty }}</div>
-          <div>touched:{{ userPrefForm.touched }}</div>
-          <div>untouched:{{ userPrefForm.untouched }}</div>
-          <hr>
-          <div>email.valid:{{ email.valid }}</div>
-          <div>email.invalid:{{ email.invalid }}</div>
-          <div>email.pristine:{{ email.pristine }}</div>
-          <div>email.dirty:{{ email.dirty }}</div>
-          <div>email.touched:{{ email.touched }}</div>
-          <div>email.untouched:{{ email.untouched }}</div>
-          <hr>
-
-          <div>email: {{ email.value }}</div>
-          <div>emailConf: {{ emailConf.value }}</div>
-          <div>val: {{ emailConf.value == email.value }}</div> -->
-
   </form>
 </div>

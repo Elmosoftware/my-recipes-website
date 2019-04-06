@@ -49,7 +49,7 @@ export class MediaService {
         .pipe(
           map(data => {
             let respData = new APIResponseParser(data);
-            this.uploadPicturesSettings = respData.entities;
+            this.uploadPicturesSettings = respData.entities[0];
             return this.uploadPicturesSettings;
           })
         );
@@ -175,24 +175,6 @@ export class MediaService {
         })
       );
   }
-
-  /*
- "cloudName": "elmosoftware",
-        "filesPrefix": "my-recipes-stage/user-files",
-        "maxFilesSize": "2097152",
-        "maxUploadsPerCall": "5",
-        "supportedFileFormats": [
-            ".gif",
-            ".jpeg",
-            ".jpe",
-            ".jpg",
-            ".png",
-            ".tga",
-            ".tif",
-            ".tiff",
-            ".webp"
-        ]
-  */
 
   private validateUpload(files: FileList): Observable<object> {
 
