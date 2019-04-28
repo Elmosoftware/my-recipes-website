@@ -362,5 +362,5 @@ v- Refactor de "recipe-item" component para incluirlo en "search".
         -  display-full-description: Indicates if the description will be displayed full or it will be summarized. 
         -  display-ingredients: Indicates if the list of ingredients will be displayed.
         -  display-directions : Show recipe directions with direction number.
- - Agregar la funcionalidad de Busqueda por usuario.
+v - Agregar la funcionalidad de Busqueda por usuario.
         - Crear las clase "SearchByUserService" implementando la interfaz "SearchServiceInterface"

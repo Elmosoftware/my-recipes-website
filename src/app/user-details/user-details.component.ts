@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 
 import { EntityServiceFactory } from "../services/entity-service-factory";
 import { EntityService } from "../services/entity-service";
@@ -11,6 +11,7 @@ import { ErrorLog } from '../model/error-log';
 import { ToasterHelperService } from '../services/toaster-helper-service';
 import { SubscriptionService } from "../services/subscription.service";
 import { MediaService } from "../services/media-service";
+import { SEARCH_TYPE } from "../services/search-type";
 
 const TOP_USER_RECIPES: number = 5;
 
@@ -26,7 +27,8 @@ export class UserDetailsComponent implements OnInit {
   model: any;
   helper: Helper;
 
-  constructor(private svcFac: EntityServiceFactory,
+  constructor(private router: Router,
+    private svcFac: EntityServiceFactory,
     private svcAuth: AuthService,
     private route: ActivatedRoute,
     private subs: SubscriptionService,
@@ -85,6 +87,10 @@ export class UserDetailsComponent implements OnInit {
 
   getFriendlyDate(d: Date): string {
     return this.helper.friendlyTimeFromNow(d);
+  }
+
+  searchMore(): void {
+    this.router.navigate(["/search"], { queryParams: { type: SEARCH_TYPE.User, term: this.model.user.name, id: this.model.userId } } )
   }
 
   localErrorHandler(item: ErrorLog) {
