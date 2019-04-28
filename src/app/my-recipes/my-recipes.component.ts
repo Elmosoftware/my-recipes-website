@@ -6,7 +6,8 @@ import { Helper } from "../shared/helper";
 import { SubscriptionService } from "../services/subscription.service";
 import { ErrorLog } from '../model/error-log';
 import { EntityServiceFactory } from "../services/entity-service-factory";
-import { EntityService, EntityServiceQueryParams, QUERY_PARAM_PUB, QUERY_PARAM_OWNER } from "../services/entity-service";
+import { EntityService } from "../services/entity-service";
+import { APIQueryParams, QUERY_PARAM_PUB, QUERY_PARAM_OWNER } from "../services/api-query-params";
 import { APIResponseParser } from "../services/api-response-parser";
 import { Recipe } from "../model/recipe";
 import { InfiniteScrollingService, SCROLL_POSITION, PagingHelper } from "../shared/infinite-scrolling/infinite-scrolling-module";
@@ -56,7 +57,6 @@ export class MyRecipesComponent implements OnInit {
   reset() {
     this.svcInfScroll = new InfiniteScrollingService<Recipe>(PAGE_SIZE);
     this.resetMealTypesFilterCounters();
-    // this.onDataFeed = this.svcInfScroll.dataFeed.subscribe(ph => { this.onDataFeedHandler(ph) })
     this.onDataFeed = this.svcInfScroll.dataFeed;
 
     this.onDataFeed
@@ -167,7 +167,7 @@ export class MyRecipesComponent implements OnInit {
 
   private getRecipes(top: number = 0, skip: number = 0) {
 
-    let q: EntityServiceQueryParams = new EntityServiceQueryParams();
+    let q: APIQueryParams = new APIQueryParams();
 
     if (this.svcInfScroll.model) {
       this.toast.showInformation("Estamos trayendo más resultados de tu búsqueda...", "Espera!");

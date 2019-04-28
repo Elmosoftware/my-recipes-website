@@ -10,7 +10,8 @@ import { WizardComponent } from "../shared/wizard/wizard.component";
 import { SubscriptionService } from "../services/subscription.service";
 import { ErrorLog } from '../model/error-log';
 import { EntityServiceFactory } from "../services/entity-service-factory";
-import { EntityService, EntityServiceQueryParams, QUERY_PARAM_OWNER } from "../services/entity-service";
+import { EntityService } from "../services/entity-service";
+import { APIQueryParams, QUERY_PARAM_OWNER } from "../services/api-query-params";
 import { MediaService, MediaTransformations } from "../services/media-service";
 import { WordAnalyzerService } from "../services/word-analyzer-service";
 import { APIResponseParser } from "../services/api-response-parser";
@@ -100,7 +101,7 @@ export class RecipeComponent implements OnInit, AfterViewInit {
 
   resetForm(forceNewRecipe: boolean = false) {
 
-    let q: EntityServiceQueryParams = new EntityServiceQueryParams();
+    let q: APIQueryParams = new APIQueryParams();
     q.pop = "true";
     q.owner = QUERY_PARAM_OWNER.me; //We need to ensure the user can edit only his own recipes.
 

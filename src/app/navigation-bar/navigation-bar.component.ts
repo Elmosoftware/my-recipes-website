@@ -1,11 +1,12 @@
-import { Component, OnChanges, OnInit, AfterViewInit, Input } from '@angular/core';
+import { Component, OnChanges, OnInit, Input } from '@angular/core';
 import { trigger, state, animate, transition, style } from '@angular/animations';
 import { Router } from '@angular/router';
 
 import { StandardDialogService, ConfirmDialogConfiguration } from "../standard-dialogs/standard-dialog.service";
-import { SearchService, SEARCH_TYPE } from "../services/search-service";
+import { SearchServiceInterface } from "../services/search-service";
 import { AuthService } from "../services/auth-service";
 import { ToasterHelperService } from "../services/toaster-helper-service";
+import { Recipe } from '../model/recipe';
 
 @Component({
   selector: 'app-navigation-bar',
@@ -44,8 +45,9 @@ export class NavigationBarComponent implements OnInit {
     return this.authSvc.isAuthenticated && this.authSvc.userProfile.user.details.isAdmin;
   }
 
-  onSearchHandler($event: SearchService) {
-    $event.search();
+  onSearchHandler($event: SearchServiceInterface<Recipe>) {
+    // $event.search();
+    this.router.navigate(["/search"], { queryParams: { type: $event.searchType, term: $event.term, id: $event.id } } )
   }
 
   login() {

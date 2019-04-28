@@ -14,8 +14,6 @@ import { ToastrModule } from 'ngx-toastr';
 import { NgxSelectModule } from "ngx-select-ex";
 import { NgxPageScrollModule } from 'ngx-page-scroll';
 import { NgxPageScrollCoreModule } from 'ngx-page-scroll-core';
-// import { NgProgressModule } from '@ngx-progressbar/core';
-// import { NgProgressHttpModule } from '@ngx-progressbar/http';
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
 
@@ -44,6 +42,7 @@ import { CarouselComponent } from './shared/carousel/carousel.component';
 import { AboutComponent } from './about/about.component';
 import { FileDropperComponent } from './shared/file-dropper/file-dropper.component';
 import { TestNewStuffComponent } from './test-new-stuff/test-new-stuff.component';
+import { UserDetailsComponent } from './user-details/user-details.component';
 
 //Services
 import { SubscriptionService } from "./services/subscription.service";
@@ -54,6 +53,7 @@ import { ToasterHelperService } from "./services/toaster-helper-service";
 import { AuthService } from "./services/auth-service";
 import { AuthGuard } from './services/auth-guard';
 import { MediaService } from "./services/media-service";
+import { SearchServiceFactory } from "./services/search-service-factory";
 
 //Dialogs
 import { ConfirmDialogComponent } from './standard-dialogs/confirm-dialog/confirm-dialog.component'
@@ -62,6 +62,7 @@ import { EditLevelDialog } from './standard-dialogs/edit-level-dialog/edit-level
 import { EditUnitDialog } from './standard-dialogs/edit-unit-dialog/edit-unit-dialog';
 import { EditIngredientDialog } from "./standard-dialogs/edit-ingredient-dialog/edit-ingredient-dialog";
 import { EditRecipeDirectionDialog } from "./standard-dialogs/edit-recipe-direction-dialog/edit-recipe-direction-dialog";
+import { RecipeItemComponent } from './recipe-item/recipe-item.component';
 
 @NgModule({
   declarations: [
@@ -88,7 +89,9 @@ import { EditRecipeDirectionDialog } from "./standard-dialogs/edit-recipe-direct
     MyRecipesComponent,
     CarouselComponent,
     AboutComponent,
-    FileDropperComponent
+    FileDropperComponent,
+    UserDetailsComponent,
+    RecipeItemComponent
   ],
   imports: [
     FormsModule,
@@ -110,16 +113,6 @@ import { EditRecipeDirectionDialog } from "./standard-dialogs/edit-recipe-direct
     NgxSelectModule,
     WizardModule,
     HttpClientModule,
-    // NgProgressModule,
-    // // .withConfig({
-    // //   trickleSpeed: 300,
-    // //   min: 8,
-    // //   thick: true,
-    // //   spinner: true,
-    // //   spinnerPosition: "left",
-    // //   meteor: false
-    // // }),
-    // NgProgressHttpModule,
     LoadingBarModule,
     LoadingBarHttpClientModule,
     NgxPageScrollModule,
@@ -145,7 +138,8 @@ import { EditRecipeDirectionDialog } from "./standard-dialogs/edit-recipe-direct
     StandardDialogService,
     Cache,
     ToasterHelperService,
-    MediaService
+    MediaService,
+    SearchServiceFactory
   ],
   bootstrap: [AppComponent]
 })

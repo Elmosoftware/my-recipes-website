@@ -343,3 +343,24 @@ retrieved by the App.
 
     We return the User and UserDetails.
 
+==========================================================================
+
+User details page
+---------------------
+
+v - Crear nuevo componente: "recipe-item"
+    Va a ser incluido dentro de:
+        "latest-recipes", "user-details", "search" usados para mostrar los datos de un recipe.
+        Comenzar creandolo e incluyendolo en "latest-recipes" e ir incrementando la complejidad en "search" que necesita ser refactorizado.
+
+NEXT STEPS:
+-----------
+
+v- Refactor de Search.
+v- Refactor de "recipe-item" component para incluirlo en "search".
+    -Parameters:
+        -  display-full-description: Indicates if the description will be displayed full or it will be summarized. 
+        -  display-ingredients: Indicates if the list of ingredients will be displayed.
+        -  display-directions : Show recipe directions with direction number.
+ - Agregar la funcionalidad de Busqueda por usuario.
+        - Crear las clase "SearchByUserService" implementando la interfaz "SearchServiceInterface"

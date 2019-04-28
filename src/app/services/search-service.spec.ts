@@ -1,20 +1,15 @@
-import { TestBed, inject } from '@angular/core/testing';
-import { Router } from '@angular/router';
-
-import { SearchService, SEARCH_TYPE } from './search-service';
+import { SEARCH_TYPE } from "./search-type";
+import { SearchServiceFactory } from "./search-service-factory";
+import { SearchServiceInterface } from "./search-service";
+import { Recipe } from '../model/recipe';
 
 describe("SearchService Class", () => {
 
-  let router: Router;
-  let ss: SearchService; 
+  let ss: SearchServiceInterface<Recipe>; 
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [{ provide: Router, useClass: class { navigate = jasmine.createSpy("navigate"); } }]
-    });
-
-    router = TestBed.get(Router);
-    ss = new SearchService(router)
+    let sf = new SearchServiceFactory(null);
+    ss = sf.getService(SEARCH_TYPE.Text);
   });
 
   describe("term", () => {
@@ -43,36 +38,5 @@ describe("SearchService Class", () => {
       expect(ss.words).toEqual(["first second"]);
     });    
   });
-  describe("search()", () => {
-    it(`For SEARCH_TYPE "Text" it must throw an error if the search term is not valid.`, () => {
-      ss.term = "a";
-
-      expect(() => { ss.search(); })
-        .toThrowError(`The search term is not valid. The search operation will be aborted.`);
-    });    
-    it(`For SEARCH_TYPE "Text" it navigates successfully to search page when the search term is valid.`, () => {
-      ss.term = "my search";
-      ss.search();
-      
-      expect(router.navigate).toHaveBeenCalledWith(['/search'], 
-        { queryParams: { type: "text", term: "my search", id: "" }});
-    });    
-    it(`For SEARCH_TYPE "Ingredient" it must throw an error if the search term is not valid.`, () => {
-      ss.searchType = SEARCH_TYPE.Ingredient;
-      ss.term = "Ingredient name";
-      ss.id = ""
-
-      expect(() => { ss.search(); })
-        .toThrowError(`The search term is not valid. The search operation will be aborted.`);
-    });    
-    it(`For SEARCH_TYPE "Ingredient" it navigates successfully to search page when the search term is valid.`, () => {
-      ss.searchType = SEARCH_TYPE.Ingredient;
-      ss.term = "Ingredient name";
-      ss.id = "xxx"
-      ss.search();
-      
-      expect(router.navigate).toHaveBeenCalledWith(['/search'], 
-        { queryParams: { type: "ingredient", term: "Ingredient name", id: "xxx" }});
-    });   
-  });
+  
 });

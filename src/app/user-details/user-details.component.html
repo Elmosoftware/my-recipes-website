@@ -1,0 +1,63 @@
+<!-- Navigation Bar -->
+<app-navigation-bar searchBoxEnabled="true"></app-navigation-bar>
+
+<div class="container col-lg-8 col-sm formPositioning">
+  <!-- User info -->
+  <div *ngIf="model.user; else noData">
+    <div class="row my-5 align-items-center">
+      <div class="col-auto">
+        <img [src]="model.user.details.picture">
+      </div>
+      <div class="col">
+        <div class="userName">{{ model.user.name }}</div>
+        <div>Miembro desde: {{ getFriendlyDate(model.user.details.memberSince) }}</div>
+        <div *ngIf="model.recipesAreReady">Recetas publicadas: {{ model.totalRecipes }}</div>
+      </div>
+    </div>
+    <!-- Last recipes list -->
+    <div class="row my-3 align-items-start">
+      <div class="col-12">
+        <h3>Sus últimas recetas:</h3>
+      </div>
+    </div>
+    <app-recipe-item hide-user="true" [model]="model.recipes"></app-recipe-item>
+    <div *ngIf="model.recipesAreReady && model.totalRecipes == 0"
+      class="row mt-4 justify-content-center alert alert-warning">
+      <div class="col-3 align-self-center text-center">
+        <i class="fa fa-info-circle fa-5x" aria-hidden="true"></i>
+      </div>
+      <div class="col-9 align-self-start">
+        <h3>Oops!</h3>
+        <p>
+          <strong>Parece que este usuario aún no creo ninguna receta o al menos no posee ninguna publicada.</strong>
+        </p>
+        <p>Intenta volver a nuestra
+          <a routerLink="/home">página principal</a> y comenzar desde alli.</p>
+      </div>
+    </div>
+    <div *ngIf="model.recipesAreReady && model.totalRecipes > model.topLastRecipes"
+      class="row mt-4 justify-content-center">
+      <div class="col-auto">
+        <button class="btn btn-primary" type="button" (click)="searchMore()">
+          Buscar más!
+        </button>
+      </div>
+    </div>
+  </div>
+  <ng-template #noData>
+    <div *ngIf="model.userIsReady && !model.user" class="row mt-4 justify-content-center alert alert-warning">
+      <div class="col-3 align-self-center text-center">
+        <i class="fa fa-info-circle fa-5x" aria-hidden="true"></i>
+      </div>
+      <div class="col-9 align-self-start">
+        <h3>Oops!</h3>
+        <p>
+          <strong>Parece que el usuario ha cerrado su cuenta o bien el enlace por el que has accedido es
+            incorrecto.</strong>
+        </p>
+        <p>Intenta volver a nuestra
+          <a routerLink="/home">página principal</a> y comenzar desde alli.</p>
+      </div>
+    </div>
+  </ng-template>
+</div>

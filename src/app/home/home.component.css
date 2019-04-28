@@ -3,6 +3,10 @@
     border-radius: 0;
 }
 
+.latest-recipes-section {
+    background-color: rgb(232, 182, 124);
+}
+
 .search-by-ingredient-section{
     background-color: rgb(241, 238, 168);
 }

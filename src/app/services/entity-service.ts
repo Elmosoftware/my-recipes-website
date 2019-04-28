@@ -6,6 +6,7 @@ import { Entity } from "../model/entity";
 import { EntityDef } from "../model/entity-factory";
 import { Cache, CACHE_MEMBERS } from "../shared/cache/cache";
 import { AuthService } from './auth-service';
+import { APIQueryParams } from "./api-query-params";
 
 /**
  * Entities Data Service
@@ -53,7 +54,7 @@ export class EntityService {
    * the documents at least there is any contraint defined in the query parameters.
    * @param query Query parameters for the API like top, sort, filter and others. 
    */
-  get(id: string = "", query: EntityServiceQueryParams): Observable<Object> {
+  get(id: string = "", query: APIQueryParams): Observable<Object> {
     return this.http.get(this.getUrl(id, query), { headers: this.buildAPIHeaders() });
   }
 
@@ -90,7 +91,7 @@ export class EntityService {
    * @param param Additional params, (like the Object Id)
    * @param query Query parameters.
    */
-  private getUrl(param?: string, query?: EntityServiceQueryParams): string {
+  private getUrl(param?: string, query?: APIQueryParams): string {
 
     let queryText: string = "";
 
@@ -116,81 +117,5 @@ export class EntityService {
     }
 
     return ret;
-  }
-}
-
-export const enum QUERY_PARAM_PUB {
-  /**
-   * Only include Published entities in the results.
-   */
-  default = "default",
-  /**
-   * Include both, published and not published entities in the results.
-   */
-  all = "all",
-  /**
-   *  Only include Not Published entities in the results.
-   */
-  notpub = "notpub"
-};
-
-export const enum QUERY_PARAM_OWNER {
-  /**
-   * Include any entity in the results, regardless of which user is the owner.
-   */
-  any = "any",
-  /**
-   * Include only entities owned by the current user.
-   */
-  me = "me",
-  /**
-   *  Only include entities owned by other users that the current one.
-   */
-  others = "others"
-};
-
-export class EntityServiceQueryParams {
-
-  constructor(pop: string = "", filter: string = "", top: string = "", skip: string = "",
-    sort: string = "", count: string = "", fields: string = "", pub: QUERY_PARAM_PUB = QUERY_PARAM_PUB.default,
-    owner: QUERY_PARAM_OWNER = QUERY_PARAM_OWNER.any) {
-    this.pop = pop;
-    this.top = top;
-    this.skip = skip;
-    this.sort = sort;
-    this.filter = filter;
-    this.count = count;
-    this.fields = fields;
-    this.pub = pub;
-    this.owner = owner;
-  }
-
-  top: string;
-  skip: string;
-  sort: string;
-  pop: string;
-  filter: string;
-  count: string;
-  fields: string;
-  pub: QUERY_PARAM_PUB;
-  owner: QUERY_PARAM_OWNER;
-
-  getQueryString(): string {
-
-    let ret = { value: "" };
-
-    //Parsing query parameters:
-    Object.getOwnPropertyNames(this).forEach((element) => {
-      this.appendQueryValue(ret, element, this[element]);
-    });
-
-    return ret.value;
-  }
-
-  private appendQueryValue(query: any, paramName: string, value: string) {
-
-    if (value) {
-      query.value += `${(query.value.length > 0) ? "&" : ""}${paramName}=${value}`;
-    }
   }
 }

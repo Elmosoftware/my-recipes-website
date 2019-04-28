@@ -2,10 +2,12 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import * as auth0 from 'auth0-js';
+import { Observable } from "rxjs";
 
 import { environment } from "../../environments/environment";
 import { APIResponseParser } from "../services/api-response-parser";
 import { User } from "../model/user";
+import { APIQueryParams } from './api-query-params';
 
 (window as any).global = window;
 
@@ -151,6 +153,10 @@ export class AuthService {
     return this._userProfile && this._userProfile.sessionExpiresAt > new Date();
   }
 
+  public getUsersInfo(id: string, query: APIQueryParams): Observable<Object> {
+      return this.http.get(this._buildManagementAPIURL("user", id, query));
+  }
+  
   /**
    * This method is called once when the app is started.
    * It uses session cookies to refresh the token and continue an previous user session.
@@ -247,13 +253,19 @@ export class AuthService {
    * @param functionName Management API function name to invoke.
    * @param param URL Param to send.
    */
-  private _buildManagementAPIURL(functionName: string, param?: string): string {
+  private _buildManagementAPIURL(functionName: string, param?: string, query?: APIQueryParams): string {
+
+    let queryText: string = "";
 
     if (!param) {
       param = "";
     }
 
-    return `${environment.apiURL}${environment.apiManagementEndpoint}${functionName}/${param}`;
+    if (query) {
+      queryText = query.getQueryString();
+    }
+
+    return `${environment.apiURL}${environment.apiManagementEndpoint}${functionName}/${param}?${queryText}`;
   }
 
   private _buildManagementAPIHeaders(accessToken: string): HttpHeaders {
@@ -295,9 +307,9 @@ export class UserProfile {
     let ret = ""
 
     if (this.user) {
-      ret = this.user.name + " (" + this.user.email + ")."  
+      ret = this.user.name + " (" + this.user.email + ")."
     }
-    
+
     return ret;
   }
 }

@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
+
 import { EntityServiceFactory } from "../../services/entity-service-factory";
-import { EntityService, EntityServiceQueryParams } from "../../services/entity-service";
+import { APIQueryParams } from "../../services/api-query-params";
+import { EntityService } from "../../services/entity-service";
 import { MediaService } from "../../services/media-service";
 import { APIResponseParser } from "../../services/api-response-parser";
 import { Entity } from "../../model/entity";
@@ -157,7 +159,7 @@ export class Cache extends CacheRepository {
     }
 
     private refreshCacheLatestRecipes(): Promise<Object> {
-        let q = new EntityServiceQueryParams();
+        let q = new APIQueryParams();
         q.pop = "true";
         q.top = "3";
         q.sort = "-publishedOn";

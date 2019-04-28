@@ -7,6 +7,7 @@ export class UserDetails extends EntityBase {
         super();
         this.user = null;
         this.providerName = "";
+        this.memberSince = null;
         this.lastLogin = null;
         this.isSocial = false;
         this.picture = "";
@@ -16,6 +17,7 @@ export class UserDetails extends EntityBase {
 
     user: User;
     providerName: string;
+    memberSince: Date;
     lastLogin: Date;
     isSocial: boolean;
     picture: string;

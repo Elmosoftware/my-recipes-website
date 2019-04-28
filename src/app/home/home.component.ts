@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { SearchService, SEARCH_TYPE } from "../services/search-service";
+import { Router } from '@angular/router';
+
+import { SearchServiceInterface } from "../services/search-service";
 import { Cache } from "../shared/cache/cache";
 import { Helper } from "../shared/helper";
 import { environment } from "../../environments/environment";
 import { procastinationData } from "../static/procastinationData";
+import { Recipe } from '../model/recipe';
 
 @Component({
   selector: 'app-home',
@@ -15,7 +18,7 @@ export class HomeComponent implements OnInit {
   private helper: Helper;
   public procastinationRandomUrl: string;
 
-  constructor(public cache: Cache) {
+  constructor(private router: Router, public cache: Cache) {
   }
 
   ngOnInit() {
@@ -27,9 +30,9 @@ export class HomeComponent implements OnInit {
   ngAfterViewInit(): void {
   }
 
-  onSearchHandler($event: SearchService) {
+  onSearchHandler($event: SearchServiceInterface<Recipe>) {
     console.log(`SEARCH! type:"${$event.searchType}", term:"${$event.term}", id:"${$event.id}"`);
-    $event.search();
+    this.router.navigate(["/search"], { queryParams: { type: $event.searchType, term: $event.term, id: $event.id } } )
   }
 
   get contactEmailLink(): string {

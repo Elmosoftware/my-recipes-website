@@ -26,15 +26,20 @@ export class FileDropperComponent implements OnInit {
 
   @Input()
   set progress(value: number) {
-    if (value <= PROGRESS_MIN) {
-      this._progress = PROGRESS_MIN;
-    }
-    else {
-      this._progress = (value > PROGRESS_MAX) ? PROGRESS_MAX : value;
-    }
 
-    if (this.autoReset && this._progress == PROGRESS_MAX) {
-      this.isReseting = true;
+    if (!isNaN(value)) {
+      value = Math.round(value);
+
+      if (value <= PROGRESS_MIN) {
+        this._progress = PROGRESS_MIN;
+      }
+      else {
+        this._progress = (value > PROGRESS_MAX) ? PROGRESS_MAX : value;
+      }
+
+      if (this.autoReset && this._progress == PROGRESS_MAX) {
+        this.isReseting = true;
+      }
     }
   }
   get progress(): number {
@@ -78,7 +83,7 @@ export class FileDropperComponent implements OnInit {
     this._progress = PROGRESS_MIN;
     this.isReseting = false;
   }
-  
+
   autoResetDone($event) {
     if ($event.toState == "finish") {
       this.forceReset();

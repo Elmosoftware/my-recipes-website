@@ -3,35 +3,34 @@
 
 <!-- Search Component -->
 <a id="topSearch"></a>
-<div class="row sticky-top formPositioning align-items-center">
-  <div class="col-12 alert alert-info">
-    <search-box [searchType]="svcSearch.searchType" [initialTerm]="initialValues.term" [initialId]="initialValues.id" (search)="onSearchHandler($event)"></search-box>
+<div class="container alert alert-info sticky-top formPositioning overlayIndex">
+  <div class="row align-items-center">
+    <div class="col-12">
+      <search-box [searchType]="svcSearch.searchType" [initialTerm]="initialValues.term" [initialId]="initialValues.id"
+        (search)="onSearchHandler($event)" [searchInProgress]="asyncInProgress" [placeHolder]="placeHolderText"></search-box>
+    </div>
+  </div>
+  <div *ngIf="svcInfScroll.model && svcInfScroll.model.length > 0" class="row justify-content-between mt-2">
+    <div class="col-auto">
+        Mostrando {{ svcInfScroll.count }} resultados de un total de {{ svcInfScroll.totalCount }} coincidencias.
+    </div>
+    <div class="col-auto">
+        <button type="button" pageScroll href="#topSearch" class="btn btn-primary btn-sm" [disabled]="asyncInProgress" (click)="fullScrollUp()"
+        data-toggle="tooltip" data-placement="top" title="Ir al primer resultado de la búsqueda.">
+        <i class="fa fa-chevron-up fa-1x"></i>
+      </button>
+      <button type="button" pageScroll href="#bottomSearch" class="btn btn-primary btn-sm ml-2" [disabled]="asyncInProgress" (click)="fullScrollDown()"
+        data-toggle="tooltip" data-placement="top" title="Ir al final o buscar más resultados.">
+        <i class="fa fa-chevron-down fa-1x"></i>
+      </button>
+    </div>
   </div>
 </div>
-<div class="container col-lg-8 col-sm">
+
+<div class="container">
   <div *ngIf="svcInfScroll.model && svcInfScroll.model.length > 0" infinite-scrolling [scrollWindow]="true" (scrollEnd)="onScrollEndHandler($event)">
-    <div class="row my-5" *ngIf="svcInfScroll.model && svcInfScroll.model.length > 0">
-      <div class="col-12" *ngFor="let recipe of svcInfScroll.model">
-        <a routerLink="/recipe-view/{{recipe._id}}" role="button">
-          <h4 [innerHTML]="recipe.name"></h4>
-        </a>
-        <p [innerHTML]="recipe.description"></p>
-        <div class="mb-2" *ngFor="let dir of recipe.directions; let i = index">
-          <small *ngIf="dir">
-            <button class="btn btn-secondary rounded-circle text-center roundedList" type="button">{{ i + 1 }}</button>
-            <span [innerHTML]="dir"></span>
-          </small>
-        </div>
-        <div *ngIf="recipe.ingredients" class="mb-2">
-          <ul>
-            <li *ngFor="let ing of recipe.ingredients">
-              {{ ing.ingredient.name + ", " + ing.amount.toString() + ing.unit.abbrev }}
-            </li>
-          </ul>
-        </div>
-        <hr>
-      </div>
-    </div>
+      <app-recipe-item [model]="svcInfScroll.model" display-full-description="true" 
+      display-ingredients="true" display-directions="true"></app-recipe-item>
   </div>
   <div *ngIf="svcInfScroll.model && svcInfScroll.model.length == 0" class="alert alert-warning formPositioning" role="alert">
     <div class="row">
@@ -43,7 +42,7 @@
         <p>
           <strong>La búsqueda que realizaste no devolvió ningún resultado!.</strong>
         </p>
-        <p>Verificá si escribiste correctamente el términó a buscar.
+        <p>Verificá si escribiste correctamente el termino a buscar.
         </p>
         <p>Para tener resultados más precisos, podés encerrar entre comillas dobles la palabra o frase específica a buscar.
         </p>
@@ -52,16 +51,3 @@
   </div>
 </div>
 <a id="bottomSearch"></a>
-<div *ngIf="svcInfScroll.model && svcInfScroll.model.length > 0" class="row align-items-center alert alert-info fixed-bottom">
-  <div class="col align-self-start">
-    Mostrando {{ svcInfScroll.count }} resultados de un total de {{ svcInfScroll.totalCount }} coincidencias.
-  </div>
-  <button type="button" pageScroll href="#topSearch" class="btn btn-primary btn-sm" [disabled]="asyncInProgress" (click)="fullScrollUp()"
-    data-toggle="tooltip" data-placement="top" title="Ir al primer resultado de la búsqueda.">
-    <i class="fa fa-chevron-up fa-1x"></i>
-  </button>
-  <button type="button" pageScroll href="#bottomSearch" class="btn btn-primary btn-sm ml-2" [disabled]="asyncInProgress" (click)="fullScrollDown()"
-    data-toggle="tooltip" data-placement="top" title="Ir al final o buscar más resultados.">
-    <i class="fa fa-chevron-down fa-1x"></i>
-  </button>
-</div>

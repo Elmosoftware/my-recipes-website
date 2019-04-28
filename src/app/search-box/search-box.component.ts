@@ -1,14 +1,13 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
 import { FormControl } from "@angular/forms";
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
-import { EntityServiceFactory } from "../services/entity-service-factory";
-import { EntityService, EntityServiceQueryParams } from '../services/entity-service';
 import { ToasterHelperService } from "../services/toaster-helper-service";
-import { APIResponseParser } from "../services/api-response-parser";
-import { Ingredient } from '../model/ingredient';
-import { SearchService, SEARCH_TYPE } from "../services/search-service";
+import { Recipe } from "../model/recipe";
+import { SearchServiceInterface } from "../services/search-service";
+import { SearchServiceFactory } from "../services/search-service-factory";
+import { SEARCH_TYPE, parseSearchType } from "../services/search-type";
+import { SearchSuggestion } from '../services/search-suggestion';
 
 @Component({
   selector: 'search-box',
@@ -17,37 +16,36 @@ import { SearchService, SEARCH_TYPE } from "../services/search-service";
 })
 export class SearchBoxComponent implements OnInit {
 
-  @Input() searchType: SEARCH_TYPE = SEARCH_TYPE.Text;
+  @Input() searchType: string;
 
   @Input() initialTerm: string;
 
   @Input() initialId: string;
-  
+
   @Input() placeHolder: string = "Busca recetas con ...";
 
-  @Output() search = new EventEmitter<SearchService>(); 
+  @Input() searchInProgress: boolean;
 
-  selectedValue: SearchService;
-  suggestions: SuggestedItem[];
-  optionSelectedFlag: boolean;
+  @Output() search = new EventEmitter<SearchServiceInterface<Recipe>>();
+
+  svcSearch: SearchServiceInterface<Recipe>;
+  suggestions: SearchSuggestion[];
   searchTextBox: FormControl;
-  svcIngredients: EntityService;
 
-  constructor(private router: Router, private svcFactory: EntityServiceFactory, private toast: ToasterHelperService) {
+  constructor(private svcSearchFactory: SearchServiceFactory,
+    private toast: ToasterHelperService) {
   }
 
   ngOnInit() {
-    this.selectedValue = null;
+    this.svcSearch = this.svcSearchFactory.getService(parseSearchType(this.searchType));
     this.suggestions = [];
-    this.optionSelectedFlag = false;
     this.searchTextBox = new FormControl();
-    this.svcIngredients = this.svcFactory.getService("Ingredient");
-    this.parseInput();
 
     //We set the initial values if any:
     if (this.initialTerm || this.initialId) {
-      this.selectedValue = new SearchService(this.router, this.searchType, this.initialTerm, this.initialId);
-      this.searchTextBox.setValue(this.selectedValue.term, { emitEvent: false });
+      this.svcSearch.term = this.initialTerm;
+      this.svcSearch.id = this.initialId;
+      this.searchTextBox.setValue(this.svcSearch.term, { emitEvent: false });
     }
 
     this.searchTextBox.valueChanges
@@ -55,116 +53,105 @@ export class SearchBoxComponent implements OnInit {
         debounceTime(300),
         distinctUntilChanged()
       )
-      .subscribe(value => { this.valueChangeHandle(value) });
+      .subscribe(term => {
+        this.termChangeHandle(term)
+      });
   }
 
-  parseInput() {
-    this.searchType = SearchService.parseSearchType(this.searchType);
-  }
-
-  valueChangeHandle(text: string) {
+  termChangeHandle(text: string) {
 
     //If there is no search text, we reset the values:
     if (!text) {
       this.suggestions = [];
-      this.selectedValue = null;
+      this.svcSearch.reset();
       return;
     }
 
-    if (this.searchType != SEARCH_TYPE.Text) {
-      //If the text changes and we have at least one suggestion but no selected value yet. We need to check if the 
-      //current text matches any of the current suggestions, if that's the case, we have a selected value!
-      this.selectedValue = null;
-      if (this.suggestions.length > 0) {
-        this.suggestions.forEach((s: SuggestedItem) => {
-          if (text.toLowerCase() == s.text.toLowerCase()) {
-            this.selectedValue = new SearchService(this.router, this.searchType, s.text, s.id);
-            return;
-          }
-        });
-      }
+    //If we are doing a text based search, no suggestions are expected. The user just enter 
+    //the text and click on the magnifier glass to get the results:
+    if (this.svcSearch.isTextBasedSearch) {
+      this.svcSearch.term = text;
+    }
+    else {
+      //If this is a suggestion based search and not any of the previous suggestions match the user text:
+      if (!this.suggestionMatch(text)) {
 
-      //If there is a selected value, we set the text in the search text box, if not, we look again for suggestions:
-      if (this.selectedValue) {
-        this.searchTextBox.setValue(this.selectedValue.term, { emitEvent: false });
+        //We fetch new suggestions:
+        this.svcSearch.findSuggestions(text)
+          .subscribe((suggestions: SearchSuggestion[]) => {
 
-        //If the selected value was chosen directly from the suggestions panel, then we can proceed to do the search directly!:
-        if (this.optionSelectedFlag) {
-          this.optionSelectedFlag = false;
-          this.startSearching();  
-        }        
+            this.suggestions = suggestions;
+
+            if (this.suggestionMatch(text)) {
+              this.startSearching();
+            }
+          })
       }
       else {
-        this.findSuggestions(text);
-      }
-    }
-    else{ //If it's a text search:
-      if (this.selectedValue) {
-        this.selectedValue.term = text;
-      }
-      else{
-        this.selectedValue = new SearchService(this.router, this.searchType, text);
+        this.startSearching();
       }
     }
   }
 
-  findSuggestions(text: string) {
+  suggestionMatch(text: string): boolean {
 
-    let q = new EntityServiceQueryParams();
-    q.pop = "true";
-    q.filter = JSON.stringify({ name: { $regex: text, $options: "i" } });
-    q.top = "5"
+    let ret: boolean = false;
 
-    console.log(`Value:${text}, Search type:${this.searchType}, Type: ${typeof this.searchType}`);
+    this.svcSearch.reset();
 
-    this.svcIngredients.get("", q)
-      .subscribe(data => {
-        let response: APIResponseParser = new APIResponseParser(data);
-        this.suggestions = this.ingredientsToList(response.entities as Ingredient[]);
+    if (this.suggestions.length > 0) {
+      this.suggestions.forEach((s: SearchSuggestion) => {
+
+        if (text.toLowerCase() == s.text.toLowerCase()) {
+          this.svcSearch.term = s.text;
+          this.svcSearch.id = s.id;
+          this.searchTextBox.setValue(this.svcSearch.term, { emitEvent: false });
+          ret = true;
+        }
       });
-
-  }
-
-  ingredientsToList(ingredients: Ingredient[]): SuggestedItem[] {
-    let ret: SuggestedItem[] = [];
-
-    if (ingredients && Array.isArray(ingredients)) {
-      ingredients.forEach((ing: Ingredient) => {
-        ret.push(new SuggestedItem(ing._id, ing.name));
-      })
     }
 
     return ret;
   }
 
-  optionSelected($event) {
-    console.log(`option.viewValue: ${$event.option.viewValue}, option.value: ${$event.option.value}`)
-    this.optionSelectedFlag = true;
+  suggestionSelected($event) {
     this.searchTextBox.setValue($event.option.viewValue);
+  }
+
+  getSearchingLegend(): string {
+
+    let ret: string = "Buscando recetas "
+
+    switch (this.svcSearch.searchType) {
+      case SEARCH_TYPE.Text:
+        ret += "con el texto ";
+        break;
+      case SEARCH_TYPE.Ingredient:
+        ret += "que contengan ";
+        break;
+      case SEARCH_TYPE.User:
+        ret += "creadas por "
+        break;
+      default:
+        ret += "con "
+    }
+
+    ret += `"${this.svcSearch.term}", espere por favor.`
+
+    return ret;
   }
 
   startSearching() {
 
-    if (!this.selectedValue) {
+    if (!this.svcSearch.term) {
       return;
     }
 
-    if (!this.selectedValue.termIsValid) {
+    if (!this.svcSearch.termIsValid) {
       this.toast.showInformation("Para tener más éxito, te aconsejamos refinar el texto a buscar. Prueba agregando más caracteres!")
       return;
     }
 
-    //console.log("SEARCH!");
-    this.search.emit(this.selectedValue);
+    this.search.emit(this.svcSearch);
   }
-}
-
-class SuggestedItem {
-  constructor(id: string, text: string) {
-    this.id = id;
-    this.text = text;
-  }
-
-  public readonly id: string;
-  public readonly text: string;
 }

@@ -14,6 +14,7 @@ import { MyRecipesComponent } from './my-recipes/my-recipes.component';
 import { NotFoundErrorPageComponent } from './error-pages/not-found/not-found.component';
 import { AboutComponent } from './about/about.component';
 import { TestNewStuffComponent } from './test-new-stuff/test-new-stuff.component';
+import { UserDetailsComponent } from './user-details/user-details.component';
 
 const routes: Routes = [
   { 
@@ -131,6 +132,10 @@ const routes: Routes = [
       } 
     }, 
     canActivate: [AuthGuard] 
+  },
+  { 
+    path: 'user-details/:id', 
+    component: UserDetailsComponent 
   },
   { 
     path: 'my-recipes', 

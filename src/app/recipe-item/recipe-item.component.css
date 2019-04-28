@@ -1,0 +1,23 @@
+.recipeTitle{
+    font-family: 'Bellefair';
+    font-size: 2.4em;
+}
+
+.recipeDescription{
+    font-family: 'Bellefair';
+    font-size: 1.2em;
+    font-style: italic; 
+}
+
+.recipeDirections article:not(:last-child) {
+    border-bottom: 1px dotted lightgray;
+}
+
+.noBorder {
+    border-bottom: none !important;
+}
+
+.roundedList{
+    color: white;
+    font-weight: 600;
+}

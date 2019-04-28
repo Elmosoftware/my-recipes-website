@@ -5,7 +5,8 @@ import { Router, ActivatedRoute, Params, Data } from "@angular/router";
 import { CommonModule, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
 
 import { EntityServiceFactory } from "../services/entity-service-factory";
-import { EntityService, EntityServiceQueryParams, QUERY_PARAM_PUB } from "../services/entity-service";
+import { EntityService } from "../services/entity-service";
+import { APIQueryParams, QUERY_PARAM_PUB } from "../services/api-query-params";
 import { Entity } from "../model/entity";
 import { ErrorLog } from '../model/error-log';
 import { APIResponseParser } from "../services/api-response-parser";
@@ -58,7 +59,7 @@ export class EntitiesComponent implements OnInit {
 
   dataRefresh() {
 
-    let q = new EntityServiceQueryParams();
+    let q = new APIQueryParams();
     q.pub = QUERY_PARAM_PUB.all; //We would like to see all the entities, regardless if they are published or not.
 
     if (this.defaultSort) {
@@ -90,7 +91,7 @@ export class EntitiesComponent implements OnInit {
 
     if (entityId) {
 
-      let query = new EntityServiceQueryParams("false")
+      let query = new APIQueryParams("false")
 
       this.svc.get(entityId, query)
         .subscribe(data => {
@@ -132,15 +133,8 @@ export class EntitiesComponent implements OnInit {
             if (!respData.error) {
               this.toast.showSuccess("Los cambios se guardaron con éxito!");
               this.dataRefresh();
-              // //If the entity holds a cache key, we need to invalidate the cache so it will be refreshed next time is accessed:
-              // if (this.svc.getCacheKey()) {
-              //   this.cache.invalidateOne(this.svc.getCacheKey() as CACHE_MEMBERS)
-              // }
             }
           }); 
-          // , err => {
-          //   throw err
-          // });
       }
     });
   }
@@ -165,10 +159,6 @@ export class EntitiesComponent implements OnInit {
               if (!respData.error) {
                 this.toast.showSuccess("El elemento ha sido eliminado.");
                 this.dataRefresh();
-                // //If the entity holds a cache key, we need to invalidate the cache so it will be refreshed next time is accessed:
-                // if (this.svc.getCacheKey()) {
-                //   this.cache.invalidateOne(this.svc.getCacheKey() as CACHE_MEMBERS)
-                // }
               }
             }, err => {
               throw err

@@ -1,0 +1,41 @@
+<div *ngFor="let recipe of model">
+  <div class="row mt-3 align-items-center">
+    <div class="col-auto align-self-start">
+      <img [src]="getCover(recipe)">
+    </div>
+    <div class="col">
+      <div class="recipeTitle" [innerHtml]="recipe.name"></div>
+      <div class="recipeDescription" [innerHtml]="getDescription(recipe)"></div>
+      <ul *ngIf="options.displayIngredients" class="mt-1">
+        <li *ngFor="let ing of recipe.ingredients">
+          {{ ing.ingredient.name + ", " + ing.amount.toString() + ing.unit.abbrev }}
+        </li>
+      </ul>
+      <div *ngIf="options.displayDirections" class="mt-1 recipeDirections">
+        <article *ngFor="let dir of recipe.directions; let i = index" class="py-1" [ngClass]="{'noBorder': !dir}">
+          <section *ngIf="dir" class="row mx-1">
+              <div class="col-auto align-self-start">
+                <div class="bg-secondary rounded-circle roundedList row align-items-center justify-content-center">
+                  <span class="text-center">{{ i + 1 }}</span></div>
+              </div>
+              <div class="col">
+                <small [innerHTML]="dir"></small>
+              </div>
+          </section>
+        </article>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-1 justify-content-between">
+    <div class="col-auto">
+      <small *ngIf="!options.hideUser">Creada por <a href="javascript:void(0)"
+          (click)="viewUserDetails(recipe)">{{ recipe.createdBy.name }}</a></small>
+    </div>
+    <div class="col-auto">
+      <button *ngIf="!options.hideLink" class="btn btn-secondary" type="button" (click)="viewRecipe(recipe)">
+        <i class="fa fa-file-text-o" aria-hidden="true" data-toggle="tooltip" data-placement="top"
+          title="Ver todos los datos  de esta receta."></i>
+      </button>
+    </div>
+  </div>
+</div>
