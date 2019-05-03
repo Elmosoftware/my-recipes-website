@@ -1,18 +1,14 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, NgZone } from '@angular/core';
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { environment } from "../../environments/environment";
 
-import { StandardDialogService } from "../standard-dialogs/standard-dialog.service";
-import { ToasterHelperService } from '../services/toaster-helper-service';
-import { Helper } from "../shared/helper";
+import { CoreService } from "../services/core-service";
 import { WizardComponent } from "../shared/wizard/wizard.component";
-import { SubscriptionService } from "../services/subscription.service";
 import { ErrorLog } from '../model/error-log';
-import { EntityServiceFactory } from "../services/entity-service-factory";
 import { EntityService } from "../services/entity-service";
 import { APIQueryParams, QUERY_PARAM_OWNER } from "../services/api-query-params";
-import { MediaService, MediaTransformations } from "../services/media-service";
+import { MediaTransformations } from "../services/media-service";
 import { WordAnalyzerService } from "../services/word-analyzer-service";
 import { APIResponseParser } from "../services/api-response-parser";
 import { Recipe } from "../model/recipe";
@@ -46,13 +42,11 @@ export class RecipeComponent implements OnInit, AfterViewInit {
   isPublished: boolean;
   modelIsReady: boolean;
   model: Recipe;
-  globalErrorSubscription: any;
   wordAnalyzer: WordAnalyzerService;
   svcRecipe: EntityService;
   svcIngredient: EntityService;
   svcRecipeIngredient: EntityService;
   svcRecipePicture: EntityService;
-  helper: Helper;
   missingIngredients: string[];
   compatibleUnits: Entity[];
   newRecipeIngredient: RecipeIngredient;
@@ -62,13 +56,8 @@ export class RecipeComponent implements OnInit, AfterViewInit {
   deletedPictures: RecipePicture[];
   deletedIngredients: RecipeIngredient[];
 
-  constructor(private zone: NgZone,
+  constructor(private core: CoreService,
     private route: ActivatedRoute,
-    private subs: SubscriptionService,
-    private dlgSvc: StandardDialogService,
-    private svcFactory: EntityServiceFactory,
-    private svcMedia: MediaService,
-    private toast: ToasterHelperService,
     private cache: Cache) {
   }
 
@@ -87,12 +76,12 @@ export class RecipeComponent implements OnInit, AfterViewInit {
     this.isPublished = false;
     this.modelIsReady = false; //This acts like a flag to know when data retrieval process is ready or not.
     this.wordAnalyzer = new WordAnalyzerService();
-    this.helper = new Helper();
-    this.svcRecipe = this.svcFactory.getService("Recipe");
-    this.svcIngredient = this.svcFactory.getService("Ingredient");
-    this.svcRecipeIngredient = this.svcFactory.getService("RecipeIngredient");
-    this.svcRecipePicture = this.svcFactory.getService("RecipePicture");
-    this.globalErrorSubscription = this.subs.getGlobalErrorEmitter().subscribe(item => this.localErrorHandler(item));
+    this.svcRecipe = this.core.entityFactory.getService("Recipe");
+    this.svcIngredient = this.core.entityFactory.getService("Ingredient");
+    this.svcRecipeIngredient = this.core.entityFactory.getService("RecipeIngredient");
+    this.svcRecipePicture = this.core.entityFactory.getService("RecipePicture");
+    this.core.subscription.getGlobalErrorEmitter()
+      .subscribe(item => this.localErrorHandler(item));
     this.resetForm();
   }
 
@@ -115,7 +104,6 @@ export class RecipeComponent implements OnInit, AfterViewInit {
     this.isCompleted = false;
 
     if (!this.isNewRecipe) {
-      //this.svcRecipe.get(this.route.snapshot.paramMap.get("id"), new EntityServiceQueryParams("true"))
       this.svcRecipe.get(this.route.snapshot.paramMap.get("id"), q)
         .subscribe(
           data => {
@@ -202,29 +190,30 @@ export class RecipeComponent implements OnInit, AfterViewInit {
 
   newIngredient() {
 
-    this.dlgSvc.showEditEntityDialog("Ingredient", this.svcIngredient.getNew(), true).subscribe(result => {
+    this.core.dialog.showEditEntityDialog("Ingredient", this.svcIngredient.getNew(), true)
+      .subscribe(result => {
 
-      console.log(`Dialog closed. Result: "${result}" `);
+        console.log(`Dialog closed. Result: "${result}" `);
 
-      //If the user does not cancelled the dialog:
-      if (typeof result === "object") {
+        //If the user does not cancelled the dialog:
+        if (typeof result === "object") {
 
-        console.log(`DATA: Name= "${result.name}"`);
+          console.log(`DATA: Name= "${result.name}"`);
 
-        this.svcIngredient.save(result).subscribe(data => {
+          this.svcIngredient.save(result).subscribe(data => {
 
-          let respData = new APIResponseParser(data);
-          console.log(`After Save`);
-          console.log(`Error:"${respData.error}", Payload:"${respData.entities}"`);
+            let respData = new APIResponseParser(data);
+            console.log(`After Save`);
+            console.log(`Error:"${respData.error}", Payload:"${respData.entities}"`);
 
-          if (!respData.error) {
-            this.toast.showSuccess("El ingrediente fué agregado con éxito!");
-          }
-        }, err => {
-          throw err
-        });
-      }
-    });
+            if (!respData.error) {
+              this.core.toast.showSuccess("El ingrediente fué agregado con éxito!");
+            }
+          }, err => {
+            throw err
+          });
+        }
+      });
   }
 
   ingredientSelected() {
@@ -247,7 +236,7 @@ export class RecipeComponent implements OnInit, AfterViewInit {
 
   addIngredient() {
     if (this.ingredientExists(this.newRecipeIngredient.ingredient)) {
-      this.toast.showWarning("Verifica la lista de ingredientes agregados y modifica las cantidades de ser necesario.");
+      this.core.toast.showWarning("Verifica la lista de ingredientes agregados y modifica las cantidades de ser necesario.");
     }
     else {
       this.model.ingredients.push(Object.assign({}, this.newRecipeIngredient));
@@ -256,7 +245,7 @@ export class RecipeComponent implements OnInit, AfterViewInit {
   }
 
   removeIngredient(id): void {
-    this.helper.removeTooltips(this.zone);
+    this.core.helper.removeTooltips(this.core.zone);
 
     if (typeof id != "string") {
       id = (id as Entity)._id;
@@ -314,7 +303,7 @@ export class RecipeComponent implements OnInit, AfterViewInit {
 
   editDirection(index): void {
 
-    this.dlgSvc.showRecipeDirectionDialog(this.model.directions[index])
+    this.core.dialog.showRecipeDirectionDialog(this.model.directions[index])
       .subscribe(result => {
 
         //If the user does not cancelled the dialog:
@@ -429,15 +418,15 @@ export class RecipeComponent implements OnInit, AfterViewInit {
     console.log("DROPPED!!!");
 
     if ($event.length > this.remainingPictures) {
-      this.toast.showWarning(`Intentaste agregar ${$event.length} imagenes, mientras que tu limite restante es de solo ${this.remainingPictures}${(this.remainingPictures > 1) ? "imagen" : "imagenes"}.`,
+      this.core.toast.showWarning(`Intentaste agregar ${$event.length} imagenes, mientras que tu limite restante es de solo ${this.remainingPictures}${(this.remainingPictures > 1) ? "imagen" : "imagenes"}.`,
         "Limite de imágenes excedido");
       return;
     }
 
-    this.toast.showInformation("Tus imagenes están siendo cargadas, aguarda un momento por favor ...")
+    this.core.toast.showInformation("Tus imagenes están siendo cargadas, aguarda un momento por favor ...")
     this.uploadStatus = UPLOAD_STATUS.InProgress;
 
-    this.svcMedia.uploadPictures($event, MediaTransformations.uploadedPicturesView, (respData) => {
+    this.core.media.uploadPictures($event, MediaTransformations.uploadedPicturesView, (respData) => {
 
       if (respData.progress) {
         console.log(`Isdone:${respData.progress.isDone}, %:${respData.progress.percentage}, total:${respData.progress.totalBytes}`);
@@ -445,7 +434,7 @@ export class RecipeComponent implements OnInit, AfterViewInit {
       }
       else {
         if (respData.error) {
-          this.toast.showError("Por favor reintenta esta operación luego.", "Ocurrió un error al intentar subir tus imagenes.")
+          this.core.toast.showError("Por favor reintenta esta operación luego.", "Ocurrió un error al intentar subir tus imagenes.")
           this.uploadStatus = UPLOAD_STATUS.Error;
         }
         else {
@@ -467,7 +456,7 @@ export class RecipeComponent implements OnInit, AfterViewInit {
 
   handleDeletePicture(picture: RecipePicture) {
 
-    this.helper.removeTooltips(this.zone);
+    this.core.helper.removeTooltips(this.core.zone);
 
     //If the picture was already saved, (mean was not just added):
     if (picture._id) {
@@ -481,7 +470,7 @@ export class RecipeComponent implements OnInit, AfterViewInit {
   }
 
   drop(event: CdkDragDrop<RecipePicture[]>) {
-    this.helper.removeTooltips(this.zone);
+    this.core.helper.removeTooltips(this.core.zone);
     moveItemInArray(this.model.pictures, event.previousIndex, event.currentIndex);
   }
 
@@ -501,10 +490,20 @@ export class RecipeComponent implements OnInit, AfterViewInit {
     let ret: string = "";
 
     if (this.isPublished && !this.model.publishedOn) {
-      ret = this.helper.friendlyCalendarTime(new Date());
+      ret = this.core.helper.friendlyCalendarTime(new Date());
     }
     else if (this.model.publishedOn) {
-      ret = this.helper.friendlyCalendarTime(this.model.publishedOn);
+      ret = this.core.helper.friendlyCalendarTime(this.model.publishedOn);
+    }
+
+    return ret;
+  }
+
+  get preparationFriendlyTime(): string {
+    let ret: string = "";
+    
+    if (this.model && this.model.estimatedTime) {
+      ret = this.core.helper.estimatedFriendlyTime(this.model.estimatedTime);
     }
 
     return ret;
@@ -564,7 +563,7 @@ export class RecipeComponent implements OnInit, AfterViewInit {
         console.log(`Recipe saved sucessfully!`);
 
         if (!respData.error) {
-          this.toast.showSuccess("Los cambios se guardaron con éxito!");
+          this.core.toast.showSuccess("Los cambios se guardaron con éxito!");
           //If this is a new recipe, we need to invalidate the "LatestRecipes" cache:
           if (this.isNewRecipe) {
             this.cache.invalidateOne(CACHE_MEMBERS.LatestRecipes);
@@ -582,12 +581,10 @@ export class RecipeComponent implements OnInit, AfterViewInit {
   }
 
   localErrorHandler(item: ErrorLog) {
-
-    //If the error occurred during a file upload:
+    //There is one special case we need to handle, this is when the error occurs as part of a file upload. 
+    //If this happens, we need to ensure the status is changed back so we'll be able to upload files again:
     if (this.uploadStatus == UPLOAD_STATUS.InProgress) {
       this.uploadStatus = UPLOAD_STATUS.Error;
     }
-
-    this.toast.showError(item);
   }
 }

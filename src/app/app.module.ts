@@ -18,6 +18,7 @@ import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
 
 //Support Classes and Modules
+import { CoreService } from "./services/core-service"
 import { CustomErrorHandler } from "./custom-error-handler";
 import { InfiniteScrollingModule } from "./shared/infinite-scrolling/infinite-scrolling-module";
 
@@ -130,6 +131,7 @@ import { RecipeItemComponent } from './recipe-item/recipe-item.component';
     EditRecipeDirectionDialog
   ],
   providers: [
+    CoreService,
     AuthService,
     AuthGuard,
     { provide: ErrorHandler, useClass: CustomErrorHandler },

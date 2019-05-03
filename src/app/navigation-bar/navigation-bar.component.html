@@ -15,13 +15,13 @@
             <a class="nav-link dropdown-toggle" href="" id="dropdown01" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false">Recetario</a>
             <div class="dropdown-menu" aria-labelledby="dropdown01">
-              <div *ngIf="authSvc.isAuthenticated" class="dropdown-item">
+              <div *ngIf="isAuthenticated" class="dropdown-item">
                 <a class="nav-link" routerLink="/my-recipes">Mis Recetas!</a>
                 <li class="dropdown-divider"></li>
               </div>
               <div class="dropdown-item">
                 <a pageScroll class="nav-link" href="#recently-added">Recientes</a></div>
-              <div *ngIf="authSvc.isAuthenticated" class="dropdown-item">
+              <div *ngIf="isAuthenticated" class="dropdown-item">
                 <a class="nav-link" routerLink="/recipe">Crear una receta</a></div>
               <div class="dropdown-item">
                 <a pageScroll class="nav-link" href="#search-by-ingredient">Hoy quiero con ...</a></div>
@@ -49,19 +49,19 @@
       <ul class="nav navbar-nav">
         <li class="nav-item dropdown">
           <div class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="true" id="dropdown02">
-            <i *ngIf="authSvc.isAuthenticated; else notAuthUserImage">
-              <img class="rounded-circle profile-picture" [src]="authSvc.userProfile.user.details.picture" [alt]="authSvc.userProfile.user.name"
-                data-toggle="tooltip" data-placement="bottom" [title]="authSvc.userProfile.userNameAndAccount">
+            <i *ngIf="isAuthenticated; else notAuthUserImage">
+              <img class="rounded-circle profile-picture" [src]="userPicture" [alt]="userName"
+                data-toggle="tooltip" data-placement="bottom" [title]="userNameAndAccount">
             </i>
             <ng-template #notAuthUserImage>
               <i class="fa fa-user fa-fw"></i>
             </ng-template>
           </div>
           <div class="dropdown-menu dropdown-user" aria-labelledby="dropdown02">
-            <div *ngIf="!authSvc.isAuthenticated" class="dropdown-item" (click)="login()">
+            <div *ngIf="!isAuthenticated" class="dropdown-item" (click)="login()">
               <i class="fa fa-sign-in fa-fw"></i> Iniciar sesión
             </div>
-            <div *ngIf="authSvc.isAuthenticated && !authSvc.userProfile.user.details.isSocial">
+            <div *ngIf="isAuthenticated && !isSocial">
               <div class="dropdown-item" (click)="changePassword()">
                 <i class="fa fa-gear fa-fw"></i> Cambiar contraseña
               </div>
@@ -70,7 +70,7 @@
               </div>
         <li class="dropdown-divider"></li>
     </div>
-    <div *ngIf="authSvc.isAuthenticated" class="dropdown-item" (click)="logout()">
+    <div *ngIf="isAuthenticated" class="dropdown-item" (click)="logout()">
       <i class="fa fa-sign-out fa-fw"></i> Finalizar sesión
     </div>
 </div>

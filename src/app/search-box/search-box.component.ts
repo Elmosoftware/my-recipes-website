@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormControl } from "@angular/forms";
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
-import { ToasterHelperService } from "../services/toaster-helper-service";
+import { CoreService } from "../services/core-service";
 import { Recipe } from "../model/recipe";
 import { SearchServiceInterface } from "../services/search-service";
 import { SearchServiceFactory } from "../services/search-service-factory";
@@ -32,8 +32,8 @@ export class SearchBoxComponent implements OnInit {
   suggestions: SearchSuggestion[];
   searchTextBox: FormControl;
 
-  constructor(private svcSearchFactory: SearchServiceFactory,
-    private toast: ToasterHelperService) {
+  constructor(private core: CoreService,
+    private svcSearchFactory: SearchServiceFactory) {
   }
 
   ngOnInit() {
@@ -148,7 +148,7 @@ export class SearchBoxComponent implements OnInit {
     }
 
     if (!this.svcSearch.termIsValid) {
-      this.toast.showInformation("Para tener más éxito, te aconsejamos refinar el texto a buscar. Prueba agregando más caracteres!")
+      this.core.toast.showInformation("Para tener más éxito, te aconsejamos refinar el texto a buscar. Prueba agregando más caracteres!")
       return;
     }
 

@@ -1,9 +1,7 @@
-import { Component, OnInit, Input, NgZone } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, Input } from '@angular/core';
 
-import { Helper } from "../shared/helper";
+import { CoreService } from "../services/core-service";
 import { Recipe } from "../model/recipe";
-import { MediaService } from "../services/media-service";
 
 @Component({
   selector: 'app-recipe-item',
@@ -19,13 +17,11 @@ export class RecipeItemComponent implements OnInit {
   @Input("hide-user") hideUser: string;
   @Input("hide-link") hideLink: string;
 
-  helper: Helper;
   options: any;
 
-  constructor(public svcMedia: MediaService, public router: Router, public zone: NgZone) { }
+  constructor(public core: CoreService) { }
 
   ngOnInit() {
-    this.helper = new Helper();
     this.options = {
       displayFullDescription: (this.displayFullDescription && this.displayFullDescription.toLowerCase() == "true"),
       displayIngredients: (this.displayIngredients && this.displayIngredients.toLowerCase() == "true"),
@@ -36,20 +32,20 @@ export class RecipeItemComponent implements OnInit {
   }
 
   getDescription(recipe: Recipe): string {
-    return (this.options.displayFullDescription) ? recipe.description : this.helper.getShortText(recipe.description);
+    return (this.options.displayFullDescription) ? recipe.description : this.core.helper.getShortText(recipe.description);
   }
 
   getCover(recipe: Recipe): string {
-    return this.svcMedia.getCoverPictureCircleThumb(recipe.pictures);
+    return this.core.media.getCoverPictureCircleThumb(recipe.pictures);
   }
 
   viewUserDetails(recipe: Recipe) {
-    this.helper.removeTooltips(this.zone);
-    this.router.navigate([`/user-details/${recipe.createdBy._id}`])
+    this.core.helper.removeTooltips(this.core.zone);
+    this.core.router.navigate([`/user-details/${recipe.createdBy._id}`])
   }
 
   viewRecipe(recipe: Recipe) {
-    this.helper.removeTooltips(this.zone);
-    this.router.navigate([`/recipe-view/${recipe._id}`])
+    this.core.helper.removeTooltips(this.core.zone);
+    this.core.router.navigate([`/recipe-view/${recipe._id}`])
   }
 }

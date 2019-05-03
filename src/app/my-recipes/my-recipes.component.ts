@@ -1,19 +1,12 @@
-import { Component, OnInit, EventEmitter, NgZone } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 
-import { ToasterHelperService } from '../services/toaster-helper-service';
-import { Helper } from "../shared/helper";
-import { SubscriptionService } from "../services/subscription.service";
-import { ErrorLog } from '../model/error-log';
-import { EntityServiceFactory } from "../services/entity-service-factory";
+import { CoreService } from "../services/core-service";
 import { EntityService } from "../services/entity-service";
 import { APIQueryParams, QUERY_PARAM_PUB, QUERY_PARAM_OWNER } from "../services/api-query-params";
 import { APIResponseParser } from "../services/api-response-parser";
 import { Recipe } from "../model/recipe";
 import { InfiniteScrollingService, SCROLL_POSITION, PagingHelper } from "../shared/infinite-scrolling/infinite-scrolling-module";
 import { Cache } from '../shared/cache/cache';
-import { AuthService } from '../services/auth-service';
-
 
 /**
  * Size of each data page.
@@ -28,7 +21,6 @@ const PAGE_SIZE: number = 50;
 export class MyRecipesComponent implements OnInit {
 
   globalErrorSubscription: any;
-  helper: Helper;
   asyncInProgress: boolean;
   svcRecipe: EntityService;
   svcInfScroll: InfiniteScrollingService<Recipe>;
@@ -36,21 +28,14 @@ export class MyRecipesComponent implements OnInit {
   mealTypesFilter: number[];
   notPublishedOnlyFilter: boolean;
 
-  constructor(private zone: NgZone,
-    private router: Router,
-    public cache: Cache,
-    private subs: SubscriptionService,
-    private svcFactory: EntityServiceFactory,
-    public authSvc: AuthService,
-    private toast: ToasterHelperService) {
+  constructor(public core: CoreService,
+    public cache: Cache) {
   }
 
   ngOnInit() {
     //Initializing:
     this.mealTypesFilter = [];
-    this.helper = new Helper();
-    this.svcRecipe = this.svcFactory.getService("Recipe");
-    this.globalErrorSubscription = this.subs.getGlobalErrorEmitter().subscribe(item => this.localErrorHandler(item));
+    this.svcRecipe = this.core.entityFactory.getService("Recipe");
     this.reset();
   }
 
@@ -146,10 +131,10 @@ export class MyRecipesComponent implements OnInit {
     let ret: string;
 
     if (r.lastUpdateOn) {
-      ret = "Última actualización: " + this.helper.friendlyTimeFromNow(r.lastUpdateOn);
+      ret = "Última actualización: " + this.core.helper.friendlyTimeFromNow(r.lastUpdateOn);
     }
     else {
-      ret = "Creada: " + this.helper.friendlyCalendarTime(r.createdOn);
+      ret = "Creada: " + this.core.helper.friendlyCalendarTime(r.createdOn);
     }
 
     return ret;
@@ -159,7 +144,37 @@ export class MyRecipesComponent implements OnInit {
     let ret: string = "Aún no publicada";
 
     if (r.publishedOn) {
-      ret = this.helper.friendlyTimeFromNow(r.publishedOn);
+      ret = this.core.helper.friendlyTimeFromNow(r.publishedOn);
+    }
+
+    return ret;
+  }
+
+  getPreparationFriendlyTime(r: Recipe): string {
+    let ret: string = "";
+    
+    if (r) {
+      ret = this.core.helper.estimatedFriendlyTime(r.estimatedTime);
+    }
+
+    return ret;
+  }
+
+  getShorterTitle(r: Recipe): string {
+    let ret: string = "";
+    
+    if (r) {
+      ret = this.core.helper.getShortText(r.name, 0, 45);
+    }
+
+    return ret;
+  }
+
+  getShorterDescription(r: Recipe): string {
+    let ret: string = "";
+    
+    if (r) {
+      ret = this.core.helper.getShortText(r.description, 0, 75);
     }
 
     return ret;
@@ -170,7 +185,7 @@ export class MyRecipesComponent implements OnInit {
     let q: APIQueryParams = new APIQueryParams();
 
     if (this.svcInfScroll.model) {
-      this.toast.showInformation("Estamos trayendo más resultados de tu búsqueda...", "Espera!");
+      this.core.toast.showInformation("Estamos trayendo más resultados de tu búsqueda...", "Espera!");
     }
 
     q.pop = "true";
@@ -200,17 +215,13 @@ export class MyRecipesComponent implements OnInit {
   }
 
   viewRecipe(id: string) {
-    this.helper.removeTooltips(this.zone);
-    this.router.navigate([`/recipe-view/${id}`])
+    this.core.helper.removeTooltips(this.core.zone);
+    this.core.router.navigate([`/recipe-view/${id}`])
   }
 
   editRecipe(id: string) {
-    this.helper.removeTooltips(this.zone);
-    this.router.navigate([`/recipe/${id}`]);
-  }
-
-  localErrorHandler(item: ErrorLog) {
-    this.toast.showError(item);
+    this.core.helper.removeTooltips(this.core.zone);
+    this.core.router.navigate([`/recipe/${id}`]);
   }
 
   /*

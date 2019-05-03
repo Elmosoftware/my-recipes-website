@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { CoreService } from "../services/core-service";
 import { SearchServiceInterface } from "../services/search-service";
 import { Cache } from "../shared/cache/cache";
-import { Helper } from "../shared/helper";
 import { environment } from "../../environments/environment";
 import { procastinationData } from "../static/procastinationData";
 import { Recipe } from '../model/recipe';
@@ -15,15 +15,13 @@ import { Recipe } from '../model/recipe';
 })
 export class HomeComponent implements OnInit {
 
-  private helper: Helper;
   public procastinationRandomUrl: string;
 
-  constructor(private router: Router, public cache: Cache) {
+  constructor(private core: CoreService,private router: Router, public cache: Cache) {
   }
 
   ngOnInit() {
-    this.helper = new Helper();
-    this.procastinationRandomUrl = procastinationData.urls[this.helper.getRandomNumberFromInterval(0, 
+    this.procastinationRandomUrl = procastinationData.urls[this.core.helper.getRandomNumberFromInterval(0, 
       procastinationData.urls.length - 1)];
   } 
 

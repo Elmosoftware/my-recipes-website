@@ -26,8 +26,8 @@
     <div class="card-deck justify-content-center" infinite-scrolling [scrollWindow]="true" (scrollEnd)="onScrollEndHandler($event)">
       <div *ngFor="let recipe of svcInfScroll.model" class="card cardWidth mb-3 h-100">
         <div class="card-body">
-          <h5 class="card-title recipeTitle" [innerHTML]="helper.getShortText(recipe.name, 0, 45)"></h5>
-          <p class="card-text recipeDescription" [innerHTML]="helper.getShortText(recipe.description, 0, 75)"></p>
+          <h5 class="card-title recipeTitle" [innerHTML]="getShorterTitle(recipe)"></h5>
+          <p class="card-text recipeDescription" [innerHTML]="getShorterDescription(recipe)"></p>
           <div class="row no-gutters mt-3 justify-content-between align-items-center">
             <div class="mr-3">
               <i id="tooltip1" class="fa fa-cutlery" aria-hidden="true" data-toggle="tooltip" data-placement="top"
@@ -38,7 +38,7 @@
             <div class="mr-3">
               <i class="fa fa-clock-o" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Tiempo de preparación."></i>
               <small class="mr-3" data-toggle="tooltip" data-placement="top" title="Tiempo de preparación.">{{
-                helper.estimatedFriendlyTime(recipe.estimatedTime) }}</small>
+                getPreparationFriendlyTime(recipe) }}</small>
             </div>
             <div class="mr-3">
               <i class="fa fa-signal" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Nivel de dificultad."></i>

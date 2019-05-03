@@ -1,18 +1,12 @@
-import { Component, OnInit, NgZone } from '@angular/core';
-import { ActivatedRoute, Router } from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from "@angular/router";
 
-import { EntityServiceFactory } from "../services/entity-service-factory";
+import { CoreService } from "../services/core-service";
 import { EntityService } from "../services/entity-service";
 import { APIResponseParser } from "../services/api-response-parser";
 import { Recipe } from "../model/recipe";
 import { RecipePicture } from '../model/recipe-picture';
-import { Helper } from "../shared/helper";
-import { ErrorLog } from '../model/error-log';
-import { StandardDialogService, ConfirmDialogConfiguration } from "../standard-dialogs/standard-dialog.service";
-import { ToasterHelperService } from '../services/toaster-helper-service';
-import { SubscriptionService } from "../services/subscription.service";
-import { MediaService } from "../services/media-service";
-import { AuthService } from '../services/auth-service';
+import { ConfirmDialogConfiguration } from "../standard-dialogs/standard-dialog.service";
 import { CarouselItem } from '../shared/carousel/carousel.component';
 
 @Component({
@@ -22,34 +16,23 @@ import { CarouselItem } from '../shared/carousel/carousel.component';
 })
 export class RecipeViewComponent implements OnInit {
 
-  globalErrorSubscription: any;
   model: Recipe;
   modelIsReady: boolean;
   svc: EntityService;
-  helper: Helper;
   preparationMode: boolean;
   lastStepDone: number;
   shoppingList: string[];
   carouselPictures: CarouselItem[];
 
-  constructor(private svcAuth: AuthService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private subs: SubscriptionService,
-    private dlgSvc: StandardDialogService,
-    private svcFac: EntityServiceFactory,
-    private toast: ToasterHelperService,
-    private zone: NgZone,
-    private svcMedia: MediaService) { }
+  constructor(private core: CoreService,
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.globalErrorSubscription = this.subs.getGlobalErrorEmitter().subscribe(item => this.localErrorHandler(item));
     this.preparationMode = false;
     this.lastStepDone = 0;
     this.shoppingList = [];
     this.modelIsReady = false; //This acts like a flag to know when data retrieval process is ready or not.
-    this.helper = new Helper();
-    this.svc = this.svcFac.getService("Recipe");
+    this.svc = this.core.entityFactory.getService("Recipe");
 
     this.svc.get(this.route.snapshot.paramMap.get("id"), null)
       .subscribe(
@@ -74,10 +57,20 @@ export class RecipeViewComponent implements OnInit {
   get isOwner() :boolean {
     let ret: boolean = false;
 
-    if (this.model && this.svcAuth.isAuthenticated) {
-      ret = this.model.createdBy._id == this.svcAuth.userProfile.user._id;
+    if (this.model && this.core.auth.isAuthenticated) {
+      ret = this.model.createdBy._id == this.core.auth.userProfile.user._id;
     }
     
+    return ret;
+  }
+
+  get preparationFriendlyTime(): string {
+    let ret: string = "";
+    
+    if (this.model && this.model.estimatedTime) {
+      ret = this.core.helper.estimatedFriendlyTime(this.model.estimatedTime);
+    }
+
     return ret;
   }
 
@@ -89,7 +82,7 @@ export class RecipeViewComponent implements OnInit {
       this.model.pictures.forEach((pic: RecipePicture) => {
         let item: CarouselItem = new CarouselItem();
 
-        item.imageSrc = this.svcMedia.getTransformationURL(pic.pictureId.publicId, pic.pictureId.cloudName)
+        item.imageSrc = this.core.media.getTransformationURL(pic.pictureId.publicId, pic.pictureId.cloudName)
         item.captionText = pic.caption
         this.carouselPictures.push(item);
       })   
@@ -98,7 +91,7 @@ export class RecipeViewComponent implements OnInit {
 
   enablePreparationMode(): void {
 
-    this.dlgSvc.showConfirmDialog(new ConfirmDialogConfiguration("Modo Preparación",
+    this.core.dialog.showConfirmDialog(new ConfirmDialogConfiguration("Modo Preparación",
       `<p>
         El modo preparación te permitirá:
       </p>
@@ -164,13 +157,9 @@ export class RecipeViewComponent implements OnInit {
     `);
     popupWin.document.close();
   }
-
-  localErrorHandler(item: ErrorLog) {
-    this.toast.showError(item);
-  }
   
   editRecipe(){
-    this.helper.removeTooltips(this.zone);
-    this.router.navigate([`/recipe/${this.model._id}`]);
+    this.core.helper.removeTooltips(this.core.zone);
+    this.core.router.navigate([`/recipe/${this.model._id}`]);
   }
 }

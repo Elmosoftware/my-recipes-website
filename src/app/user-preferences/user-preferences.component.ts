@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { AuthService } from "../services/auth-service";
-import { ToasterHelperService } from "../services/toaster-helper-service";
+import { CoreService } from "../services/core-service";
 import { User } from "../model/user";
 
 @Component({
@@ -11,7 +10,7 @@ import { User } from "../model/user";
 })
 export class UserPreferencesComponent implements OnInit {
 
-  constructor(private authSvc: AuthService, private toastSvc: ToasterHelperService) { }
+  constructor(private core: CoreService) { }
 
   model: User;
   emailConfirmation: string = "";
@@ -21,13 +20,13 @@ export class UserPreferencesComponent implements OnInit {
   }
 
   dataRefresh() {
-    this.model = this.authSvc.userProfile.user;
+    this.model = this.core.auth.userProfile.user;
   }
 
   save(){
-    this.authSvc.updateUserPreferences(this.model, (err) => {
+    this.core.auth.updateUserPreferences(this.model, (err) => {
       if (!err) {
-        this.toastSvc.showSuccess("Tus preferencias han sido modificadas con éxito!");  
+        this.core.toast.showSuccess("Tus preferencias han sido modificadas con éxito!");  
       }
       
       this.dataRefresh();

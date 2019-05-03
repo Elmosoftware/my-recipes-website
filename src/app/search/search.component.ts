@@ -1,11 +1,8 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { ToasterHelperService } from '../services/toaster-helper-service';
-import { Helper } from "../shared/helper";
+import { CoreService } from "../services/core-service";
 import { WordAnalyzerService } from "../services/word-analyzer-service";
-import { SubscriptionService } from "../services/subscription.service";
-import { ErrorLog } from '../model/error-log';
 import { Recipe } from "../model/recipe";
 import { SearchServiceInterface } from "../services/search-service";
 import { SearchServiceFactory } from "../services/search-service-factory";
@@ -27,8 +24,6 @@ export class SearchComponent implements OnInit {
 
   svcInfScroll: InfiniteScrollingService<Recipe>;
   onDataFeed: EventEmitter<PagingHelper>;
-  globalErrorSubscription: any;
-  helper: Helper;
   wordAnalyzer: WordAnalyzerService;
   svcSearch: SearchServiceInterface<Recipe>;
   initialValues = { term: "", id: "" };
@@ -36,17 +31,14 @@ export class SearchComponent implements OnInit {
   asyncInProgress: boolean;
   placeHolderText: string;
 
-  constructor(private route: ActivatedRoute,
-    private subs: SubscriptionService,
-    private toast: ToasterHelperService,
+  constructor(private core: CoreService,
+    private route: ActivatedRoute,
     private svcSearchFactory: SearchServiceFactory) {
   }
 
   ngOnInit() {
     //Initializing:
-    this.helper = new Helper();
     this.wordAnalyzer = new WordAnalyzerService();
-    this.globalErrorSubscription = this.subs.getGlobalErrorEmitter().subscribe(item => this.localErrorHandler(item));
     this.resetSearch();
     this.parseQueryparams();
     this.initPlaceHolderText();
@@ -60,7 +52,7 @@ export class SearchComponent implements OnInit {
           "ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked".
         */
         setTimeout(() => {
-          this.toast.showInformation("Intenta refinar el texto a buscar. Prueba agregando más caracteres!");
+          this.core.toast.showInformation("Intenta refinar el texto a buscar. Prueba agregando más caracteres!");
         });
       }
       else {
@@ -150,7 +142,7 @@ export class SearchComponent implements OnInit {
   fetchData(top: number, skip: number): void {
 
     if (this.svcInfScroll.model) {
-      this.toast.showInformation("Estamos trayendo más resultados de tu búsqueda...", "Espera!");
+      this.core.toast.showInformation("Estamos trayendo más resultados de tu búsqueda...", "Espera!");
     }
 
     this.asyncInProgress = true;
@@ -168,10 +160,5 @@ export class SearchComponent implements OnInit {
 
   fullScrollDown() {
     this.svcInfScroll.fullScrollDown();
-  }
-
-  localErrorHandler(item: ErrorLog) {
-    this.asyncInProgress = false;
-    this.toast.showError(item);
   }
 }

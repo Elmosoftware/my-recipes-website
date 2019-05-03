@@ -1,16 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 
-import { EntityServiceFactory } from "../services/entity-service-factory";
+import { CoreService } from "../services/core-service";
 import { EntityService } from "../services/entity-service";
 import { APIQueryParams } from "../services/api-query-params";
 import { APIResponseParser } from "../services/api-response-parser";
-import { AuthService } from "../services/auth-service";
-import { Helper } from "../shared/helper";
-import { ErrorLog } from '../model/error-log';
-import { ToasterHelperService } from '../services/toaster-helper-service';
-import { SubscriptionService } from "../services/subscription.service";
-import { MediaService } from "../services/media-service";
 import { SEARCH_TYPE } from "../services/search-type";
 
 const TOP_USER_RECIPES: number = 5;
@@ -23,24 +17,16 @@ const TOP_USER_RECIPES: number = 5;
 export class UserDetailsComponent implements OnInit {
 
   svc: EntityService;
-  globalErrorSubscription: any;
   model: any;
-  helper: Helper;
 
-  constructor(private router: Router,
-    private svcFac: EntityServiceFactory,
-    private svcAuth: AuthService,
-    private route: ActivatedRoute,
-    private subs: SubscriptionService,
-    private toast: ToasterHelperService,
-    public svcMedia: MediaService) { }
+  constructor(private core: CoreService,
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
 
     let q: APIQueryParams;
-    this.globalErrorSubscription = this.subs.getGlobalErrorEmitter().subscribe(item => this.localErrorHandler(item));
-    this.helper = new Helper();
-    this.svc = this.svcFac.getService("Recipe");
+
+    this.svc = this.core.entityFactory.getService("Recipe");
     this.model = {
       userId: this.route.snapshot.paramMap.get("id"),
       user: null,
@@ -52,7 +38,7 @@ export class UserDetailsComponent implements OnInit {
     }
 
     //Retrieving user data:
-    this.svcAuth.getUsersInfo(this.model.userId, null)
+    this.core.auth.getUsersInfo(this.model.userId, null)
       .subscribe((data) => {
         let parser: APIResponseParser = new APIResponseParser(data); //This will throw if there is an API error
 
@@ -86,14 +72,10 @@ export class UserDetailsComponent implements OnInit {
   }
 
   getFriendlyDate(d: Date): string {
-    return this.helper.friendlyTimeFromNow(d);
+    return this.core.helper.friendlyTimeFromNow(d);
   }
 
   searchMore(): void {
-    this.router.navigate(["/search"], { queryParams: { type: SEARCH_TYPE.User, term: this.model.user.name, id: this.model.userId } } )
-  }
-
-  localErrorHandler(item: ErrorLog) {
-    this.toast.showError(item);
+    this.core.router.navigate(["/search"], { queryParams: { type: SEARCH_TYPE.User, term: this.model.user.name, id: this.model.userId } } )
   }
 }
