@@ -5,7 +5,7 @@ import * as auth0 from 'auth0-js';
 import { Observable } from "rxjs";
 
 import { environment } from "../../environments/environment";
-import { APIResponseParser } from "../services/api-response-parser";
+import { APIResponseParser } from "./api-response-parser";
 import { User } from "../model/user";
 import { APIQueryParams } from './api-query-params';
 

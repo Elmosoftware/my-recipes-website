@@ -160,6 +160,10 @@ export class RecipeViewComponent implements OnInit {
   
   editRecipe(){
     this.core.helper.removeTooltips(this.core.zone);
-    this.core.router.navigate([`/recipe/${this.model._id}`]);
+    this.core.navigate.toRecipe(this.model._id);
+  }
+
+  goToHome(){
+    this.core.navigate.toHome();
   }
 }

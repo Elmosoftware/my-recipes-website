@@ -6,6 +6,7 @@ import { EntityService } from "../services/entity-service";
 import { APIQueryParams } from "../services/api-query-params";
 import { APIResponseParser } from "../services/api-response-parser";
 import { SEARCH_TYPE } from "../services/search-type";
+import { SearchServiceFactory } from "../services/search-service-factory";
 
 const TOP_USER_RECIPES: number = 5;
 
@@ -20,7 +21,8 @@ export class UserDetailsComponent implements OnInit {
   model: any;
 
   constructor(private core: CoreService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private svcSearchFac: SearchServiceFactory) { }
 
   ngOnInit() {
 
@@ -76,6 +78,15 @@ export class UserDetailsComponent implements OnInit {
   }
 
   searchMore(): void {
-    this.core.router.navigate(["/search"], { queryParams: { type: SEARCH_TYPE.User, term: this.model.user.name, id: this.model.userId } } )
+    let s = this.svcSearchFac.getService(SEARCH_TYPE.User);
+
+    s.term = this.model.user.name;
+    s.id = this.model.userId;
+
+    this.core.navigate.toSearch(s);
+  }
+
+  goToHome() {
+    this.core.navigate.toHome();
   }
 }

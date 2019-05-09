@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { CoreService } from "../services/core-service";
 import { SearchServiceInterface } from "../services/search-service";
@@ -17,7 +16,7 @@ export class HomeComponent implements OnInit {
 
   public procastinationRandomUrl: string;
 
-  constructor(private core: CoreService,private router: Router, public cache: Cache) {
+  constructor(private core: CoreService, public cache: Cache) {
   }
 
   ngOnInit() {
@@ -30,10 +29,15 @@ export class HomeComponent implements OnInit {
 
   onSearchHandler($event: SearchServiceInterface<Recipe>) {
     console.log(`SEARCH! type:"${$event.searchType}", term:"${$event.term}", id:"${$event.id}"`);
-    this.router.navigate(["/search"], { queryParams: { type: $event.searchType, term: $event.term, id: $event.id } } )
+    // this.core.router.navigate(["/search"], { queryParams: { type: $event.searchType, term: $event.term, id: $event.id } } )
+    this.core.navigate.toSearch($event);
   }
 
   get contactEmailLink(): string {
     return `mailto:${environment.appSettings.contactEmail}`
+  }
+
+  goToAbout() {
+    this.core.navigate.toAbout();
   }
 }

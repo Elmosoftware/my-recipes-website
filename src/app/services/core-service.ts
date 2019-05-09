@@ -1,5 +1,5 @@
 import { Injectable, NgZone } from '@angular/core';
-import { Router } from '@angular/router';
+
 import { EntityServiceFactory } from './entity-service-factory';
 import { SubscriptionService } from './subscription.service';
 import { ToasterHelperService } from './toaster-helper-service';
@@ -7,6 +7,7 @@ import { AuthService } from './auth-service';
 import { Helper } from '../shared/helper';
 import { StandardDialogService } from '../standard-dialogs/standard-dialog.service';
 import { MediaService } from './media-service';
+import { NavigationService } from './navigation-service';
 
 /**
  * This core class help inject common services to the app. 
@@ -23,14 +24,14 @@ export class CoreService {
   constructor(
     //Angular and 3rd party injected services:
     private injZone: NgZone, 
-    private injRouter: Router, 
     //Mi Cocina injected Services:
     private injAuthService: AuthService,
     private injEntityFactory: EntityServiceFactory, 
     private injSubscriptionService: SubscriptionService,
     private injToasterHelperService: ToasterHelperService,
     private injStandardDialogService: StandardDialogService,
-    private injMediaService: MediaService) {
+    private injMediaService: MediaService,
+    private injNavigationService: NavigationService) {
 
       console.log(`CoreServices Created`)
       this.svcHelper = new Helper();
@@ -42,10 +43,6 @@ export class CoreService {
 
   get zone() :NgZone {
     return this.injZone;
-  }
-
-  get router(): Router {
-    return this.injRouter;
   }
 
   get auth(): AuthService {
@@ -74,5 +71,9 @@ export class CoreService {
 
   get media(): MediaService {
     return this.injMediaService;
+  }
+
+  get navigate(): NavigationService {
+    return this.injNavigationService;
   }
 }

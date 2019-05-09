@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from "@angular/router";
 
+import { PAGES } from "./services/navigation-service";
 import { HomeComponent } from "./home/home.component";
 import { SearchComponent } from './search/search.component';
 import { EntitiesComponent } from "./entities/entities.component";
@@ -19,7 +20,7 @@ import { UserDetailsComponent } from './user-details/user-details.component';
 const routes: Routes = [
   { 
     path: '', 
-    redirectTo: '/home', 
+    redirectTo: PAGES.Home,
     pathMatch: 'full' 
   },
   { 
@@ -27,23 +28,23 @@ const routes: Routes = [
     component: TestNewStuffComponent 
   },
   { 
-    path: 'home', 
+    path: PAGES.Home, 
     component: HomeComponent 
   },
   { 
-    path: 'auth-callback', 
+    path: PAGES.AuthCallback, 
     component: AuthCallbackComponent 
   },
   { 
-    path: 'error-unauthorized', 
+    path: PAGES.Unauthorized, 
     component: UnauthorizedErrorPageComponent 
   },
   { 
-    path: 'search', 
+    path: PAGES.Search, 
     component: SearchComponent 
   },
   { 
-    path: 'recipe', 
+    path: PAGES.Recipe, 
     component: RecipeComponent, 
     data: { 
       authGuard: { 
@@ -53,7 +54,8 @@ const routes: Routes = [
     }, 
     canActivate: [AuthGuard] },
   { 
-    path: 'recipe/:id', 
+    // path: 'recipe/:id', 
+    path: `${PAGES.Recipe}/:id`, 
     component: RecipeComponent, 
     data: { 
       authGuard: { 
@@ -64,11 +66,12 @@ const routes: Routes = [
     canActivate: [AuthGuard] 
   },
   { 
-    path: 'recipe-view/:id', 
+    // path: 'recipe-view/:id', 
+    path: `${PAGES.RecipeView}/:id`, 
     component: RecipeViewComponent 
   },
   { 
-    path: 'levels', 
+    path: PAGES.Level, 
     component: EntitiesComponent, 
     data: { 
       type: "Level", 
@@ -82,7 +85,7 @@ const routes: Routes = [
     canActivate: [AuthGuard] 
   },
   { 
-    path: 'mealtypes', 
+    path: PAGES.MealType, 
     component: EntitiesComponent, 
     data: { 
       type: "MealType", 
@@ -95,7 +98,7 @@ const routes: Routes = [
     }, 
     canActivate: [AuthGuard] },
   { 
-    path: 'units', 
+    path: PAGES.Unit, 
     component: EntitiesComponent, 
     data: { 
       type: "Unit", 
@@ -109,7 +112,7 @@ const routes: Routes = [
     canActivate: [AuthGuard] 
   },
   { 
-    path: 'ingredients', 
+    path: PAGES.Ingredient, 
     component: EntitiesComponent, 
     data: { 
       type: "Ingredient", 
@@ -123,7 +126,7 @@ const routes: Routes = [
     canActivate: [AuthGuard] 
   },
   { 
-    path: 'user-preferences', 
+    path: PAGES.UserPreferences, 
     component: UserPreferencesComponent, 
     data: { 
       authGuard: { 
@@ -134,11 +137,12 @@ const routes: Routes = [
     canActivate: [AuthGuard] 
   },
   { 
-    path: 'user-details/:id', 
+    // path: 'user-details/:id', 
+    path: `${PAGES.UserDetails}/:id`, 
     component: UserDetailsComponent 
   },
   { 
-    path: 'my-recipes', 
+    path: PAGES.MyRecipes, 
     component: MyRecipesComponent, 
     data: { 
       authGuard: { 
@@ -149,7 +153,7 @@ const routes: Routes = [
     canActivate: [AuthGuard] 
   },
   { 
-    path: 'about', 
+    path: PAGES.About, 
     component: AboutComponent 
   },
   { 

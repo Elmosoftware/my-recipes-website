@@ -48,7 +48,7 @@
           </div>
           <div class="row no-gutters mt-1 justify-content-end">
             <div class="col-1 mx-3">
-              <button id="btnViewRecipe" class="btn btn-primary" type="button" (click)="viewRecipe(recipe._id)">
+              <button id="btnViewRecipe" class="btn btn-primary" type="button" (click)="goToRecipeView(recipe._id)">
                 <i class="fa fa-file-text-o" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Ver todos los datos  de esta receta."></i>
               </button>
             </div>
@@ -76,7 +76,7 @@
         <p>
           <strong>Parece que aún no agregaste ninguna receta de ese tipo!.</strong>
         </p>
-        <p>No te preocupes, puedes agregar una haciendo click <a routerLink="/recipe">aqui</a>.
+        <p>No te preocupes, puedes agregar una haciendo click <a href="javascript:void(0)" (click)="goToRecipe()">aqui</a>.
         </p>
       </div>
     </div>

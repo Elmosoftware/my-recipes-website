@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+import { CoreService } from 'src/app/services/core-service';
 import { Cache } from "../../shared/cache/cache";
 import { Recipe } from "../../model/recipe";
 
@@ -10,7 +11,7 @@ import { Recipe } from "../../model/recipe";
 })
 export class LatestRecipesComponent implements OnInit {
 
-  constructor(public cache: Cache) {
+  constructor(private core: CoreService, public cache: Cache) {
   }
 
   get model(): Recipe[] {
@@ -18,5 +19,9 @@ export class LatestRecipesComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  goToRecipe() {
+    this.core.navigate.toRecipe();
   }
 }

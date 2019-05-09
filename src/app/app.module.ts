@@ -46,6 +46,7 @@ import { TestNewStuffComponent } from './test-new-stuff/test-new-stuff.component
 import { UserDetailsComponent } from './user-details/user-details.component';
 
 //Services
+import { NavigationService } from './services/navigation-service';
 import { SubscriptionService } from "./services/subscription.service";
 import { EntityServiceFactory } from "./services/entity-service-factory";
 import { StandardDialogService } from "./standard-dialogs/standard-dialog.service";
@@ -132,6 +133,7 @@ import { RecipeItemComponent } from './recipe-item/recipe-item.component';
   ],
   providers: [
     CoreService,
+    NavigationService,
     AuthService,
     AuthGuard,
     { provide: ErrorHandler, useClass: CustomErrorHandler },

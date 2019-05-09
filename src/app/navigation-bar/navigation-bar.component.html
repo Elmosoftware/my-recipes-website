@@ -3,7 +3,7 @@
 <div infinite-scrolling [scrollWindow]="true" (scroll)="onScrollHandler($event)">
   <nav [@isVisibleChanged]="isVisible" class="navbar navbar-expand-md navbar-light fixed-top bg-light home-page-section navbar-section">
     <img class="navbar-logo-small mx-4" src="../assets/images/logo.svg" alt="My Recipes Website">
-    <a class="navbar-brand" routerLink="/home">Mi Cocina</a>
+    <a class="navbar-brand" href="javascript:void(0)" (click)="goToHome()">Mi Cocina</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMain" aria-controls="navbarMain"
       aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -16,13 +16,13 @@
               aria-haspopup="true" aria-expanded="false">Recetario</a>
             <div class="dropdown-menu" aria-labelledby="dropdown01">
               <div *ngIf="isAuthenticated" class="dropdown-item">
-                <a class="nav-link" routerLink="/my-recipes">Mis Recetas!</a>
+                <a class="nav-link" href="javascript:void(0)" (click)="goToMyRecipes()">Mis Recetas!</a>
                 <li class="dropdown-divider"></li>
               </div>
               <div class="dropdown-item">
                 <a pageScroll class="nav-link" href="#recently-added">Recientes</a></div>
               <div *ngIf="isAuthenticated" class="dropdown-item">
-                <a class="nav-link" routerLink="/recipe">Crear una receta</a></div>
+                <a class="nav-link" href="javascript:void(0)" (click)="goToRecipe()">Crear una receta</a></div>
               <div class="dropdown-item">
                 <a pageScroll class="nav-link" href="#search-by-ingredient">Hoy quiero con ...</a></div>
             </div>
@@ -33,10 +33,10 @@
             <a class="nav-link dropdown-toggle" href="" id="dropdown01" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false">Administración</a>
             <div class="dropdown-menu" aria-labelledby="dropdown01">
-              <div class="dropdown-item"><a class="nav-link" routerLink="/mealtypes">Platos</a></div>
-              <div class="dropdown-item"><a class="nav-link" routerLink="/levels">Niveles de dificultad</a></div>
-              <div class="dropdown-item"><a class="nav-link" routerLink="/units">Unidades de medida</a></div>
-              <div class="dropdown-item"><a class="nav-link" routerLink="/ingredients">Ingredientes</a></div>
+              <div class="dropdown-item"><a class="nav-link" href="javascript:void(0)" (click)="goToMealtypes()">Platos</a></div>
+              <div class="dropdown-item"><a class="nav-link" href="javascript:void(0)" (click)="goToLevels()">Niveles de dificultad</a></div>
+              <div class="dropdown-item"><a class="nav-link" href="javascript:void(0)" (click)="goToUnits()">Unidades de medida</a></div>
+              <div class="dropdown-item"><a class="nav-link" href="javascript:void(0)" (click)="goToIngredients()">Ingredientes</a></div>
             </div>
           </li>
         </div>
@@ -65,7 +65,7 @@
               <div class="dropdown-item" (click)="changePassword()">
                 <i class="fa fa-gear fa-fw"></i> Cambiar contraseña
               </div>
-              <div class="dropdown-item" (click)="userPreferences()">
+              <div class="dropdown-item" (click)="goToUserPreferences()">
                 <i class="fa fa-gear fa-fw"></i> Preferencias
               </div>
         <li class="dropdown-divider"></li>

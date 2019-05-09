@@ -580,6 +580,10 @@ export class RecipeComponent implements OnInit, AfterViewInit {
     this.evaluateIngredientUsage();
   }
 
+  goToHome() {
+    this.core.navigate.toHome();
+  }
+
   localErrorHandler(item: ErrorLog) {
     //There is one special case we need to handle, this is when the error occurs as part of a file upload. 
     //If this happens, we need to ensure the status is changed back so we'll be able to upload files again:

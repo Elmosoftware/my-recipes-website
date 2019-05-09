@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { CoreService } from 'src/app/services/core-service';
+
 @Component({
   selector: 'app-not-found',
   templateUrl: './not-found.component.html',
@@ -7,9 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NotFoundErrorPageComponent implements OnInit {
 
-  constructor() { }
+  constructor(private core: CoreService) { }
 
   ngOnInit() {
   }
 
+  goToHome() {
+    this.core.navigate.toHome();
+  }
 }

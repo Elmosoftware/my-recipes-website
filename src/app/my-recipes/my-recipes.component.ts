@@ -214,14 +214,19 @@ export class MyRecipesComponent implements OnInit {
       });
   }
 
-  viewRecipe(id: string) {
+  goToRecipeView(id: string) {
     this.core.helper.removeTooltips(this.core.zone);
-    this.core.router.navigate([`/recipe-view/${id}`])
+    this.core.navigate.toRecipeView(id);
   }
 
   editRecipe(id: string) {
     this.core.helper.removeTooltips(this.core.zone);
-    this.core.router.navigate([`/recipe/${id}`]);
+    this.core.navigate.toRecipe(id);
+  }
+
+  goToRecipe() {
+    this.core.helper.removeTooltips(this.core.zone);
+    this.core.navigate.toRecipe();
   }
 
   /*

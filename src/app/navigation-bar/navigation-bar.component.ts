@@ -79,8 +79,7 @@ export class NavigationBarComponent implements OnInit {
   }
 
   onSearchHandler($event: SearchServiceInterface<Recipe>) {
-    // $event.search();
-    this.core.router.navigate(["/search"], { queryParams: { type: $event.searchType, term: $event.term, id: $event.id } } )
+    this.core.navigate.toSearch($event);
   }
 
   login() {
@@ -111,8 +110,36 @@ export class NavigationBarComponent implements OnInit {
       });
   }
 
-  userPreferences(name: string) {
-    this.core.router.navigate(['/user-preferences']);
+  goToHome() {
+    this.core.navigate.toHome();
+  }
+
+  goToMyRecipes() {
+    this.core.navigate.toMyRecipes();
+  }
+
+  goToUserPreferences() {
+    this.core.navigate.toUserPreferences();
+  }
+
+  goToRecipe() {
+    this.core.navigate.toRecipe();
+  }
+
+  goToMealtypes() {
+    this.core.navigate.toMealTypes();
+  }
+
+  goToLevels() {
+    this.core.navigate.toLevels();
+  }
+
+  goToUnits() {
+    this.core.navigate.toUnits();
+  }
+
+  goToIngredients() {
+    this.core.navigate.toIngredients();
   }
 
   logout() {

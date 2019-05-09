@@ -39,13 +39,13 @@ export class RecipeItemComponent implements OnInit {
     return this.core.media.getCoverPictureCircleThumb(recipe.pictures);
   }
 
-  viewUserDetails(recipe: Recipe) {
+  goToUserDetails(recipe: Recipe) {
     this.core.helper.removeTooltips(this.core.zone);
-    this.core.router.navigate([`/user-details/${recipe.createdBy._id}`])
+    this.core.navigate.toUserDetails(recipe.createdBy._id);
   }
 
-  viewRecipe(recipe: Recipe) {
+  goToRecipeView(recipe: Recipe) {
     this.core.helper.removeTooltips(this.core.zone);
-    this.core.router.navigate([`/recipe-view/${recipe._id}`])
+    this.core.navigate.toRecipeView(recipe._id);
   }
 }

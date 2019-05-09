@@ -29,10 +29,10 @@
   <div class="row mt-1 justify-content-between">
     <div class="col-auto">
       <small *ngIf="!options.hideUser">Creada por <a href="javascript:void(0)"
-          (click)="viewUserDetails(recipe)">{{ recipe.createdBy.name }}</a></small>
+          (click)="goToUserDetails(recipe)">{{ recipe.createdBy.name }}</a></small>
     </div>
     <div class="col-auto">
-      <button *ngIf="!options.hideLink" class="btn btn-secondary" type="button" (click)="viewRecipe(recipe)">
+      <button *ngIf="!options.hideLink" class="btn btn-secondary" type="button" (click)="goToRecipeView(recipe)">
         <i class="fa fa-file-text-o" aria-hidden="true" data-toggle="tooltip" data-placement="top"
           title="Ver todos los datos  de esta receta."></i>
       </button>
