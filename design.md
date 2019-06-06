@@ -364,3 +364,10 @@ v- Refactor de "recipe-item" component para incluirlo en "search".
         -  display-directions : Show recipe directions with direction number.
 v - Agregar la funcionalidad de Busqueda por usuario.
         - Crear las clase "SearchByUserService" implementando la interfaz "SearchServiceInterface"
+
+
+Issues:
+
+v -El boton siguiente no se habilita en los tabs "Ingredientes" preparacion y de,mas aún cuando la data es válida durante la ediciíon de recetas existentes.
+
+-En el tab details en una receta nueva marca el tab como inválido al comenzar a editar el nombre de la receta.

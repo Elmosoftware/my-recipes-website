@@ -80,6 +80,24 @@ export class MediaService {
   }
 
   /**
+   * Returns the RecipePicture object corresponding to the uploaded recipe image that is acting as the recipe cover.
+   * @param pictures Recipe pictures collection.
+   */
+  getCoverPicture(pictures: RecipePicture[]): RecipePicture {
+    return pictures.find((p: RecipePicture) => {
+      return p.isCover; //Find the Cover picture.
+    })
+  }
+
+  /**
+   * Returns a boolean value indicating if there is a picture selected as cover in the recipe pictures collection.
+   * @param pictures Recipe pictures collection.
+   */
+  hasCoverPicture(pictures: RecipePicture[]): boolean {
+    return Boolean(this.getCoverPicture(pictures));
+  }
+
+  /**
    * Returns the cover picture for the recipe transformed as a circular thumbnail.
    * @param pictures Recipes Pictures collection.
    */
@@ -103,7 +121,6 @@ export class MediaService {
 
     return ret;
   }
-
 
   /**
    * Upload submitted pictures to the CDN provider and returns a list of the picture URLS and public ids.

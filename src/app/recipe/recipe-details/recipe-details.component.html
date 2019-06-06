@@ -1,0 +1,65 @@
+<form class="my-4" #detailsForm="ngForm">
+  <div class="form-group">
+    <div class="input-group-prepend">
+      <span class="input-group-text text-primary"
+        [ngClass]="{'validatorValid': (name.valid && name.dirty), 'validatorInvalid': (name.invalid && name.dirty)}"
+        data-toggle="tooltip" data-placement="right" title="Esta información es requerida.">Nombre de la
+        receta</span>
+    </div>
+    <input type="text" class="form-control" placeholder="Ingrese aqui el nombre de la receta"
+      [(ngModel)]="model.name" name="name" required maxlength="50" autocomplete="off" #name="ngModel">
+  </div>
+  <div class="form-group">
+    <div class="input-group-prepend">
+      <span class="input-group-text">Descripción</span>
+    </div>
+    <textarea class="form-control"
+      placeholder="Ingrese aqui más detalles, como una breve historia de la preparación, curiosidades sobre su origen, precauciones a tener durante la preparación y hasta consejos sobre los ingredientes!"
+      [(ngModel)]="model.description" name="description" rows="3" maxlength="512"></textarea>
+  </div>
+  <div class="form-group">
+    <div class="input-group-prepend">
+      <span class="input-group-text" data-toggle="tooltip" data-placement="right"
+        title="Seleccione el tiempo estimado de esta preparación.">Tiempo
+        estimado</span>
+    </div>
+    <div class="input-group form-control">
+      <input type="range" min="0" max="180" step="10" list="ticks" class="form-control"
+        [(ngModel)]="model.estimatedTime" name="estimatedTime" #estimatedTime="ngModel">
+      <datalist id="ticks">
+        <option value="30">
+        <option value="60">
+        <option value="90">
+        <option value="120">
+        <option value="150">
+        <option value="180">
+      </datalist>
+      <div class="input-group align-items-center">
+        <small>{{ preparationFriendlyTime }}</small>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="input-group-prepend">
+      <span class="input-group-text text-primary"
+        [ngClass]="{'validatorValid': (level.valid && level.dirty), 'validatorInvalid': (level.invalid && level.dirty)}"
+        data-toggle="tooltip" data-placement="right" title="Debe seleccionar un nivel de dificultad de la lista.">Nivel
+        de dificultad</span>
+    </div>
+    <ngx-select required [multiple]="false" [items]="cache.levels"
+      [(ngModel)]="modelLevel" name="level" optionTextField="name" optionValueField="_id"
+      placeholder="Seleccione el nivel de dificultad de esta receta." #level="ngModel">
+    </ngx-select>
+  </div>
+  <div class="form-group">
+    <div class="input-group-prepend">
+      <span class="input-group-text text-primary"
+        [ngClass]="{'validatorValid': (mealType.valid && mealType.dirty), 'validatorInvalid': (mealType.invalid && mealType.dirty)}"
+        data-toggle="tooltip" data-placement="right" title="Seleccione un plato de la lista.">Plato</span>
+    </div>
+    <ngx-select required [multiple]="false" [items]="cache.mealTypes"
+      [(ngModel)]="modelMealtype" name="mealType" optionTextField="name"
+      optionValueField="_id" placeholder="Seleccione el tipo de plato al que corresponde esta receta."
+      #mealType="ngModel"></ngx-select>
+  </div>
+</form>

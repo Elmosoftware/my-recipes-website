@@ -1,9 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 
-import { Helper } from "../shared/helper";
-import { Cache } from "../shared/cache/cache";
-import { RecipePicture } from '../model/recipe-picture';
-import { MediaService } from "../services/media-service";
+import { CoreService } from "../services/core-service";
 
 @Component({
   selector: 'app-test-new-stuff',
@@ -12,15 +9,13 @@ import { MediaService } from "../services/media-service";
 })
 export class TestNewStuffComponent implements OnInit {
 
-  helper: Helper;
-
-  constructor(public cache: Cache, public svcMedia: MediaService) { }
+  constructor(private core: CoreService) { }
+ 
 
   ngOnInit() {
-    this.helper = new Helper();
   }
 
-  getCover(pictures: RecipePicture[]): string{
-    return this.svcMedia.getCoverPictureCircleThumb(pictures);
+  ngAfterViewInit() {
   }
+  
 }

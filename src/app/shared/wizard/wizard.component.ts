@@ -84,6 +84,7 @@ export class WizardComponent implements AfterContentInit {
     this.activeStep = this.steps[0];
     for (let step of this.steps) {
       step.isDisabled = true;
+      step.isDirty = false;
     }
     this.activeStep.isDisabled = false;
     this.activeStep.isActive = true;

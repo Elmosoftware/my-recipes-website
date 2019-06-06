@@ -1,7 +1,8 @@
 <div class="card">
   <div class="card-header">
     <ul class="nav nav-justified">
-      <li class="nav-item" *ngFor="let step of steps" [ngClass]="{'active': step.isActive, 'enabled': !step.isDisabled, 'disabled': step.isDisabled, 'completed': isCompleted}">
+      <li class="nav-item sameLine px-1" *ngFor="let step of steps" 
+        [ngClass]="{'active': step.isActive, 'enabled': !step.isDisabled, 'disabled': step.isDisabled, 'completed': isCompleted, 'dirty': step.isDirty, 'invalid': (!step.isValid && step.isDirty)}">
         <a (click)="goToStep(step)">{{step.title}}</a>
       </li>
     </ul>

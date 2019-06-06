@@ -10,6 +10,7 @@ export class WizardStepComponent {
   @Input() title: string;
   @Input() hidden: boolean = false;
   @Input() isValid: boolean = true;
+  @Input() isDirty: boolean = false;
   @Input() showNext: boolean = true;
   @Input() showPrev: boolean = true;
 

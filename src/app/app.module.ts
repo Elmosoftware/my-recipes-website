@@ -4,7 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from "@angular/forms";
-import { MatDialogModule, MatDialogRef, MatAutocompleteModule, MatInputModule} from '@angular/material';
+import { MatDialogModule, MatDialogRef, MatAutocompleteModule, MatInputModule, MatCheckboxModule} from '@angular/material';
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatRadioModule } from '@angular/material/radio';
@@ -29,6 +29,10 @@ import { HomeComponent } from './home/home.component';
 import { EntitiesComponent } from './entities/entities.component';
 import { LatestRecipesComponent } from './home/latest-recipes/latest-recipes.component';
 import { RecipeComponent } from "./recipe/recipe.component";
+import { RecipeDetailsComponent } from './recipe/recipe-details/recipe-details.component';
+import { RecipeIngredientsComponent } from './recipe/recipe-ingredients/recipe-ingredients.component';
+import { RecipeDirectionsComponent } from './recipe/recipe-directions/recipe-directions.component';
+import { RecipePhotosComponent } from './recipe/recipe-photos/recipe-photos.component';
 import { NavigationBarComponent } from './navigation-bar/navigation-bar.component';
 import { WizardModule } from "./shared/wizard/wizard.module";
 import { RecipeViewComponent } from './recipe-view/recipe-view.component';
@@ -53,9 +57,12 @@ import { StandardDialogService } from "./standard-dialogs/standard-dialog.servic
 import { Cache } from "./shared/cache/cache";
 import { ToasterHelperService } from "./services/toaster-helper-service";
 import { AuthService } from "./services/auth-service";
-import { AuthGuard } from './services/auth-guard';
 import { MediaService } from "./services/media-service";
 import { SearchServiceFactory } from "./services/search-service-factory";
+
+//Guards
+import { AuthGuard } from './services/auth-guard';
+import { DataLossPreventionGuard } from "./services/data-loss-prevention-guard";
 
 //Dialogs
 import { ConfirmDialogComponent } from './standard-dialogs/confirm-dialog/confirm-dialog.component'
@@ -65,6 +72,7 @@ import { EditUnitDialog } from './standard-dialogs/edit-unit-dialog/edit-unit-di
 import { EditIngredientDialog } from "./standard-dialogs/edit-ingredient-dialog/edit-ingredient-dialog";
 import { EditRecipeDirectionDialog } from "./standard-dialogs/edit-recipe-direction-dialog/edit-recipe-direction-dialog";
 import { RecipeItemComponent } from './recipe-item/recipe-item.component';
+import { RecipePublishingComponent } from './recipe/recipe-publishing/recipe-publishing.component';
 
 @NgModule({
   declarations: [
@@ -81,7 +89,11 @@ import { RecipeItemComponent } from './recipe-item/recipe-item.component';
     EditRecipeDirectionDialog,
     LatestRecipesComponent,
     RecipeComponent,
+    RecipeDetailsComponent,
+    RecipeIngredientsComponent,
+    RecipeDirectionsComponent,
     NavigationBarComponent,
+    RecipePhotosComponent,
     RecipeViewComponent,
     SearchBoxComponent,
     AuthCallbackComponent,
@@ -93,7 +105,8 @@ import { RecipeItemComponent } from './recipe-item/recipe-item.component';
     AboutComponent,
     FileDropperComponent,
     UserDetailsComponent,
-    RecipeItemComponent
+    RecipeItemComponent,
+    RecipePublishingComponent
   ],
   imports: [
     FormsModule,
@@ -105,6 +118,7 @@ import { RecipeItemComponent } from './recipe-item/recipe-item.component';
     MatSlideToggleModule,
     MatInputModule,
     MatAutocompleteModule,
+    MatCheckboxModule,
     HttpClientModule,
     ToastrModule.forRoot({
       maxOpened: 5,
@@ -143,7 +157,8 @@ import { RecipeItemComponent } from './recipe-item/recipe-item.component';
     Cache,
     ToasterHelperService,
     MediaService,
-    SearchServiceFactory
+    SearchServiceFactory,
+    DataLossPreventionGuard
   ],
   bootstrap: [AppComponent]
 })

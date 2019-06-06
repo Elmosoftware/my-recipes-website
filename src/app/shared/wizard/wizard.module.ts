@@ -15,6 +15,10 @@ High Severity issues:
 -The form allows to move to another step even if the current one has invalid data (Status: FIXED): This was working for the "Next" and "Previous" 
 buttons, but not for the headers. This mean that you could move to a previous step, broke the data validation and come back to 
 the next steps and continue working.
+
+Improvements:
+---------------------
+-Added a Dirtiness and validity indicator icons on each tab. 
 */
 
 import { NgModule, ModuleWithProviders } from '@angular/core';

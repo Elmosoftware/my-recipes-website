@@ -16,149 +16,152 @@ import { NotFoundErrorPageComponent } from './error-pages/not-found/not-found.co
 import { AboutComponent } from './about/about.component';
 import { TestNewStuffComponent } from './test-new-stuff/test-new-stuff.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
+import { DataLossPreventionGuard } from './services/data-loss-prevention-guard';
 
 const routes: Routes = [
-  { 
-    path: '', 
+  {
+    path: '',
     redirectTo: PAGES.Home,
-    pathMatch: 'full' 
+    pathMatch: 'full'
   },
-  { 
-    path: 'test', 
-    component: TestNewStuffComponent 
+  {
+    path: 'test',
+    component: TestNewStuffComponent,
+    canDeactivate: [DataLossPreventionGuard]
   },
-  { 
-    path: PAGES.Home, 
-    component: HomeComponent 
+  {
+    path: PAGES.Home,
+    component: HomeComponent
   },
-  { 
-    path: PAGES.AuthCallback, 
-    component: AuthCallbackComponent 
+  {
+    path: PAGES.AuthCallback,
+    component: AuthCallbackComponent
   },
-  { 
-    path: PAGES.Unauthorized, 
-    component: UnauthorizedErrorPageComponent 
+  {
+    path: PAGES.Unauthorized,
+    component: UnauthorizedErrorPageComponent
   },
-  { 
-    path: PAGES.Search, 
-    component: SearchComponent 
+  {
+    path: PAGES.Search,
+    component: SearchComponent
   },
-  { 
-    path: PAGES.Recipe, 
-    component: RecipeComponent, 
-    data: { 
-      authGuard: { 
-        adminOnly: false, 
-        allowSocialUsers: true 
-      } 
-    }, 
-    canActivate: [AuthGuard] },
-  { 
-    // path: 'recipe/:id', 
-    path: `${PAGES.Recipe}/:id`, 
-    component: RecipeComponent, 
-    data: { 
-      authGuard: { 
-        adminOnly: false, 
-        allowSocialUsers: true 
+  {
+    path: PAGES.Recipe,
+    component: RecipeComponent,
+    data: {
+      authGuard: {
+        adminOnly: false,
+        allowSocialUsers: true
       }
-    }, 
-    canActivate: [AuthGuard] 
+    },
+    canActivate: [AuthGuard],
+    canDeactivate: [DataLossPreventionGuard]
   },
-  { 
-    // path: 'recipe-view/:id', 
-    path: `${PAGES.RecipeView}/:id`, 
-    component: RecipeViewComponent 
-  },
-  { 
-    path: PAGES.Level, 
-    component: EntitiesComponent, 
-    data: { 
-      type: "Level", 
-      title: "Niveles de dificultad", 
-      defaultSort: "name",
-      authGuard: { 
-        adminOnly: true, 
-        allowSocialUsers: true 
+  {
+    path: `${PAGES.Recipe}/:id`,
+    component: RecipeComponent,
+    data: {
+      authGuard: {
+        adminOnly: false,
+        allowSocialUsers: true
       }
-    }, 
-    canActivate: [AuthGuard] 
+    },
+    canActivate: [AuthGuard],
+    canDeactivate: [DataLossPreventionGuard]
   },
-  { 
-    path: PAGES.MealType, 
-    component: EntitiesComponent, 
-    data: { 
-      type: "MealType", 
-      title: "Platos", 
+  {
+    path: `${PAGES.RecipeView}/:id`,
+    component: RecipeViewComponent
+  },
+  {
+    path: PAGES.Level,
+    component: EntitiesComponent,
+    data: {
+      type: "Level",
+      title: "Niveles de dificultad",
       defaultSort: "name",
-      authGuard: { 
-        adminOnly: true, 
-        allowSocialUsers: true 
-      } 
-    }, 
-    canActivate: [AuthGuard] },
-  { 
-    path: PAGES.Unit, 
-    component: EntitiesComponent, 
-    data: { 
-      type: "Unit", 
-      title: "Unidades de medida", 
+      authGuard: {
+        adminOnly: true,
+        allowSocialUsers: true
+      }
+    },
+    canActivate: [AuthGuard]
+  },
+  {
+    path: PAGES.MealType,
+    component: EntitiesComponent,
+    data: {
+      type: "MealType",
+      title: "Platos",
+      defaultSort: "name",
+      authGuard: {
+        adminOnly: true,
+        allowSocialUsers: true
+      }
+    },
+    canActivate: [AuthGuard]
+  },
+  {
+    path: PAGES.Unit,
+    component: EntitiesComponent,
+    data: {
+      type: "Unit",
+      title: "Unidades de medida",
       defaultSort: "abbrev",
-      authGuard: { 
-        adminOnly: true, 
-        allowSocialUsers: true 
-      } 
-    }, 
-    canActivate: [AuthGuard] 
+      authGuard: {
+        adminOnly: true,
+        allowSocialUsers: true
+      }
+    },
+    canActivate: [AuthGuard]
   },
-  { 
-    path: PAGES.Ingredient, 
-    component: EntitiesComponent, 
-    data: { 
-      type: "Ingredient", 
-      title: "Ingredientes", 
+  {
+    path: PAGES.Ingredient,
+    component: EntitiesComponent,
+    data: {
+      type: "Ingredient",
+      title: "Ingredientes",
       defaultSort: "name",
-      authGuard: { 
-        adminOnly: true, 
-        allowSocialUsers: true 
-      } 
-    }, 
-    canActivate: [AuthGuard] 
+      authGuard: {
+        adminOnly: true,
+        allowSocialUsers: true
+      }
+    },
+    canActivate: [AuthGuard]
   },
-  { 
-    path: PAGES.UserPreferences, 
-    component: UserPreferencesComponent, 
-    data: { 
-      authGuard: { 
-        adminOnly: false, 
-        allowSocialUsers: false 
-      } 
-    }, 
-    canActivate: [AuthGuard] 
+  {
+    path: PAGES.UserPreferences,
+    component: UserPreferencesComponent,
+    data: {
+      authGuard: {
+        adminOnly: false,
+        allowSocialUsers: false
+      }
+    },
+    canActivate: [AuthGuard]
   },
-  { 
-    // path: 'user-details/:id', 
-    path: `${PAGES.UserDetails}/:id`, 
-    component: UserDetailsComponent 
+  {
+    path: `${PAGES.UserDetails}/:id`,
+    component: UserDetailsComponent
   },
-  { 
-    path: PAGES.MyRecipes, 
-    component: MyRecipesComponent, 
-    data: { 
-      authGuard: { 
-        adminOnly: false, 
-        allowSocialUsers: true 
-      } 
-    }, 
-    canActivate: [AuthGuard] 
+  {
+    path: PAGES.MyRecipes,
+    component: MyRecipesComponent,
+    data: {
+      authGuard: {
+        adminOnly: false,
+        allowSocialUsers: true
+      }
+    },
+    canActivate: [AuthGuard]
   },
-  { 
-    path: PAGES.About, 
-    component: AboutComponent 
+  {
+    path: PAGES.About,
+    component: AboutComponent
   },
-  { 
-    path: '**', 
-    component: NotFoundErrorPageComponent 
+  {
+    path: '**',
+    component: NotFoundErrorPageComponent
   }
 ];
 

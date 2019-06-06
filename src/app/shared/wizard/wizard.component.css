@@ -23,6 +23,22 @@
     color: black; 
     border-bottom-color: #1976D2 !important; 
 }
+.sameLine {
+    white-space: nowrap;
+}
+.dirty ::after {
+    font-family: FontAwesome;
+    content: "\f040";
+    display: inline-block;
+    padding-left: 0.5em;
+}
+.invalid ::after {
+    font-family: FontAwesome;
+    content: "\f057";
+    display: inline-block;
+    padding-left: 0.5em;
+    color: #dc3545;
+}
 .enabled { 
     cursor: pointer; 
     border-bottom-color: rgb(88, 162, 234); 

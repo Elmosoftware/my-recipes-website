@@ -1,0 +1,13 @@
+.uploadedImage{
+    background-size: cover;
+    background-repeat: no-repeat;
+    max-height: 200px;
+}
+
+.pictureCaption{
+    opacity: .6;
+}
+
+.pictureCaption:focus{
+    opacity: 1;
+}
