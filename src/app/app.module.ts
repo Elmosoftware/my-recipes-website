@@ -73,6 +73,7 @@ import { EditIngredientDialog } from "./standard-dialogs/edit-ingredient-dialog/
 import { EditRecipeDirectionDialog } from "./standard-dialogs/edit-recipe-direction-dialog/edit-recipe-direction-dialog";
 import { RecipeItemComponent } from './recipe-item/recipe-item.component';
 import { RecipePublishingComponent } from './recipe/recipe-publishing/recipe-publishing.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -106,7 +107,8 @@ import { RecipePublishingComponent } from './recipe/recipe-publishing/recipe-pub
     FileDropperComponent,
     UserDetailsComponent,
     RecipeItemComponent,
-    RecipePublishingComponent
+    RecipePublishingComponent,
+    LoginComponent
   ],
   imports: [
     FormsModule,

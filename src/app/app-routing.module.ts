@@ -3,6 +3,7 @@ import { RouterModule, Routes } from "@angular/router";
 
 import { PAGES } from "./services/navigation-service";
 import { HomeComponent } from "./home/home.component";
+import { LoginComponent } from './login/login.component';
 import { SearchComponent } from './search/search.component';
 import { EntitiesComponent } from "./entities/entities.component";
 import { RecipeViewComponent } from "./recipe-view/recipe-view.component";
@@ -26,12 +27,15 @@ const routes: Routes = [
   },
   {
     path: 'test',
-    component: TestNewStuffComponent,
-    canDeactivate: [DataLossPreventionGuard]
+    component: TestNewStuffComponent
   },
   {
     path: PAGES.Home,
     component: HomeComponent
+  },
+  {
+    path: PAGES.Login,
+    component: LoginComponent
   },
   {
     path: PAGES.AuthCallback,

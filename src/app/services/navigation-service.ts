@@ -7,6 +7,7 @@ import { SearchServiceInterface } from './search-service';
  */
 export const enum PAGES {
     Home = "home",
+    Login = "login",
     AuthCallback = "auth-callback",
     Unauthorized = "error-unauthorized",
     Search = "search",
@@ -36,6 +37,17 @@ export class NavigationService {
 
     toHome(): void {
         this.router.navigate([this.getRelativePath(PAGES.Home)]);
+    }
+
+    toLogin(referrer?: string): void {
+
+        let extras = { queryParams: {} };
+        
+        if (referrer) {
+            (extras.queryParams as any).referrer = referrer;
+        }
+        
+        this.router.navigate([this.getRelativePath(PAGES.Login)], extras);
     }
 
     toAbout(): void {

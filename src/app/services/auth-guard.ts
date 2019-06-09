@@ -21,7 +21,7 @@ export class AuthGuard implements CanActivate {
     //This guard requires an authenticated user, if not we will redirect to the login page:
     if (!this.core.auth.isAuthenticated) {
       console.info(`An authenticated user is required to navigate to ${state.url}. Redirecting to login page...`);
-      this.core.auth.login(state.url);
+      this.core.navigate.toLogin(state.url);
     }
     else {
 
