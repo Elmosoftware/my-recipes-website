@@ -1,80 +1,85 @@
 <ngx-loading-bar></ngx-loading-bar>
 
 <div infinite-scrolling [scrollWindow]="true" (scroll)="onScrollHandler($event)">
-  <nav [@isVisibleChanged]="isVisible" class="navbar navbar-expand-md navbar-light fixed-top bg-light home-page-section navbar-section">
+  <nav [@isVisibleChanged]="isVisible"
+    class="navbar navbar-expand-md navbar-light fixed-top bg-light home-page-section navbar-section">
     <img class="navbar-logo-small mx-4" src="../assets/images/logo.svg" alt="My Recipes Website">
     <a class="navbar-brand" href="javascript:void(0)" (click)="goToHome()">Mi Cocina</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMain" aria-controls="navbarMain"
-      aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMain"
+      aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarMain">
       <ul class="navbar-nav mr-auto">
         <div *ngIf="homePageFeaturesEnabled" class="ml-auto ml-lg-5">
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="" id="dropdown01" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">Recetario</a>
+            <a class="nav-link dropdown-toggle" href="" id="dropdown01" data-toggle="dropdown" aria-haspopup="true"
+              aria-expanded="false">Recetario</a>
             <div class="dropdown-menu" aria-labelledby="dropdown01">
               <div *ngIf="isAuthenticated" class="dropdown-item">
                 <a class="nav-link" href="javascript:void(0)" (click)="goToMyRecipes()">Mis Recetas!</a>
-                <li class="dropdown-divider"></li>
-              </div>
-              <div class="dropdown-item">
-                <a pageScroll class="nav-link" href="#recently-added">Recientes</a></div>
-              <div *ngIf="isAuthenticated" class="dropdown-item">
-                <a class="nav-link" href="javascript:void(0)" (click)="goToRecipe()">Crear una receta</a></div>
-              <div class="dropdown-item">
-                <a pageScroll class="nav-link" href="#search-by-ingredient">Hoy quiero con ...</a></div>
-            </div>
-          </li>
+          <li class="dropdown-divider"></li>
         </div>
-        <div *ngIf="adminMenuEnabled && isAdminUser" class="ml-auto ml-lg-5">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="" id="dropdown01" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">Administración</a>
-            <div class="dropdown-menu" aria-labelledby="dropdown01">
-              <div class="dropdown-item"><a class="nav-link" href="javascript:void(0)" (click)="goToMealtypes()">Platos</a></div>
-              <div class="dropdown-item"><a class="nav-link" href="javascript:void(0)" (click)="goToLevels()">Niveles de dificultad</a></div>
-              <div class="dropdown-item"><a class="nav-link" href="javascript:void(0)" (click)="goToUnits()">Unidades de medida</a></div>
-              <div class="dropdown-item"><a class="nav-link" href="javascript:void(0)" (click)="goToIngredients()">Ingredientes</a></div>
-            </div>
-          </li>
-        </div>
-      </ul>
-      <div *ngIf="searchBoxEnabled" class="navbar-form" role="search">
-        <div class="input-group">
-          <search-box searchType="text" placeHolder="La receta que buscás..." (search)="onSearchHandler($event)"></search-box>
-        </div>
-      </div>
-      <ul class="nav navbar-nav">
-        <li class="nav-item dropdown">
-          <div class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="true" id="dropdown02">
-            <i *ngIf="isAuthenticated; else notAuthUserImage">
-              <img class="rounded-circle profile-picture" [src]="userPicture" [alt]="userName"
-                data-toggle="tooltip" data-placement="bottom" [title]="userNameAndAccount">
-            </i>
-            <ng-template #notAuthUserImage>
-              <i class="fa fa-user fa-fw"></i>
-            </ng-template>
-          </div>
-          <div class="dropdown-menu dropdown-user" aria-labelledby="dropdown02">
-            <div *ngIf="!isAuthenticated" class="dropdown-item" (click)="login()">
-              <i class="fa fa-sign-in fa-fw"></i> Iniciar sesión
-            </div>
-            <div *ngIf="isAuthenticated && !isSocial">
-              <div class="dropdown-item" (click)="changePassword()">
-                <i class="fa fa-gear fa-fw"></i> Cambiar contraseña
-              </div>
-              <div class="dropdown-item" (click)="goToUserPreferences()">
-                <i class="fa fa-gear fa-fw"></i> Preferencias
-              </div>
-        <li class="dropdown-divider"></li>
+        <div *ngIf="isHome" class="dropdown-item">
+          <a pageScroll class="nav-link" href="#recently-added">Recientes</a></div>
+        <div *ngIf="isAuthenticated" class="dropdown-item">
+          <a class="nav-link" href="javascript:void(0)" (click)="goToRecipe()">Crear una receta</a></div>
+        <div class="dropdown-item">
+          <a pageScroll class="nav-link" href="#search-by-ingredient" (click)="goToSearchByIngredient()">Hoy quiero con ...</a></div>
     </div>
-    <div *ngIf="isAuthenticated" class="dropdown-item" (click)="logout()">
-      <i class="fa fa-sign-out fa-fw"></i> Finalizar sesión
-    </div>
+    </li>
 </div>
-</li>
+<div *ngIf="adminMenuEnabled && isAdminUser" class="ml-auto ml-lg-5">
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="" id="dropdown01" data-toggle="dropdown" aria-haspopup="true"
+      aria-expanded="false">Administración</a>
+    <div class="dropdown-menu" aria-labelledby="dropdown01">
+      <div class="dropdown-item"><a class="nav-link" href="javascript:void(0)" (click)="goToMealtypes()">Platos</a>
+      </div>
+      <div class="dropdown-item"><a class="nav-link" href="javascript:void(0)" (click)="goToLevels()">Niveles de
+          dificultad</a></div>
+      <div class="dropdown-item"><a class="nav-link" href="javascript:void(0)" (click)="goToUnits()">Unidades de
+          medida</a></div>
+      <div class="dropdown-item"><a class="nav-link" href="javascript:void(0)"
+          (click)="goToIngredients()">Ingredientes</a></div>
+    </div>
+  </li>
+</div>
+</ul>
+<div *ngIf="searchBoxEnabled" class="navbar-form" role="search">
+  <div class="input-group">
+    <search-box searchType="text" placeHolder="La receta que buscás..." (search)="onSearchHandler($event)"></search-box>
+  </div>
+</div>
+<ul class="nav navbar-nav">
+  <li class="nav-item dropdown">
+    <div class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="true" id="dropdown02">
+      <i *ngIf="isAuthenticated; else notAuthUserImage">
+        <img class="rounded-circle profile-picture" [src]="userPicture" [alt]="userName" data-toggle="tooltip"
+          data-placement="bottom" [title]="userNameAndAccount">
+      </i>
+      <ng-template #notAuthUserImage>
+        <i class="fa fa-user fa-fw"></i>
+      </ng-template>
+    </div>
+    <div class="dropdown-menu dropdown-user" aria-labelledby="dropdown02">
+      <div *ngIf="!isAuthenticated" class="dropdown-item" (click)="login()">
+        <i class="fa fa-sign-in fa-fw"></i> Iniciar sesión
+      </div>
+      <div *ngIf="isAuthenticated && !isSocial">
+        <div class="dropdown-item" (click)="changePassword()">
+          <i class="fa fa-gear fa-fw"></i> Cambiar contraseña
+        </div>
+        <div class="dropdown-item" (click)="goToUserPreferences()">
+          <i class="fa fa-gear fa-fw"></i> Preferencias
+        </div>
+  <li class="dropdown-divider"></li>
+  </div>
+  <div *ngIf="isAuthenticated" class="dropdown-item" (click)="logout()">
+    <i class="fa fa-sign-out fa-fw"></i> Finalizar sesión
+  </div>
+  </div>
+  </li>
 </ul>
 </div>
 </nav>

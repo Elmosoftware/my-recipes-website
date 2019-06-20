@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Router } from '@angular/router';
+import { Router, UrlSegment } from '@angular/router';
 import { SearchServiceInterface } from './search-service';
 
 /**
@@ -31,6 +31,49 @@ export class NavigationService {
     constructor(private router: Router) {
     }
 
+    parsePageURL(url: UrlSegment): PAGES {
+
+        if (url && url.path) {
+            switch (url.path.toLowerCase()) {
+                case PAGES.Home:
+                    return PAGES.Home
+                case PAGES.Login:
+                    return PAGES.Login
+                case PAGES.AuthCallback:
+                    return PAGES.AuthCallback
+                case PAGES.Unauthorized:
+                    return PAGES.Unauthorized
+                case PAGES.Search:
+                    return PAGES.Search
+                case PAGES.Recipe:
+                    return PAGES.Recipe
+                case PAGES.RecipeView:
+                    return PAGES.RecipeView
+                case PAGES.Level:
+                    return PAGES.Level
+                case PAGES.MealType:
+                    return PAGES.MealType
+                case PAGES.Unit:
+                    return PAGES.Unit
+                case PAGES.Ingredient:
+                    return PAGES.Ingredient
+                case PAGES.UserPreferences:
+                    return PAGES.UserPreferences
+                case PAGES.UserDetails:
+                    return PAGES.UserDetails
+                case PAGES.MyRecipes:
+                    return PAGES.MyRecipes
+                case PAGES.About:
+                    return PAGES.About
+                default:
+                    throw new Error(`Page "${url.path.toLowerCase()}" is not been defined yet in PAGES enumeration.`)
+            }
+        }
+        else {
+            throw new Error(`Invalid URL segment sent.`);
+        }
+    }
+
     toUnauthorizedAccess(): void {
         this.router.navigate([this.getRelativePath(PAGES.Unauthorized)]);
     }
@@ -56,7 +99,7 @@ export class NavigationService {
 
     toRecipe(id?: string): void {
 
-        let commands:any[] = [this.getRelativePath(PAGES.Recipe)]
+        let commands: any[] = [this.getRelativePath(PAGES.Recipe)]
 
         if (id) {
             commands.push(id);
@@ -118,7 +161,7 @@ export class NavigationService {
         this.router.navigate([this.getRelativePath(PAGES.Ingredient)]);
     }
 
-    private getRelativePath(page: PAGES): string{
+    private getRelativePath(page: PAGES): string {
         return `/${page}`;
     }
 }

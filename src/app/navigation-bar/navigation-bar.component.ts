@@ -1,10 +1,15 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { trigger, state, animate, transition, style } from '@angular/animations';
 
 import { CoreService } from '../services/core-service';
 import { ConfirmDialogConfiguration } from "../standard-dialogs/standard-dialog.service";
 import { SearchServiceInterface } from "../services/search-service";
+import { PAGES } from "../services/navigation-service";
 import { Recipe } from '../model/recipe';
+import { SearchByIngredientService } from '../services/search-by-ingredient-service';
+import { SEARCH_TYPE } from "../services/search-type";
+import { SearchServiceFactory } from "../services/search-service-factory";
 
 @Component({
   selector: 'app-navigation-bar',
@@ -24,12 +29,19 @@ export class NavigationBarComponent implements OnInit {
   @Input() searchBoxEnabled: boolean;
 
   isVisible: boolean;
+  currentPage: PAGES
 
-  constructor(private core: CoreService) {
+  get isHome(): boolean {
+    return this.currentPage == PAGES.Home;
+  }
+
+  constructor(private core: CoreService, private route: ActivatedRoute, 
+    private svcSearchFac: SearchServiceFactory) {
   }
 
   ngOnInit() {
     this.isVisible = true;
+    this.currentPage = this.core.navigate.parsePageURL(this.route.snapshot.url[0]);
   }
 
   onScrollHandler($event: number) {
@@ -112,6 +124,17 @@ export class NavigationBarComponent implements OnInit {
 
   goToHome() {
     this.core.navigate.toHome();
+  }
+
+  goToSearchByIngredient(){
+    let s: SearchServiceInterface<Recipe>;
+
+    //This need to do something only if we are not in Home page. Otherwise the pagescroll directive 
+    //will do the job.
+    if (!this.isHome) {
+      s = this.svcSearchFac.getService(SEARCH_TYPE.Ingredient);
+      this.core.navigate.toSearch(s);
+    }
   }
 
   goToMyRecipes() {
