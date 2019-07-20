@@ -1,50 +1,47 @@
 <div *ngIf="uploadStatus != 'IN-PROGRESS'" class="my-4">
   <div *ngIf="uploadStatus == 'ERROR'" class="alert alert-danger alert-dismissible" role="alert">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">×</span>
+    <button class="btn btn-secondary close m-1" type="button" data-dismiss="alert" aria-label="Close">
+      <i class="fa fa-times"></i>
     </button>
     <strong>Ocurrió un error al subir tus fotos.</strong> Por favor verifica lo siguiente antes de reintentar
     esta operación:
-    <ul>
+    <ul class="mt-2 mb-0">
       <li>Verifica que todos los archivos que seleccionaste para subir son archivos de imágenes.</li>
       <li>Verifica el tamaño de los archivos para asegurarte que ninguno sea demasiado grande.</li>
     </ul>
   </div>
   <div *ngIf="uploadStatus == 'READY' && uploadedPictures == 0" class="alert alert-info alert-dismissible" role="alert">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">×</span>
+    <button class="btn btn-secondary close m-1" type="button" data-dismiss="alert" aria-label="Close">
+      <i class="fa fa-times"></i>
     </button>
-    <strong>Ahora a agregar las fotos!</strong> Arrastra las imagenes que quieras agregar a tu receta,
-    arrastrandolas al
-    recuadro de linea puenteada que puedes ver aqui debajo.
-    <p>
-      Recuerda que <strong>puedes agregar hasta {{ maxPicturesPerRecipe }} imagenes por receta</strong>. Si aún
-      no las tienes, no te preocupes. Haz click en siguiente y agregalas luego.
+    <strong>Ahora a agregar las fotos!</strong> Arrastra las imagenes que quieras a nuestra "nube", (aqui debajo...).
+    <p class="mt-2 mb-0">
+      Recordá que <strong>podes agregar hasta {{ maxPicturesPerRecipe }} imagenes por receta</strong>. Si aún
+      no las tenés, no te preocupes. Hace click en siguiente y podrás agregarlas mas tarde.
     </p>
   </div>
   <div *ngIf="uploadStatus == 'READY' && remainingPictures == 0" class="alert alert-warning" role="alert">
-    <strong>Ya alcanzaste el limite de fotos de tu receta.</strong> Puedes remover las que quieras y subir
+    <strong>Ya alcanzaste el limite de fotos de tu receta.</strong> Podés remover las que quieras y subir
     nuevas cuando desees reemplazarlas.
   </div>
   <div *ngIf="uploadStatus == 'READY' && remainingPictures > 0 && uploadedPictures == 1"
     class="alert alert-info alert-dismissible" role="alert">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">×</span>
+    <button type="button" class="btn btn-secondary close m-1" data-dismiss="alert" aria-label="Close">
+      <i class="fa fa-times"></i>
     </button>
-    <strong>Recuerda que puedes subir varias imagenes a la vez arrastrandolas aqui debajo.</strong> Podrás ver
-    la imagen que subiste
-    debajo y podrás agregar un texto descriptivo a la misma.
+    <strong>Recordá que podes subir varias imagenes a la vez arrastrandolas aqui debajo.</strong> Podrás ver
+    la imagen que subiste y agregar un texto descriptivo a la misma.
   </div>
   <div *ngIf="uploadStatus == 'READY' && remainingPictures > 0 && uploadedPictures > 1"
     class="alert alert-info alert-dismissible" role="alert">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">×</span>
+    <button type="button" class="btn btn-secondary close m-1" data-dismiss="alert" aria-label="Close">
+      <i class="fa fa-times"></i>
     </button>
-    <strong>Ya tienes varias imagenes, muy bien!</strong> Puedes <strong>arrastrarlas</strong> para ordenarlas
-    como quieras que se muestren y además puedes <strong>seleccionar una de ellas como la imagen de portada de
+    <strong>Ya tenés varias imagenes, muy bien!</strong> Podés <strong>arrastrarlas</strong> para ordenarlas
+    como quieras que se muestren y además podes <strong>seleccionar una de ellas como la imagen de portada de
       tu receta</strong>.
-    <p>
-      A su vez puedes agregar un texto descriptivo para cada imagen.
+    <p class="mt-2 mb-0">
+      A su vez tendrás la posibilidad de agregar un texto descriptivo para cada una.
     </p>
   </div>
 </div>
@@ -53,30 +50,21 @@
 <form class="my-4" #photosForm="ngForm">
   <div cdkDropList class="container my-2" (cdkDropListDropped)="drop($event)">
     <div cdkDrag *ngFor="let item of model.pictures; let in = index">
-      <div class="row uploadedImage mt-1" [ngStyle]="{ 'backgroundImage': 'url(' + item.transformationURL + ')'}">
-        <div class="col-4 my-3">
-           <mat-radio-group [(ngModel)]="selectedCoverId" name="isCover" #isCover="ngModel">
-              <mat-radio-button [value]="item.pictureId.publicId"  (change)="selectedCoverChange(item);"
+      <div class="row justify-content-center mb-1">
+        <mat-radio-group [(ngModel)]="selectedCoverId" class="coverImageOption" name="isCover" #isCover="ngModel">
+          <mat-radio-button [value]="item.pictureId.publicId" (change)="selectedCoverChange(item);"
             data-toggle="tooltip" data-placement="right" title="Seleccionar como la imagen de portada de mi receta.">
           </mat-radio-button>
         </mat-radio-group>
-        </div>
-        <div class="col-4">
-        </div>
-        <div class="col-4 my-3 text-right">
-          <button type="button" class="btn btn-primary btn-sm" (click)="handleDeletePicture(item)" data-toggle="tooltip"
-            data-placement="left" title="Eliminar esta imagen.">
-            <i class="fa fa-times" aria-hidden="true"></i>
-          </button>
-        </div>
-        <div class="col-12 mt-5 mb-3">
-          <div class="form-group">
-            <input type="text" class="form-control pictureCaption" placeholder="Asi debe quedar la masa ..."
-              [(ngModel)]="item.caption" name="caption-{{in}}" maxlength="75" autocomplete="off" data-toggle="tooltip"
-              data-placement="top" title="Ingrese aqui opcionalmente, un texto descriptivo que acompañará la imagen."
-              #caption="ngModel">
-          </div>
-        </div>
+        <button type="button" class="btn btn-primary btn-sm dropImagebutton" (click)="handleDeletePicture(item)"
+          data-toggle="tooltip" data-placement="left" title="Eliminar esta imagen.">
+          <i class="fa fa-times" aria-hidden="true"></i>
+        </button>
+        <img class="uploadedImage" [src]="item.transformationURL">
+        <input type="text" class="form-control pictureCaption" placeholder="Asi debe quedar la masa ..."
+          [(ngModel)]="item.caption" name="caption-{{in}}" maxlength="75" autocomplete="off" data-toggle="tooltip"
+          data-placement="top" title="Ingrese aqui opcionalmente, un texto descriptivo que acompañará la imagen."
+          #caption="ngModel">
       </div>
     </div>
   </div>

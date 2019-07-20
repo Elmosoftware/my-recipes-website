@@ -3,16 +3,20 @@
 }
 
 .userName {
-    font-size: 2em;
+    font-size: 2.5em;
+}
+
+.legend{
+    font-size: 1.9em;
 }
 
 .recipeTitle{
-    font-family: 'Bellefair';
+    font-family: 'Montserrat';
     font-size: 2.4em;
 }
 
 .recipeDescription{
-    font-family: 'Bellefair';
+    font-family: 'Montserrat';
     font-size: 1.2em;
     font-style: italic;
 }

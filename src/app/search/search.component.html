@@ -1,9 +1,63 @@
 <!-- Navigation Bar -->
-<app-navigation-bar></app-navigation-bar>
+<app-navigation-bar homePageFeaturesEnabled="true" adminMenuEnabled="true"></app-navigation-bar>
 
 <!-- Search Component -->
 <a id="topSearch"></a>
-<div class="container alert alert-info sticky-top formPositioning overlayIndex">
+<div class="container-fluid formPositioning contentWidth">
+  <div class="filterStickyToFront alert accentBackground">
+    <div class="row align-items-center">
+      <div class="col-12">
+        <search-box [searchType]="svcSearch.searchType" [initialTerm]="initialValues.term"
+          [initialId]="initialValues.id" (search)="onSearchHandler($event)" [searchInProgress]="asyncInProgress"
+          [placeHolder]="placeHolderText"></search-box>
+      </div>
+    </div>
+    <div *ngIf="svcInfScroll.model && svcInfScroll.model.length > 0" class="row justify-content-between mt-2">
+      <div class="col">
+        <span>Mostrando {{ svcInfScroll.count }} resultados de un total de {{ svcInfScroll.totalCount }} coincidencias.</span>
+      </div>
+      <div class="col-auto">
+        <button type="button" pageScroll href="#topSearch" class="btn btn-primary btn-sm" [disabled]="asyncInProgress"
+          (click)="fullScrollUp()" data-toggle="tooltip" data-placement="top"
+          title="Ir al primer resultado de la búsqueda.">
+          <i class="fa fa-chevron-up fa-1x"></i>
+        </button>
+        <button type="button" pageScroll href="#bottomSearch" class="btn btn-primary btn-sm ml-2"
+          [disabled]="asyncInProgress" (click)="fullScrollDown()" data-toggle="tooltip" data-placement="top"
+          title="Ir al final o buscar más resultados.">
+          <i class="fa fa-chevron-down fa-1x"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="svcInfScroll.model && svcInfScroll.model.length > 0" infinite-scrolling [scrollWindow]="true"
+    (scrollEnd)="onScrollEndHandler($event)">
+    <app-recipe-item [model]="svcInfScroll.model" display-full-description="true" display-ingredients="true"
+      display-directions="true"></app-recipe-item>
+  </div>
+  <div *ngIf="svcInfScroll.model && svcInfScroll.model.length == 0" class="alert alert-warning formPositioning"
+    role="alert">
+    <div class="row">
+      <div class="col-3 align-self-center text-center">
+        <i class="fa fa-chain-broken fa-5x" aria-hidden="true"></i>
+      </div>
+      <div class="col-9 align-self-start">
+        <h3>Oops!</h3>
+        <p>
+          <strong>La búsqueda que realizaste no devolvió ningún resultado!.</strong>
+        </p>
+        <p>Verificá si escribiste correctamente el termino a buscar.
+        </p>
+        <p>Para tener resultados más precisos, podés encerrar entre comillas dobles la palabra o frase específica a
+          buscar.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<a id="bottomSearch"></a>
+
+<!-- <div class="container alert accentBackground sticky-top formPositioning overlayIndex">
   <div class="row align-items-center">
     <div class="col-12">
       <search-box [searchType]="svcSearch.searchType" [initialTerm]="initialValues.term" [initialId]="initialValues.id"
@@ -50,4 +104,4 @@
     </div>
   </div>
 </div>
-<a id="bottomSearch"></a>
+<a id="bottomSearch"></a> -->

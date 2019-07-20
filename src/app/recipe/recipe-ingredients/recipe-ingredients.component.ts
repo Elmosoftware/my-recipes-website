@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { trigger, useAnimation, transition } from '@angular/animations';
 
 import { Recipe } from 'src/app/model/recipe';
 import { RecipeSubcomponentInterface } from '../recipe-subcomponent-interface';
@@ -11,11 +12,22 @@ import { Entity } from 'src/app/model/entity';
 import { RecipeIngredient } from 'src/app/model/recipe-ingredient';
 import { EntityService } from 'src/app/services/entity-service';
 import { APIResponseParser } from 'src/app/services/api-response-parser';
+import { horizontalSlideIn, horizontalSlideOut } from "../../static/animations";
 
 @Component({
   selector: 'app-recipe-ingredients',
   templateUrl: './recipe-ingredients.component.html',
-  styleUrls: ['./recipe-ingredients.component.css']
+  styleUrls: ['./recipe-ingredients.component.css'],
+  animations: [
+    trigger('filterVisibilityTrigger', [
+      transition(':enter', [
+        useAnimation(horizontalSlideIn, { params: { time: ".5s" }})
+      ]),
+      transition(':leave', [
+        useAnimation(horizontalSlideOut, { params: { time: ".5s ease-in" }})
+      ])
+    ])
+  ]
 })
 export class RecipeIngredientsComponent implements OnInit, RecipeSubcomponentInterface<RecipeIngredient> {
 

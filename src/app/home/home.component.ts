@@ -29,7 +29,6 @@ export class HomeComponent implements OnInit {
 
   onSearchHandler($event: SearchServiceInterface<Recipe>) {
     console.log(`SEARCH! type:"${$event.searchType}", term:"${$event.term}", id:"${$event.id}"`);
-    // this.core.router.navigate(["/search"], { queryParams: { type: $event.searchType, term: $event.term, id: $event.id } } )
     this.core.navigate.toSearch($event);
   }
 

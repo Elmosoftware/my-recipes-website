@@ -10,17 +10,57 @@
     max-width: 18rem;
 }
 
+.recipeCard {
+    box-shadow: 3px 3px 8px 0px rgba(107,107,107,0.75); 
+}
+
 .recipeTitle{
-    font-family: 'Bellefair';
-    font-size: 1.5em;
+    font-family: 'Montserrat';
+    font-size: 1.3em;
 }
 
 .recipeDescription{
-    font-family: 'Bellefair';
-    font-size: 1.1em;
+    font-family: 'Montserrat';
+    font-size: 0.8em;
     font-style: italic;
 }
 
 .large-icon {
     font-size: 9em;
+}
+
+.dropdown-menu-divider {
+    width: 60%;
+    margin-left: 20%;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    border: 0.5px solid rgba(255, 255,255,0.5);
+}
+
+.expander {
+    color:black;
+}
+
+.expander:hover{
+    opacity: .5;
+}
+
+.mealtypeFiltersList{
+    white-space: nowrap;
+}
+
+.filterIcon{
+    min-width: 3rem;
+    max-width: 3rem;
+}
+
+.filterStickyToFront{
+    position: sticky;
+    top: 0;
+    z-index: 900;
+}
+
+.contentStickyToBack{
+    position: sticky;
+    z-index: 800;
 }

@@ -1,0 +1,42 @@
+/*
+    TOASTER OVERRIDES:
+    ============================
+*/
+
+::ng-deep .toast-info {
+    background-color: #998b8f;
+    font-size: 1rem;
+}
+
+::ng-deep .toast-success {
+    background-color: #519fcc;
+    font-size: 1rem;
+}
+
+::ng-deep .toast-warning {
+    background-color: #fcdb9f;
+    font-size: 1rem;
+    color: #87854a !important;
+}
+
+::ng-deep .toast-error {
+    background-color: #ff5106;
+    font-size: 1rem;
+}
+
+::ng-deep .toast-title {
+    font-size: 1.4rem;
+}
+
+:ng-deep .toast-message {
+    padding-top: 10px;
+}
+
+::ng-deep .toast-container .toast {
+    padding: 15px 20px 15px 50px;
+    width: 450px;
+    background-position: left 11px top 18px;
+    background-repeat: no-repeat;
+    background-size: 30px;
+    box-shadow: none;
+}

@@ -48,6 +48,7 @@ import { AboutComponent } from './about/about.component';
 import { FileDropperComponent } from './shared/file-dropper/file-dropper.component';
 import { TestNewStuffComponent } from './test-new-stuff/test-new-stuff.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
+import { CookingAnimationComponent } from './cooking-animation/cooking-animation.component';
 
 //Services
 import { NavigationService } from './services/navigation-service';
@@ -108,7 +109,8 @@ import { LoginComponent } from './login/login.component';
     UserDetailsComponent,
     RecipeItemComponent,
     RecipePublishingComponent,
-    LoginComponent
+    LoginComponent,
+    CookingAnimationComponent
   ],
   imports: [
     FormsModule,
@@ -126,6 +128,7 @@ import { LoginComponent } from './login/login.component';
       maxOpened: 5,
       closeButton: true,
       positionClass: "toast-top-right",
+      disableTimeOut: false,
       timeOut: 5000
     }),
     NgxSelectModule,

@@ -1,7 +1,7 @@
 <div id="carouselComponent" class="carousel slide" data-ride="carousel" data-interval="5000">
   <div class="carousel-inner" role="listbox">
     <div *ngFor="let item of items; let i = index" class="carousel-item" [ngClass]="{'active': (i == 0), '': (i != 0) }">
-      <img class="d-block img-fluid carousel-image" [src]="item.imageSrc">
+      <img class="d-block img-fluid carousel-image" [ngStyle]="imageStyle" [src]="item.imageSrc">
       <div *ngIf="item.captionImageSrc || item.captionText || item.authorName">
         <div class="carousel-caption carousel-caption-container">
           <img *ngIf="item.captionImageSrc" class="carousel-center-logo" [src]="item.captionImageSrc"

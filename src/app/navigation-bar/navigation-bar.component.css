@@ -1,3 +1,9 @@
+/* These are the CSS style overrides for the Loading Bar */
+@import "../../assets/css/ngx-loading-bar-overrides.css";
+
+/* These are the CSS style overrides for the Toaster */
+@import "../../assets/css/ngx-toastr-overrides.css";
+
 .navbar-section{
     opacity: 0.9;
 }
@@ -6,8 +12,20 @@
     opacity: 1;
 }
 
+.navbar-brand{
+    font-family: 'Libre Baskerville, serif';
+    font-size: 1.9rem;
+    position: relative;
+    bottom: -13px;
+    left: -7px;
+}
+
+.navbar-link{
+    white-space: nowrap;
+}
+
 .navbar-logo-small{
-    width: 4%;
+    width: 3rem;
 }
 
 .navbar-light .navbar-nav .nav-link {
@@ -19,9 +37,23 @@
     left: auto;
 }
 
-.dropdown-menu > span:hover {
-    background-color: rgb(170, 170, 170);
-    background-image: none;
+/* Dropdown menu background color*/
+.dropdown-menu {     
+    background-color: #343a40;  
+}
+
+.dropdown-item:focus, .dropdown-item:hover {
+    color: #16181b;
+    text-decoration: none;
+    background-color: #858585;
+}
+
+.dropdown-menu-divider {
+    width: 60%;
+    margin-left: 20%;
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+    border: 0.5px solid rgba(255, 255,255,0.5);
 }
 
 .profile-picture {

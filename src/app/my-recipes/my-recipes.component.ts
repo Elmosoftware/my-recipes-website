@@ -1,4 +1,5 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
+import { trigger, state, animate, transition, style } from '@angular/animations';
 
 import { CoreService } from "../services/core-service";
 import { EntityService } from "../services/entity-service";
@@ -16,7 +17,18 @@ const PAGE_SIZE: number = 50;
 @Component({
   selector: 'app-my-recipes',
   templateUrl: './my-recipes.component.html',
-  styleUrls: ['./my-recipes.component.css']
+  styleUrls: ['./my-recipes.component.css'],
+  animations: [
+    trigger('filterVisibilityTrigger', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('0.5s', style({ opacity: 1 })),
+      ]),
+      transition(':leave', [
+        animate('0.5s', style({ opacity: 0 }))
+      ])
+    ])
+  ]
 })
 export class MyRecipesComponent implements OnInit {
 
@@ -27,6 +39,7 @@ export class MyRecipesComponent implements OnInit {
   onDataFeed: EventEmitter<PagingHelper>;
   mealTypesFilter: number[];
   notPublishedOnlyFilter: boolean;
+  filtersVisible: boolean
 
   constructor(public core: CoreService,
     public cache: Cache) {
@@ -34,6 +47,7 @@ export class MyRecipesComponent implements OnInit {
 
   ngOnInit() {
     //Initializing:
+    this.filtersVisible = true;
     this.mealTypesFilter = [];
     this.svcRecipe = this.core.entityFactory.getService("Recipe");
     this.reset();
@@ -71,6 +85,10 @@ export class MyRecipesComponent implements OnInit {
     this.svcInfScroll.fullScrollDown();
   }
 
+  toggleFiltersVisibility(){
+    this.filtersVisible = !this.filtersVisible;
+  }
+
   //This method gets called every time the list of filter options changes
   toggleMealType(id) {
 
@@ -83,6 +101,16 @@ export class MyRecipesComponent implements OnInit {
 
     console.log("STARTING NEW SEARCH!");
     this.reset();
+  }
+
+  isMealtypeSelected(id): boolean{
+    let ret: boolean = false;
+
+    if (this.mealTypesFilter[id]) {
+      ret = true;
+    }
+
+    return ret;
   }
 
   toggleNotPublishedOnly() {
@@ -127,11 +155,11 @@ export class MyRecipesComponent implements OnInit {
     return ret;
   }
 
-  getFooter(r: Recipe): string {
+  getStatus(r: Recipe): string {
     let ret: string;
 
     if (r.lastUpdateOn) {
-      ret = "Última actualización: " + this.core.helper.friendlyTimeFromNow(r.lastUpdateOn);
+      ret = "Actualizada: " + this.core.helper.friendlyTimeFromNow(r.lastUpdateOn);
     }
     else {
       ret = "Creada: " + this.core.helper.friendlyCalendarTime(r.createdOn);
@@ -206,8 +234,13 @@ export class MyRecipesComponent implements OnInit {
       .subscribe(data => {
         let response: APIResponseParser = new APIResponseParser(data);
         this.svcInfScroll.feed(response.headers.XTotalCount, (response.entities as Recipe[]));
-        this.asyncInProgress = false;
         this.setMealTypeFilterCounters((response.entities as Recipe[]));
+        this.asyncInProgress = false;
+
+        // setTimeout(() => {
+          this.filtersVisible = false; //Hiding filters on screen to improve usability.
+        // }, 2000);
+
       }, err => {
         this.asyncInProgress = false;
         throw err;

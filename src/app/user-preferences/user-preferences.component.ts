@@ -10,25 +10,39 @@ import { User } from "../model/user";
 })
 export class UserPreferencesComponent implements OnInit {
 
-  constructor(private core: CoreService) { }
+  constructor(private core: CoreService) {
+  }
+
+  private originalEmail: string = "";
 
   model: User;
   emailConfirmation: string = "";
+
+  get emailChanged(): boolean {
+    let ret: boolean = false;
+
+    if (this.model && this.model.email != this.originalEmail) {
+      ret = true;
+    }
+
+    return ret;
+  }
 
   ngOnInit() {
     this.dataRefresh();
   }
 
   dataRefresh() {
-    this.model = this.core.auth.userProfile.user;
+    this.model = Object.assign({}, this.core.auth.userProfile.user);
+    this.originalEmail = this.model.email;
   }
 
-  save(){
+  save() {
     this.core.auth.updateUserPreferences(this.model, (err) => {
       if (!err) {
-        this.core.toast.showSuccess("Tus preferencias han sido modificadas con éxito!");  
+        this.core.toast.showSuccess("Tus preferencias han sido modificadas con éxito!, los cambios se aplicaran a partir de tu proximo inicio de sesión.");
       }
-      
+
       this.dataRefresh();
     })
   }

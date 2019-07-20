@@ -1,5 +1,8 @@
 .carousel-image{
     width:100%;
+    object-fit: cover;
+    /* height: calc(100vh * 0.6);
+    border-radius: 20px; */
 }
 
 .carousel-caption-container{

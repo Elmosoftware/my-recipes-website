@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:i="&amp;#38;ns_ai;"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   id="Layer_1"
+   x="0px"
+   y="0px"
+   viewBox="0 0 164.5582 70.288727"
+   xml:space="preserve"
+   width="164.5582"
+   height="70.288727"><metadata
+   id="metadata3745"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+   id="defs3743" />
+<style
+   type="text/css"
+   id="style3730">
+	.st0{fill:none;stroke:#0F62F4;stroke-width:6;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st1{fill:white;stroke:none;stroke-miterlimit:0;}
+</style>
+<switch
+   style="stroke:#89c4e6;stroke-opacity:1"
+   id="switch3738"
+   transform="matrix(1.6999814,0,0,1.2331355,-2.7199702,-27.128981)">
+	<foreignObject
+   requiredExtensions="http://ns.adobe.com/AdobeIllustrator/10.0/"
+   x="0"
+   y="0"
+   width="1"
+   height="1">
+		
+	</foreignObject>
+	<g
+   style="stroke:#89c4e6;stroke-opacity:1"
+   i:extraneous="self"
+   id="g3736">
+		<path
+   class="st0"
+   d="m 95.4,62 c 0,7.2 -5.8,14 -13,14 H 17.6 c -7.2,0 -13,-6.9 -13,-14 0,-7.2 5.8,-13.5 13,-13.5 0.8,0 1.5,-0.2 2.3,-0.1 0.4,-8.8 7.1,-15.9 15.2,-15.9 4.7,0 8.8,2.2 11.6,5.8 C 49.2,30.6 56,25 64,25 c 10.1,0 18.3,8.9 18.3,19.9 0,1 -0.1,2.1 -0.2,3 0.1,0 0.1,0.5 0.2,0.5 7.2,0.1 13.1,6.4 13.1,13.6 z"
+   id="path3732"
+   style="fill:none;stroke:#89c4e6;stroke-width:6;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:1" />
+		<path
+   class="st1"
+   d="m 95.4,61.7 c 0,7.2 -5.8,13.8 -13,13.8 H 17.6 c -7.2,0 -13,-6.6 -13,-13.8 0,-7.2 5.8,-13.4 13,-13.4 0.8,0 1.5,-0.1 2.3,0 0.4,-8.8 7.1,-15.9 15.2,-15.9 4.7,0 8.8,2.2 11.6,5.8 C 49.3,30.6 56.1,25 64,25 c 10.1,0 18.3,8.9 18.3,19.9 0,1 -0.1,2.1 -0.2,3 0.1,0 0.1,0.4 0.2,0.4 7.2,0 13.1,6.3 13.1,13.4 z"
+   id="path3734"
+   style="fill:#ffffff;stroke:#89c4e6;stroke-miterlimit:0;stroke-opacity:1" />
+	</g>
+</switch>
+</svg>

@@ -3,13 +3,11 @@
       <div class="row justify-content-center">
         <div class="align-self-center form-inline">
           <div class="input-group-prepend">
-            <span class="input-group-text">Publicar</span>
+            <span class="standardInputLegend">Estado de publicación</span>
           </div>
-          <div class="form-control">
             <mat-slide-toggle color="primary" name="pubToggle" [(ngModel)]="isPublished" #pubToggle="ngModel">
-              {{ friendlyPublishDate }}
+              <span [ngClass]="{'badge badge-primary': isPublished, 'standardInputLegend': !isPublished}">{{ friendlyPublishDate }}</span>
             </mat-slide-toggle>
-          </div>
         </div>
         <div class="align-self-center">
           <div class="alert alert-info my-3" role="alert">
@@ -19,11 +17,11 @@
               interactuar con ellas.
             </p>
             <p>
-              Para que esto suceda deberás publicar la receta. Al hacerlo, será incluida en las búsquedas
+              Para que esto suceda deberás <strong>publicar la receta</strong>. Al hacerlo, será incluida en las búsquedas
               relevantes de cualquier usuario y todos podrán disfrutar de la delicia culinaria que has creado.
             </p>
             <p>
-              Podrás cambiar este estado de tu receta en todo momento y las veces que desees.
+              Podes cambiar este estado de tu receta en todo momento y las veces que desees.
             </p>
           </div>
         </div>

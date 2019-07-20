@@ -1,9 +1,10 @@
 .card {
     height: 100%;
     border: 0; 
+    background-color: transparent;
 }
 .card-header { 
-    background-color: #fff; 
+    background-color: transparent; 
     padding: 0; 
     font-size: 1.25rem; }
 .card-block { 
@@ -11,7 +12,7 @@
     overflow-y: visible;  /*This is to allow dropdowns to show the list without the need to scroll down */
 }
 .card-footer { 
-    background-color: #fff; 
+    background-color: transparent; 
     border-top: 0 none; 
 }
 .nav-item { 
@@ -21,7 +22,7 @@
 .active { 
     font-weight: bold; 
     color: black; 
-    border-bottom-color: #1976D2 !important; 
+    border-bottom-color: #89c4e6 !important; 
 }
 .sameLine {
     white-space: nowrap;

@@ -73,19 +73,20 @@ export class InfiniteScrollingDirective {
       this._prevPerc = this._perc
       this._perc = this._getScrollingPercent(event);
 
-      //console.log(`perc: ${this._perc}, _prevPerc:${this._prevPerc}`)
+      // console.log(`perc: ${this._perc}, _prevPerc:${this._prevPerc}`)
 
       if (this._perc <= this.scrollUpTrigger && this._prevPerc > this.scrollUpTrigger) {
-        //console.log("TRIGGERING TOP!!!")
+        // console.log("TRIGGERING TOP!!!")
         this.scrollEnd.emit(SCROLL_POSITION.Top)
       }
       else if (this._perc >= this.scrollDownTrigger && this._prevPerc < this.scrollDownTrigger) {
-        //console.log("TRIGGERING BOTTOM!!!")
+        // console.log("TRIGGERING BOTTOM!!!")
         this.scrollEnd.emit(SCROLL_POSITION.Bottom)
       }
 
       //If there was an effective scroll:
       if (this._perc != this._prevPerc) {
+        // console.log("Emiting 'scroll' event")
         this.scroll.emit(this._perc); 
       }
     }
@@ -101,13 +102,26 @@ export class InfiniteScrollingDirective {
       ret = event.target.scrollTop / (event.target.scrollHeight - event.target.offsetHeight - 1) * 100;
     }
     else {
-      var h = document.documentElement, b = document.body, st = 'scrollTop', sh = 'scrollHeight';
-      ret = (h[st] || b[st]) / ((h[sh] || b[sh]) - h.clientHeight) * 100;
+      ret = this._calcWindowScrollPosition();
     }
 
     ret = (ret > 100) ? 100 : ret;
     ret = (ret < 0) ? 0 : ret;
 
     return ret;
+  }
+
+  private _calcWindowScrollPosition(): number {
+    let scrollPosition: number = (document.documentElement.scrollTop || document.body.scrollTop);
+    let scrollAreaHeight: number = (document.documentElement.scrollHeight || document.body.scrollHeight);
+    let clientHeight: number = document.documentElement.clientHeight;
+
+    //If there is a scrolling area:
+    if (scrollAreaHeight > clientHeight) {
+      return  (scrollPosition / (scrollAreaHeight - clientHeight)) * 100;
+    }
+    else {
+      return 0;
+    }
   }
 }

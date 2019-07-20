@@ -1,39 +1,42 @@
 <div class="container">
   <form #dialogForm="ngForm">
-    <div class="input-group my-2">
+    <div class="form-group">
       <div class="input-group-prepend">
-        <span class="input-group-text text-primary" 
-        [ngClass]="{'validatorValid': (abbrev.valid && abbrev.dirty), 'validatorInvalid': (abbrev.invalid && abbrev.dirty)}">Abreviación</span>
+        <span class="standardInputLegend standardInputLegendRequired"
+          [ngClass]="{'validatorValid': (abbrev.valid && abbrev.dirty), 'validatorInvalid': (abbrev.invalid && abbrev.dirty)}"
+          data-toggle="tooltip" data-placement="left" title="Esta información es requerida.">Abreviación</span>
       </div>
-      <input type="text" class="form-control" placeholder="Abreviación de la unidad de medida." [(ngModel)]="model.abbrev"
-        name="abbrev" required maxlength="5" autocomplete="off" #abbrev="ngModel">
+      <input type="text" class="form-control standardInput" placeholder="Abreviación de la unidad de medida."
+        [(ngModel)]="model.abbrev" name="abbrev" required maxlength="5" autocomplete="off" #abbrev="ngModel">
     </div>
-    <div class="input-group my-2">
+    <div class="form-group">
       <div class="input-group-prepend">
-        <span class="input-group-text text-primary" 
-        [ngClass]="{'validatorValid': (name.valid && name.dirty), 'validatorInvalid': (name.invalid && name.dirty)}">Nombre</span>
+        <span class="standardInputLegend standardInputLegendRequired"
+          [ngClass]="{'validatorValid': (name.valid && name.dirty), 'validatorInvalid': (name.invalid && name.dirty)}"
+          data-toggle="tooltip" data-placement="left" title="Esta información es requerida.">Nombre</span>
       </div>
-      <input type="text" class="form-control" placeholder="Nombre completo de la unidad de medida." [(ngModel)]="model.name"
-        name="name" required maxlength="25" autocomplete="off" #name="ngModel">
-    </div>
-    <div *ngIf="!autoPublish" class="input-group my-2">
-      <div class="input-group-prepend">
-        <span class="input-group-text">Publicar</span>
-      </div>
-      <div class="form-control">
-        <mat-slide-toggle color="primary" [(ngModel)]="isPublished" name="published" #published="ngModel">
-          {{ friendlyPublishDate }}
-        </mat-slide-toggle>
-      </div>
+      <input type="text" class="form-control standardInput" placeholder="Nombre completo de la unidad de medida."
+        [(ngModel)]="model.name" name="name" required maxlength="25" autocomplete="off" #name="ngModel">
     </div>
   </form>
+  <div *ngIf="!autoPublish" class="form-group">
+    <div class="input-group-prepend">
+      <span class="standardInputLegend">Publicar</span>
+    </div>
+    <mat-slide-toggle class="mx-3" color="primary" name="published" [(ngModel)]="isPublished" #published="ngModel">
+      <span class="mx-2"
+        [ngClass]="{'badge badge-primary': isPublished, 'standardInputLegend': !isPublished}">{{ friendlyPublishDate }}</span>
+    </mat-slide-toggle>
+  </div>
 </div>
 <mat-dialog-actions>
-  <div class="container">
-    <div class="row">
-      <div class="col-12 text-right">
-        <button class="btn btn-secondary mx-1" (click)="closeDlg()" [disabled]="!dialogForm.form.valid">Aceptar</button>
-        <button class="btn btn-secondary mx-1" mat-dialog-close="false">Cancelar</button>
+  <div class="container dialogActions">
+    <div class="row justify-content-between">
+      <div class="col-auto">
+        <button class="btn btn-primary" (click)="closeDlg()" [disabled]="!dialogForm.form.valid">Aceptar</button>
+      </div>
+      <div class="col-auto">
+        <button class="btn btn-primary" mat-dialog-close="false">Cancelar</button>
       </div>
     </div>
   </div>

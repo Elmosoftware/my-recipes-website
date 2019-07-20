@@ -50,6 +50,19 @@ export const StaticAssets = {
   },
   otherPictures: {
     recipeCircleThumb: `${LOCAL_ASSETS_IMAGES_PATH}recipe-circlethumb.png`
+  },
+  homePageIngredients: {
+    fallbackPictures: [
+      {
+        url: `${LOCAL_ASSETS_IMAGES_PATH}static-circle100-beetroot.png`
+      },
+      {
+        url: `${LOCAL_ASSETS_IMAGES_PATH}static-circle100-bell-pepper.png`
+      },
+      {
+        url: `${LOCAL_ASSETS_IMAGES_PATH}static-circle100-olive-oil.png`
+      }
+    ]
   }
 };
 

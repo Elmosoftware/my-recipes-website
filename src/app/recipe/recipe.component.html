@@ -1,5 +1,5 @@
 <!-- Navigation Bar -->
-<app-navigation-bar homePageFeaturesEnabled="true" searchBoxEnabled="true"></app-navigation-bar>
+<app-navigation-bar homePageFeaturesEnabled="true" adminMenuEnabled="true" searchBoxEnabled="true"></app-navigation-bar>
 
 <!-- New Recipe form -->
 <div class="container formPositioning col-lg-8 col-sm">
@@ -50,14 +50,14 @@
               <div class="align-self-center py-3">
                 <div class="alert alert-info px-5 my-3" role="alert">
                   <div class="row justify-content-center">
-                    <h3 class="alert-heading my-4">¡Perfecto, ya podes guardar tu receta!</h3>
+                    <h3 class="alert-heading my-4">¡Perfecto, ya casi terminamos!</h3>
                   </div>
                   <p *ngIf="isNewRecipe; else updatedRecipe">
-                    Haz click en el botón finalizar y guardaremos tu nueva receta.
+                    Un simple click en el botón finalizar y guardaremos tu nueva receta.
                   </p>
                   <ng-template #updatedRecipe>
                     <p>
-                      Haz click en el botón finalizar y actualizaremos tu receta con los cambios que realizaste.
+                      Un simple click en el botón finalizar y actualizaremos tu receta con los cambios que realizaste.
                     </p>
                   </ng-template>
                 </div>

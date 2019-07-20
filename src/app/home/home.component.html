@@ -2,58 +2,68 @@
 <app-navigation-bar homePageFeaturesEnabled="true" adminMenuEnabled="true" searchBoxEnabled="true"></app-navigation-bar>
 
 <!-- 1st Section: Site name, logo Photo Carousel -->
-<app-carousel [items]="cache.homePagePictures"></app-carousel>
+<app-carousel [items]="cache.homePagePictures" fixedHeight="90"></app-carousel>
 
 <!-- 2nd Section: New Recipes -->
 <a id="recently-added"></a>
-<div class="jumbotron home-page-section latest-recipes-section">
-  <app-latest-recipes></app-latest-recipes>
+<div class="home-page-section latest-recipes-section">
+  <div class="py-4">
+    <app-latest-recipes></app-latest-recipes>
+  </div>
 </div>
 
 <!-- 3rd Section: Search by ingredients -->
-<div class="jumbotron home-page-section search-by-ingredient-section">
+<div class="home-page-section secondaryBackground py-4">
   <a id="search-by-ingredient"></a>
   <div class="container">
+    <div class="row justify-content-around my-4">
+      <div *ngFor="let item of cache.ingredientPictures" class="col-auto">
+        <img class="m-1" [src]="item.imageSrc">
+      </div>
+    </div>
     <div class="row">
-      <div class="col-md-12 my-lg-5 my-sm-2">
+      <div class="col-md-12 my-4">
         <h3 class="text-center">Hoy tenes ganas de un ingrediente en particular?</h3>
       </div>
     </div>
     <div class="row">
-      <div class="col-md-12 my-lg-5 my-sm-2">
+      <div class="col-md-12 my-4">
         <search-box searchType="ingredient" (search)="onSearchHandler($event)"></search-box>
       </div>
     </div>
+    <div class="row justify-content-end">
+        <div *ngFor="let item of cache.ingredientPictures; let i = index">
+            <span class="col-auto p-0 ingredient-pictures-credits" *ngIf="i==0 && item.authorName">Hermosas fotos de ingredientes provistas por:</span>
+            <a *ngIf="item.authorName" class="col-auto mx-1 p-0 ingredient-pictures-credits" target="_blank" [href]="(item.authorURL) ? item.authorURL : ''">{{item.authorName + " (" + (i+1).toString() + ")"}}</a>
+        </div>
+    </div> 
   </div>
 </div>
 
 <!-- Footer -->
-<footer class="footer home-page-section footer-section">
+<footer class="home-page-section footer-section navbar navbar-dark bg-dark py-4">
   <div class="container">
-    <div class="row align-items-center">
-      <div class="col-md-8 text-left">
-        <span>© 2017 Elmosoftware Corp. All Rights Reserved.</span>
-      </div>
-      <div class="col-md-4 text-right">
-        <ul class="list-inline">
-          <li>
-            <a href="javascript:void(0)" (click)="goToAbout()">Acerca del sitio</a>
-          </li>
-          <li>
-            <a [href]="contactEmailLink">Contacto</a>
-          </li>
-          <li>
-            <a href="../assets/misc/terms.pdf" target="_blank">Términos de uso</a>
-          </li>
-          <li>
-            <a href="../assets/misc/privacy.pdf" target="_blank">Politica de privacidad</a>
-          </li>
-          <li>
-            <a [href]="procastinationRandomUrl" target="_blank" data-toggle="tooltip" data-placement="top" 
-            title="Procastinar: Aplazar tareas, deberes y responsabilidades por otras actividades que nos resultan más gratificantes pero que son irrelevantes.">Procastinación</a>
-          </li>
-        </ul>
-      </div>
-    </div>
+    <ul class="list-unstyled list-inline text-center footer-list">
+      <li class="list-inline-item mx-3">
+        <a class="footer-nav-link" href="javascript:void(0)" (click)="goToAbout()">Acerca del sitio</a>
+      </li>
+      <li class="list-inline-item mx-3">
+        <a class="footer-nav-link" [href]="contactEmailLink">Contacto</a>
+      </li>
+      <li class="list-inline-item mx-3">
+        <a class="footer-nav-link" href="../assets/misc/terms.pdf" target="_blank">Términos de uso</a>
+      </li>
+      <li class="list-inline-item mx-3">
+        <a class="footer-nav-link" href="../assets/misc/privacy.pdf" target="_blank">Politica de privacidad</a>
+      </li>
+      <li class="list-inline-item mx-3">
+        <a class="footer-nav-link" [href]="procastinationRandomUrl" target="_blank" data-toggle="tooltip"
+          data-placement="top"
+          title="Procastinar: Aplazar tareas, deberes y responsabilidades por otras actividades que nos resultan más gratificantes pero que son irrelevantes.">Procastinación</a>
+      </li>
+    </ul>
+  </div>
+  <div class="footer-copyright text-right">
+    <span>© 2019 Elmosoftware Corp. All Rights Reserved.</span>
   </div>
 </footer>

@@ -1,0 +1,11 @@
+input.mat-input-element {
+    margin-top: 0;
+}
+
+.form-control:focus {
+    /* color: #998b8f;
+    background-color: #fff; */
+    border-color: #998b8f;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(153, 139, 143, 0.25);
+}

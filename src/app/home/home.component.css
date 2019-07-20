@@ -3,20 +3,29 @@
     border-radius: 0;
 }
 
-.latest-recipes-section {
-    background-color: rgb(232, 182, 124);
-}
-
-.search-by-ingredient-section{
-    background-color: rgb(241, 238, 168);
-}
-
 .footer-section{
-    background-color: black;
-    color: rgb(172, 172, 172);
     padding-top: 20px;
 }
 
 .footer-section a{
-    color: rgb(172, 172, 172);
+    color: rgba(255,255,255,.5);
 }
+
+.footer-section span{
+    color: rgba(255,255,255,.5);
+    font-size: .6rem;
+}
+
+.footer-list{
+    width: 100%;
+}
+
+.footer-copyright{
+    width: 100%;
+}
+
+.ingredient-pictures-credits{
+    color: #998b8f;
+    font-size: .7rem;
+}
+

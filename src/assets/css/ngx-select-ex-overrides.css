@@ -1,0 +1,62 @@
+/* 
+  ngx-select-ex control customizations
+  ----------------------------------------- 
+*/
+
+::ng-deep .ngx-select__placeholder{
+    padding-right: 1em !important;
+}
+
+::ng-deep .ngx-select__toggle{
+    background-color: transparent !important;
+    border: none !important;
+    display: inline-block !important;
+  }
+
+::ng-deep .ngx-select__toggle:hover{
+    background-color: transparent !important;
+    border: none !important;
+  }
+
+::ng-deep .ngx-select__search {
+    background-color: transparent !important;
+}
+
+::ng-deep .ngx-select__choices {
+    background-color: #89c4e6 !important;
+}
+
+::ng-deep .ngx-select_multiple {
+    background-color: transparent;
+}
+
+::ng-deep .ngx-select_multiple:focus {
+    background-color: #89c4e6;
+}
+
+::ng-deep .ngx-select__item {
+    background-color: transparent !important;
+}
+
+::ng-deep .ngx-select__item_active {
+    background-color: #998b8f !important;
+}
+
+::ng-deep .ngx-select__item_no-found {
+    cursor: default !important;
+    color: #89c4e6 !important; /* Setting the same color as background here to avoid 
+    the message in English "result not found" */
+}
+
+::ng-deep .ngx-select__item_no-found::before {
+    color: #ff5106;
+    content: "No hay coincidencias :-(" !important; /* Setting here same message but in Spanish.*/
+}
+  
+::ng-deep .dropdown-toggle {
+    padding-left: 1em !important;
+}
+
+::ng-deep .dropdown-toggle::after {
+    border-top: .3em solid #ff5106 !important;
+}

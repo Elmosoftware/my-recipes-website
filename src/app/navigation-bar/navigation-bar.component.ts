@@ -17,9 +17,15 @@ import { SearchServiceFactory } from "../services/search-service-factory";
   styleUrls: ['./navigation-bar.component.css'],
   animations: [
     trigger('isVisibleChanged', [
-      state('true', style({ opacity: 1 })),
-      state('false', style({ opacity: 0 })),
-      transition('* => *', animate('.5s'))])
+      state('true', style({ opacity: 1, display: "flex" })),
+      state('false', style({ opacity: 0, display: "none" })), 
+      transition('true => false', [
+        animate('.5s')
+      ]),
+      transition('false => true', [
+        animate('.5s')
+      ]),
+    ])
   ]
 })
 export class NavigationBarComponent implements OnInit {
@@ -30,6 +36,7 @@ export class NavigationBarComponent implements OnInit {
 
   isVisible: boolean;
   currentPage: PAGES
+  adminMenuExpanded: boolean;
 
   get isHome(): boolean {
     return this.currentPage == PAGES.Home;
@@ -40,12 +47,18 @@ export class NavigationBarComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.adminMenuExpanded = false;
     this.isVisible = true;
     this.currentPage = this.core.navigate.parsePageURL(this.route.snapshot.url[0]);
   }
 
   onScrollHandler($event: number) {
     this.isVisible = (isNaN($event) || $event < 1);
+  }
+
+  toggleAdminMenu($event):void {
+    this.adminMenuExpanded = !this.adminMenuExpanded;
+    $event.preventDefault();
   }
 
   get isAdminUser() : boolean {
@@ -103,7 +116,7 @@ export class NavigationBarComponent implements OnInit {
     this.core.dialog.showConfirmDialog(new ConfirmDialogConfiguration("Confirmación de cambio de contraseña",
       `Si confirmas tu intención de cambiar tu contraseña de acceso, se te enviará un correo 
       a <i>${this.core.auth.userProfile.user.email}</i> con las instrucciones detalladas para crear tu nueva contraseña.
-      <p>Recuerda que el mensaje de cambio de contraseña tiene un tiempo de validez, pasado el cual, el correo
+      <p class="mt-2 mb-0">Recuerda que el mensaje de cambio de contraseña tiene un tiempo de validez, pasado el cual, el correo
        ya no será válido y deberás volver a iniciar el proceso.</p>`,
       "Si, deseo cambiar mi contraseña", "No, continuaré con la actual")).subscribe(result => {
 

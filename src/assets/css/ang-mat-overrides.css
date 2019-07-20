@@ -7,70 +7,118 @@
     Material Slide toggle changing default colors
 */
 
-/* Changing Default "Accent" color to match Bootstrap "Danger" standard color */
 ::ng-deep .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
     background-color: #dc3545; 
-  }
-  
-  ::ng-deep .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
-    background-color: rgba(220,53,69,.5);  
-  }
-  
-  /* Changing "Primary" color to match Bootstrap "Primary" standard color */
-  ::ng-deep .mat-slide-toggle.mat-primary.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
-    background-color: #007bff;
-  }
-  
-  ::ng-deep .mat-slide-toggle.mat-primary.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
-    background-color: rgba(0,123,255,.5);
-  }
-  
-  /* Changing "Warn" color to match Bootstrap "Warning" standard color */
-  ::ng-deep .mat-slide-toggle.mat-warn.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
-    background-color: #ffc107;
-  }
-  
-  ::ng-deep .mat-slide-toggle.mat-warn.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
-    background-color: rgba(255,193,7,.5);
-  }
-  
-  /* 
-    Material Radio buttons changing default colors
-  */
+}
 
-  ::ng-deep .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle{
-    /* border-color:rgb(66, 134, 244);  */
-    border-color: #fff; 
-  }
+::ng-deep .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
+  background-color: rgba(220,53,69,.5);  
+}
   
-  ::ng-deep .mat-radio-button.mat-accent .mat-radio-inner-circle{
-    /* color:rgb(66, 134, 244);
-    background-color:rgb(66, 134, 244) ; */
-    color:#fff;
-    background-color:#fff;
-  }
-  
-  ::ng-deep .mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element {
-      background-color:rgb(255, 37, 37,.26)
-  }
+::ng-deep .mat-slide-toggle-thumb {
+  background-color: #b7b9ba;
+}
 
-  :host ::ng-deep .mat-radio-container{
-    /* background-color:rgb(228, 238, 255) ; */
-    background-color:#007bff;
-    width: 31px;
-    height: 31px;
-    border-radius: .2rem;
-  }
+::ng-deep .mat-slide-toggle.mat-primary.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
+  background-color: #ff5106;
+}
 
-  :host ::ng-deep .mat-radio-outer-circle{
-    border-color: rgb(240, 240, 240);
-    left: 5px;
-    top: 5px;
-  }
+::ng-deep .mat-slide-toggle.mat-primary.mat-checked .mat-slide-toggle-thumb {
+  background-color: rgba(255,81,6,.3);
+}
   
-  :host ::ng-deep .mat-radio-inner-circle{
-    color: rgb(240, 240, 240);
-    background-color: rgb(240, 240, 240);
-    left: 5px;
-    top: 5px;
-  }
+::ng-deep .mat-slide-toggle.mat-primary.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
+  background-color: rgba(255,81,6,.5);
+}
+
+::ng-deep .mat-slide-toggle.mat-primary.mat-checked .mat-slide-toggle-bar {
+  background-color: rgba(255,81,6,.3);
+}
+  
+::ng-deep .mat-slide-toggle.mat-warn.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
+  background-color: #ffc107;
+}
+  
+::ng-deep .mat-slide-toggle.mat-warn.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
+  background-color: rgba(255,193,7,.5);
+}
+  
+/* 
+  Material Radio buttons changing default colors
+*/
+
+::ng-deep .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle{
+  border-color: #ff5106;
+}
+
+::ng-deep .mat-radio-button.mat-accent .mat-radio-inner-circle{
+  color:#fff;
+  background-color:#fff;
+}
+  
+::ng-deep .mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element {
+  background-color:rgb(255, 37, 37,.26)
+}
+
+:host ::ng-deep .mat-radio-container{
+  background-color: transparent;
+  width: 31px;
+  height: 31px;
+  border-radius: .2rem;
+}
+
+:host ::ng-deep .mat-radio-container:hover {
+  background-color: #ff5106; 
+}
+
+:host ::ng-deep .mat-radio-outer-circle{
+  border-color: #ff5106;
+  left: 5px;
+  top: 5px;
+}
+
+:host ::ng-deep .mat-radio-outer-circle:hover{
+  border-color: rgb(240, 240, 240);
+}
+  
+:host ::ng-deep .mat-radio-inner-circle{
+  color: rgb(240, 240, 240);
+  background-color: #ff5106;
+  left: 5px;
+  top: 5px;
+}
+
+::ng-deep .mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element {
+  background-color: rgba(255, 81, 6, 0.26);;
+}
+
+/* 
+  Material Dialog
+*/
+
+::ng-deep .cdk-overlay-container {
+  z-index: 1100 !important;
+}
+
+::ng-deep .cdk-overlay-backdrop {
+  z-index: 1100 !important;
+}
+
+::ng-deep .cdk-global-overlay-wrapper {
+  z-index: 1100 !important;
+}
+
+::ng-deep .cdk-overlay-pane {
+  z-index: 1100 !important;
+}
+
+::ng-deep .mat-dialog-container {
+  padding: 20px;
+  overflow: visible;
+  background-color: #cbecff;
+  min-width: 400px;
+}
+
+::ng-deep .mat-dialog-actions {
+  padding: 0;
+}

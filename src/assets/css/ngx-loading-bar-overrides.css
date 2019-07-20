@@ -1,0 +1,17 @@
+/*
+    LOADING BAR:
+    ===============
+*/
+
+::ng-deep .loading-bar-fixed > div#loading-bar-spinner {
+    position: fixed !important;
+    top: 50% !important;
+    left: 37% !important;
+}
+
+::ng-deep ngx-loading-bar > #loading-bar-spinner div.spinner-icon {
+    border: 10px solid transparent !important;
+    border-top-color: #ffcd06 !important;
+    border-left-color: #e9640c !important;
+    opacity: .5;
+}

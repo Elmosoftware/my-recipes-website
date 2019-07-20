@@ -2,3 +2,20 @@
 .formPositioning{
     margin-top: 100px; 
 }
+
+.table-bordered td, .table-bordered th {
+    border: none;
+}
+
+.entitiesTitle{
+    font-size: 2.5rem;
+    font-weight: 800;
+}
+
+.entitiesTable{
+    min-width: 400px;
+}
+
+.buttonsCell{
+    white-space: nowrap;
+}

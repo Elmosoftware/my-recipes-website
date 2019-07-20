@@ -8,6 +8,7 @@ import { Cloudinary } from "cloudinary-core";
 import { environment } from "../../environments/environment";
 import { Helper } from "../shared/helper";
 import { APIResponseParser, APIResponseProgress, EMPTY_RESPONSE } from "./api-response-parser";
+import { APIQueryParams } from "./api-query-params";
 import { CarouselItem } from "../shared/carousel/carousel.component";
 import { StaticAssets } from "../static/static-assets";
 import { AuthService } from './auth-service';
@@ -64,9 +65,9 @@ export class MediaService {
    * @param imageFormat As part of the transformation we can convert the original image format. If this 
    * parameter is not specified, the original image format will be used.
    */
-  getTransformationURL(publicId: string, cloudName: string, mediaTransformation: object = MediaTransformations.none, 
+  getTransformationURL(publicId: string, cloudName: string, mediaTransformation: object = MediaTransformations.none,
     imageFormat: TRANSF_IMAGE_FORMATS = TRANSF_IMAGE_FORMATS.KeepOriginal): string {
-    
+
     let url: string;
     let cl = new Cloudinary({ cloud_name: cloudName, secure: true });
 
@@ -114,7 +115,7 @@ export class MediaService {
 
       //If there is a cover, we transform it to a circle thumbnail:
       if (cover) {
-        ret = this.getTransformationURL(cover.pictureId.publicId, cover.pictureId.cloudName, 
+        ret = this.getTransformationURL(cover.pictureId.publicId, cover.pictureId.cloudName,
           MediaTransformations.circleThumbGrayBorder, TRANSF_IMAGE_FORMATS.PNG);
       }
     }
@@ -173,11 +174,11 @@ export class MediaService {
   }
 
   /**
-   * This method returns async the list an array of picture to be used in the home page carousel.
+   * This method returns async an array of picture to be used in the home page carousel.
    * If there is any kind of errors, this method still return a list of alternative pictures stored in the assets image folder.
    */
   getDynamicHomePagePictures(): Observable<object> {
-    return this.http.get(this.getUrl("carousel"), { headers: this.buildAPIHeaders() })
+    return this.http.get(this.getUrl("carousel-pictures"), { headers: this.buildAPIHeaders() })
       .pipe(
         catchError((err) => {
           //This svc must be error safe. So, if the call to the service fail in some way,
@@ -188,11 +189,43 @@ export class MediaService {
         map(data => {
           let respData = new APIResponseParser(data, false);
 
-          return this.buildCarouselItems(respData.entities);
+          return this.buildCarouselItems(respData.entities, true);
         })
       );
   }
 
+  /**
+   * This method return a list of random ingredients pictures. In the case of any issue with the CDN, will 
+   * retrieve a set of pictures stored in the local assets folder.
+   * @param count Amount of pictures to retrieve.
+   */
+  getRandomIngredientPictures(count: number): Observable<object> {
+
+    let query: APIQueryParams = new APIQueryParams();
+    query.top = String(count);
+
+    return this.http.get(this.getUrl("ingredients-pictures", "", query), { headers: this.buildAPIHeaders() })
+      .pipe(
+        catchError((err) => {
+          //This svc must be error safe. So, if the call to the service fail in some way,
+          //we can use the alternative Ingredient pictures in the assets folder:
+          console.warn(`There was an error trying to get the dynamic ingredient pictures. Falling back to the static ones.`)
+          return of({ error: null, payload: StaticAssets.homePageIngredients.fallbackPictures });
+        }),
+        map(data => {
+          let respData = new APIResponseParser(data, false);
+
+          return this.buildCarouselItems(respData.entities, false,
+            MediaTransformations.circleThumbBigGrayBorder, TRANSF_IMAGE_FORMATS.PNG);
+        })
+      );
+  }
+
+  /**
+   * Evaluates the list of files to upload in order to validate them and prevent some errors that could be 
+   * detected on client side to be propagated through the API call.
+   * @param files List of files to upload.
+   */
   private validateUpload(files: FileList): Observable<object> {
 
     return this.getUploadPicturesSettings()
@@ -216,7 +249,6 @@ export class MediaService {
             }
           }
 
-          // return Observable.of({ valid: true });
           return of({ valid: true, settings: uploadSettings });
         })
       );
@@ -233,33 +265,43 @@ export class MediaService {
    * Build the data required for the home page Carousel by selecting randoomly a list of pictures to display.
    * @param pictures List of pictures.
    */
-  private buildCarouselItems(pictures: any[]): CarouselItem[] {
+  private buildCarouselItems(pictures: any[], includeRandomCaptionData?: boolean,
+    mediaTransformation: object = MediaTransformations.none,
+    imageFormat: TRANSF_IMAGE_FORMATS = TRANSF_IMAGE_FORMATS.KeepOriginal): CarouselItem[] {
 
     let captionIndex: number = this.getCaptionsStartIndex();
     let ret: CarouselItem[] = [];
 
     pictures.forEach((pic) => {
 
-      let item = new CarouselItem()
+      let item = new CarouselItem();
 
-      //Carousel image and author crediting:
-      item.imageSrc = pic.url
+      //If there is any image transformation set and the image is not a static one, (i mean, proceed from the CDN):
+      if (mediaTransformation != MediaTransformations.none && pic.publicId) {
+        item.imageSrc = this.getTransformationURL(pic.publicId, pic.cloudName, mediaTransformation, imageFormat);
+      }
+      else {
+        item.imageSrc = pic.url;
+      }
 
+      //If the image includes metadata:
       if (pic.metadata) {
         item.authorName = (pic.metadata.Author) ? pic.metadata.Author : "";
         item.authorURL = (pic.metadata.AuthorURL) ? pic.metadata.AuthorURL : "";
       }
 
-      //Carousel Caption, (text and picture), randomly selected:
-      if (captionIndex + 1 > (StaticAssets.homePageCarousel.captions.length - 1)) {
-        captionIndex = 0;
-      }
-      else {
-        captionIndex++;
-      }
+      //If we must include a random caption, (text and picture), for the image:
+      if (includeRandomCaptionData) {
+        if (captionIndex + 1 > (StaticAssets.homePageCarousel.captions.length - 1)) {
+          captionIndex = 0;
+        }
+        else {
+          captionIndex++;
+        }
 
-      item.captionImageSrc = StaticAssets.homePageCarousel.captions[captionIndex].img
-      item.captionText = StaticAssets.homePageCarousel.captions[captionIndex].text
+        item.captionImageSrc = StaticAssets.homePageCarousel.captions[captionIndex].img
+        item.captionText = StaticAssets.homePageCarousel.captions[captionIndex].text
+      }
 
       ret.push(item);
     })
@@ -268,16 +310,24 @@ export class MediaService {
   }
 
   /**
- * Assembles the URL to use to call the My Recipes Media API REST Service.
- * @param param Additional params, (like an Object Id)
- */
-  private getUrl(functionName: string, param?: string): string {
+   * Assembles the URL to use to call the My Recipes Media API REST Service.
+   * @param functionName API function to be called.
+   * @param param Additional params, (like an Object Id).
+   * @param query and APIQueryParams object providing query string params for the http call. 
+   */
+  private getUrl(functionName: string, param?: string, query?: APIQueryParams): string {
+
+    let queryText: string = "";
 
     if (!param) {
       param = "";
     }
 
-    return `${environment.apiURL}${environment.apiMediaEndpoint}${functionName}/${param}`;
+    if (query) {
+      queryText = query.getQueryString();
+    }
+
+    return `${environment.apiURL}${environment.apiMediaEndpoint}${functionName}/${param}?${queryText}`;
   }
 
   /**
@@ -304,18 +354,31 @@ export class MediaService {
   }
 }
 
+/**
+ * Media Transformation objects.
+ * They have the required information to transform the image as required. 
+ * This can be to change the image format, his size, shape, apply filters, etc.
+ */
 export const MediaTransformations = {
   none: {},
   uploadedPicturesView: {
-    height: 250,
+    height: 350,
     crop: "scale"
   },
   circleThumbGrayBorder: {
-    width: 100, 
-    height: 100, 
-    gravity: "center", 
-    radius: "max", 
-    crop: "thumb", 
+    width: 100,
+    height: 100,
+    gravity: "center",
+    radius: "max",
+    crop: "thumb",
+    border: "2px_solid_rgb:626262"
+  },
+  circleThumbBigGrayBorder: {
+    width: 150,
+    height: 150,
+    gravity: "center",
+    radius: "max",
+    crop: "thumb",
     border: "2px_solid_rgb:626262"
   }
 };

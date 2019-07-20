@@ -2,16 +2,16 @@
 <app-navigation-bar homePageFeaturesEnabled="true" adminMenuEnabled="true" searchBoxEnabled="true"></app-navigation-bar>
 
 <!-- Entities Component -->
-<div class="container formPositioning">
-    <h4>{{title}}</h4>
+<div class="container formPositioning entitiesTitle">
+    {{title}}
 </div>
 <div class="container my-3" *ngIf="model">
     <div class="table-responsive">
-        <table class="table table-bordered table-hover table-striped">
-            <thead>
+        <table class="table table-bordered table-hover table-striped entitiesTable">
+            <thead class="accentBackground">
                 <tr [ngSwitch]="type">
                     <th>
-                        <button type="button" class="btn btn-outline-secondary btn-sm" (click)="openDialog('')"
+                        <button type="button" class="btn btn-primary btn-sm" (click)="openDialog('')"
                             data-toggle="tooltip" data-placement="top" title="Crear uno nuevo">
                             <i class="fa fa-plus" aria-hidden="true"></i>
                         </button>
@@ -44,12 +44,12 @@
             </thead>
             <tbody>
                 <tr *ngFor="let entity of model" [ngSwitch]="type">
-                    <td>
-                        <button type="button" class="btn btn-outline-secondary btn-sm" (click)="delete(entity._id)"
+                    <td class="buttonsCell">
+                        <button type="button" class="btn btn-primary btn-sm" (click)="delete(entity._id)"
                             data-toggle="tooltip" data-placement="top" title="Eliminar">
                             <i class="fa fa-times" aria-hidden="true"></i>
                         </button>
-                        <button type="button" class="btn btn-outline-secondary btn-sm" (click)="openDialog(entity._id)"
+                        <button type="button" class="btn btn-primary btn-sm ml-1" (click)="openDialog(entity._id)"
                             data-toggle="tooltip" data-placement="top" title="Editar">
                             <i class="fa fa-pencil" aria-hidden="true"></i>
                         </button>

@@ -1,18 +1,262 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 @import "~ngx-toastr/toastr.css";
+@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Libre+Baskerville&display=swap');
 
-@font-face {
-    font-family: 'Bellefair';
-    /* font-style: normal;
-    font-weight: 400; */
-    src: url('./assets/fonts/Bellefair.ttf') format('truetype');
-  }
+/* 
+  GENERAL STYLING
+  ==========================================================
+*/
 
 body{
-    /* font-family: 'Helvetica Neue', Roboto, serif, 'Bellefair'; */
+  font-family: 'Montserrat', "Segoe UI", serif;
+  background-color: #cbecff;
 }
 
-/* FORMS */
+.secondaryBackground {
+  background-color: #f0eeda;
+}
+
+.accentBackground {
+  background-color: #89c4e6;
+}
+
+/* 
+  PRIMARY BUTTONS
+  ==========================================================
+*/
+
+.btn-primary {
+  color: #ff5106;
+  background-color: transparent;
+  border-color: transparent;
+  border-width: 2px;
+  text-shadow: none;
+}
+
+.btn-primary:hover {
+  color: #ff5106;
+  background-color: transparent;
+  border-color: #ff5106;
+}
+
+.btn-primary:focus, .btn-primary.focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 81, 6, 0.5);
+}
+
+.btn-primary.disabled, .btn-primary:disabled {
+  background-color: transparent;
+  border-color: rgba(255, 81, 6, 0.5);
+}
+
+.btn-primary:not([disabled]):not(.disabled):active, .btn-primary:not([disabled]):not(.disabled).active,
+.show > .btn-primary.dropdown-toggle {
+  color: #fff;
+  background-color: #ff5106;
+  border-color: #ff5106;
+}
+
+.btn-primary:not([disabled]):not(.disabled):active:focus, .btn-primary:not([disabled]):not(.disabled).active:focus,
+.show > .btn-primary.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 81, 6, 0.5);
+}
+
+/* 
+  SECONDARY BUTTONS
+  ==========================================================
+*/
+
+.btn-secondary {
+  color: #998b8f;
+  background-color: transparent;
+  border-color: transparent;
+  border-width: 2px;
+  text-shadow: none;
+}
+
+.btn-secondary:hover {
+  color: #998b8f;
+  background-color: transparent;
+  border-color: #998b8f;
+  border-width: 2px;
+}
+
+.btn-secondary:focus, .btn-secondary.focus {
+  box-shadow: 0 0 0 0.2rem rgba(153, 139, 143, 0.5);
+}
+
+.btn-secondary.disabled, .btn-secondary:disabled {
+  background-color: transparent;
+  border-color: rgba(153, 139, 143, 0.5);
+}
+
+.btn-secondary:not([disabled]):not(.disabled):active, .btn-secondary:not([disabled]):not(.disabled).active,
+.show > .btn-secondary.dropdown-toggle {
+  color: #fff;
+  background-color: #998b8f;
+  border-color: #998b8f;
+}
+
+.btn-secondary:not([disabled]):not(.disabled):active:focus, .btn-secondary:not([disabled]):not(.disabled).active:focus,
+.show > .btn-secondary.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(153, 139, 143, 0.5);
+}
+
+/* 
+  BUTTON RELATED
+  ==========================================================
+*/
+
+.alert-dismissible .close {
+  padding: .4rem .5rem;
+}
+
+button.close {
+  border: 2px solid transparent;
+}
+
+/* 
+  INPUT RANGE
+  ==========================================================
+  Thanks to: http://danielstern.ca/range.css/#/
+*/
+
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  margin: 10.6px 0;
+}
+
+input[type=range]:focus {
+  outline: none;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4.8px;
+  cursor: pointer;
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.4), 0px 0px 0px rgba(13, 13, 13, 0.4);
+  background: #b7b9ba;
+  border-radius: 25px;
+  border: 0px solid #000000;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  box-shadow: 3px 3px 10px rgba(255, 81, 6, 0.53), 0px 0px 3px rgba(255, 99, 32, 0.53);
+  border: 1px solid rgba(255, 81, 6, 0.5);
+  height: 26px;
+  width: 13px;
+  border-radius: 3px;
+  background: #ff5106;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -10.6px;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #babcbc;
+}
+
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 4.8px;
+  cursor: pointer;
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.4), 0px 0px 0px rgba(13, 13, 13, 0.4);
+  background: #b7b9ba;
+  border-radius: 25px;
+  border: 0px solid #000000;
+}
+
+input[type=range]::-moz-range-thumb {
+  box-shadow: 3px 3px 10px rgba(255, 81, 6, 0.53), 0px 0px 3px rgba(255, 99, 32, 0.53);
+  border: 1px solid rgba(255, 81, 6, 0.5);
+  height: 26px;
+  width: 13px;
+  border-radius: 3px;
+  background: #ff5106;
+  cursor: pointer;
+}
+
+input[type=range]::-ms-track {
+  width: 100%;
+  height: 4.8px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+
+input[type=range]::-ms-fill-lower {
+  background: #b4b6b8;
+  border: 0px solid #000000;
+  border-radius: 50px;
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.4), 0px 0px 0px rgba(13, 13, 13, 0.4);
+}
+
+input[type=range]::-ms-fill-upper {
+  background: #b7b9ba;
+  border: 0px solid #000000;
+  border-radius: 50px;
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.4), 0px 0px 0px rgba(13, 13, 13, 0.4);
+}
+
+input[type=range]::-ms-thumb {
+  box-shadow: 3px 3px 10px rgba(255, 81, 6, 0.53), 0px 0px 3px rgba(255, 99, 32, 0.53);
+  border: 1px solid rgba(255, 81, 6, 0.5);
+  height: 26px;
+  width: 13px;
+  border-radius: 3px;
+  background: #ff5106;
+  cursor: pointer;
+  height: 4.8px;
+}
+
+input[type=range]:focus::-ms-fill-lower {
+  background: #b7b9ba;
+}
+
+input[type=range]:focus::-ms-fill-upper {
+  background: #babcbc;
+}
+
+/* 
+  OTHER VISUAL ELEMENTS
+  ==========================================================
+*/
+
+.badge-primary {
+  color: #efefef;
+  background-color: #ff5106;
+}
+
+.alert-warning {
+  color: #87854a;
+  background-color: #fcdb9f;
+  border: none;
+}
+
+.alert-info {
+  background-color: #84c0cf;
+  border: none;
+}
+
+.simpleList{
+  border:none;
+}
+
+.simpleList li{
+  background-color: #89c4e6;
+  border:none;
+}
+
+.simpleList li:nth-child(even) {
+  background-color: rgba(137, 196, 230, .5);
+}
+
+/* 
+  FORMS
+  ==========================================================
+*/
 
 .validatorInvalid::after{
   font-family: FontAwesome;
@@ -21,6 +265,7 @@ body{
   padding-left: 0.5em;
   color: #a94442;
 }
+
 .validatorValid::after{
   font-family: FontAwesome;
   content: "\f00c";
@@ -29,31 +274,125 @@ body{
   color: #42A948;
 }
 
-/* 
-  Helper classes 
-  ----------------------------------------- 
-*/
-.hlp-unstyled {
-    font-style: inherit;
-    color: inherit;
-    background-color: transparent;
-    font-size: inherit;
-    text-decoration: none;
-    font-variant: inherit;
-    font-weight: inherit;
-    line-height: inherit;
-    font-family: inherit;
-    border-radius: inherit;
-    outline: inherit;
-    box-shadow: inherit;
-    padding: inherit;
-    vertical-align: inherit;
-  }
+.form-control{
+  border: none;
+}
 
-  .roundedList{
-    font-family: 'Segoe UI', sans-serif;
+.form-control:focus{
+  border: none;
+}
+
+.form-control:disabled, .form-control[readonly] {
+  background-color: transparent;
+  opacity: .5;
+}
+
+.standardInputBorderless {
+  border-bottom: none;
+}
+
+.standardInput {
+  font-family: 'Montserrat';
+  font-size: 1rem;
+  background-color: transparent;
+  border: none;
+}
+
+.standardInput:focus {
+  background-color: transparent;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem #89c4e6;
+  border: 0;
+}
+
+.standardInputMultiple {
+  font-family: 'Montserrat';
+  font-size: 1rem;
+  background-color: transparent;
+  border: none;
+}
+
+.standardInputMultiple:focus-within {
+  background-color: transparent;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem #89c4e6;
+  border: 0;
+}
+
+.standardInputLegend {
+  padding: .375rem .75rem;
+  margin-bottom: 0;
+  font-family: 'Montserrat';
+  font-size: .8rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #998b8f;
+  text-align: center;
+  white-space: nowrap;
+  background-color: transparent;
+  border: none;
+}
+
+.standardInputLegendSmall {
+  font-family: 'Montserrat';
+  font-size: .6rem;
+}
+
+.standardInputLegendRequired::before {
+  font-family: FontAwesome;
+  content: "\f12a";
+  display: inline-block;
+  padding-right: 0.5em;
+  color: #ff5106;
+}
+
+/* 
+  TABLES
+  ==========================================================
+*/
+
+.table-responsive {
+  min-width: 400px;
+}
+
+/* 
+  DIALOGS
+  ==========================================================
+*/
+
+.dialogTitle{
+  font-family: 'Montserrat';
+  font-size: 1.5em;
+  font-weight: bold;
+  border-bottom: 1px solid #ff5106;
+  padding-bottom: 10px;
+  margin-bottom: 15px !important;
+}
+
+.dialogText{
+  font-family: 'Montserrat';
+  font-size: 1em;
+  font-style: italic;
+  padding-top: 10px;
+}
+
+.dialogActions{
+  padding-top: 12px;
+  padding-bottom: 20px;
+}
+
+/* 
+  HELPER CLASSES
+  ==========================================================
+*/
+
+.roundedList{
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-weight: 800;
     font-size: 1em;
     height: 3em;
     width: 3em;
+    align-items: center!important;
+    justify-content: center!important;
+    display: inline-flex;
 }

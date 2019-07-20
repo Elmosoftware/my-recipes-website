@@ -1,7 +1,7 @@
 <form class="my-4" #ingredientsForm="ngForm">
   <div class="form-group">
     <div class="input-group-prepend">
-      <span class="input-group-text text-primary"
+      <span class="standardInputLegend standardInputLegendRequired"
         [ngClass]="{'validatorValid': (ingredient.valid && ingredient.dirty), 'validatorInvalid': (ingredient.invalid && ingredient.dirty)}"
         data-toggle="tooltip" data-placement="right"
         title="Si el ingrediente no está en la lista, puedes agregarlo!">Ingrediente</span>
@@ -9,7 +9,7 @@
     <div class="form-inline">
       <ngx-select required [multiple]="false" [items]="cache.ingredients" [(ngModel)]="newRecipeIngredient.ingredient"
         (select)="ingredientSelected()" optionTextField="name" optionValueField="_id" name="ingredient"
-        #ingredient="ngModel" placeholder="Seleccione el ingrediente.">
+        class="form-control standardInput" #ingredient="ngModel" placeholder="Seleccione el ingrediente.">
       </ngx-select>
       <button type="button" class="btn btn-primary ml-2" (click)="newIngredient()">
         <i class="fa fa-plus" aria-hidden="true" data-toggle="tooltip" data-placement="top"
@@ -19,22 +19,26 @@
   </div>
   <div class="form-group">
     <div class="input-group-prepend">
-      <span class="input-group-text text-primary"
+      <span class="standardInputLegend standardInputLegendRequired"
         [ngClass]="{'validatorValid': (amount.valid && amount.dirty && amount.value > 0 && amount.value <= 9999 && unit.valid && unit.dirty), 'validatorInvalid': ((amount.invalid || amount.value == 0 || amount.value > 9999 || unit.invalid) && amount.dirty && unit.dirty)}"
         data-toggle="tooltip" data-placement="right"
         title="Ingrese la cantidad a utilizar del ingrediente en la unidad de medida seleccionada.">Cantidad</span>
     </div>
     <div class="form-inline">
-      <input type="number" min="0" max="9999" class="form-control" placeholder="Cantidad a utilizar"
-        [(ngModel)]="newRecipeIngredient.amount" name="amount" required #amount="ngModel">
-      <ngx-select class="ml-2" required [multiple]="false" [items]="compatibleUnits"
-        [(ngModel)]="newRecipeIngredient.unit" optionTextField="name" optionValueField="_id" name="unit" #unit="ngModel"
-        placeholder="Seleccione la unidad de medida.">
-      </ngx-select>
+      <div class="standardInput">
+        <input type="number" min="0" max="9999" class="form-control standardInput standardInputBorderless"
+          placeholder="Cantidad a utilizar" [(ngModel)]="newRecipeIngredient.amount" name="amount" required
+          #amount="ngModel">
+        <ngx-select class="ml-2" required [multiple]="false" [items]="compatibleUnits"
+          class="form-control standardInput standardInputBorderless" [(ngModel)]="newRecipeIngredient.unit"
+          optionTextField="name" optionValueField="_id" name="unit" #unit="ngModel"
+          placeholder="Seleccione la unidad de medida.">
+        </ngx-select>
+      </div>
     </div>
     <div class="form-group">
       <div class="d-flex justify-content-end">
-        <button class="btn btn-primary my-2 " type="button"
+        <button class="btn btn-primary my-2" type="button"
           [disabled]="!(ingredientsForm.form.valid && amount.value > 0)"
           (click)="addIngredient();ingredientsForm.form.reset()">Agregar a la lista
           <i class="fa fa-caret-down fa-lg ml-2" aria-hidden="true"></i>
@@ -48,9 +52,9 @@
   <strong>No hay ingredientes en esta receta!</strong> Completalos indicando la cantidad de cada uno.
 </div>
 <ng-template #ingredientsList>
-  <ul class="list-group">
-    <li class="list-group-item" *ngFor="let ing of model.ingredients">
-      <button class="btn btn-light" type="button" (click)="removeIngredient(ing.ingredient)" data-toggle="tooltip"
+  <ul class="list-group simpleList pb-3">
+    <li @filterVisibilityTrigger class="list-group-item" *ngFor="let ing of model.ingredients">
+      <button class="btn btn-primary" type="button" (click)="removeIngredient(ing.ingredient)" data-toggle="tooltip"
         data-placement="top" title="Eliminar este ingrediente de la lista.">
         <i class="fa fa-times"></i>
       </button>

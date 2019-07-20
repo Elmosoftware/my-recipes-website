@@ -1,0 +1,5 @@
+/* These are the CSS style overrides for Angular Material components */
+@import "../../../assets/css/ang-mat-overrides.css";
+
+/* These are the CSS style overrides for the Native UI Select Angular component ngx-select-ex */
+@import "../../../assets/css/ngx-select-ex-overrides.css";

@@ -1,11 +1,44 @@
-.uploadedImage{
-    background-size: cover;
-    background-repeat: no-repeat;
-    max-height: 200px;
+.uploadedImage {
+    position: relative;
+    left: -35px;
+    width: 450px;
+    height: 300px;
+    object-fit: cover;
+    filter: grayscale(1);
+}
+
+.uploadedImage:hover {
+    filter: grayscale(0);
+}
+
+.dropImagebutton {
+    position: relative;
+    left: 390px;
+    top: 15px;
+    max-height: fit-content;
+    z-index: 1000;
+    box-shadow: 1px 1px 12px 7px rgba(182,182,182,0.75);
+}
+
+.coverImageOption{
+    position: relative;
+    left: 57px;
+    top: 15px;
+    max-height: fit-content;
+    z-index: 1000;
+}
+
+::ng-deep .mat-radio-container {
+    box-shadow: 1px 1px 12px 7px rgba(182,182,182,0.75);
 }
 
 .pictureCaption{
+    position: relative;
     opacity: .6;
+    /* left: 34px; */
+    bottom: 50px;
+    max-width: 410px;
+    z-index: 1000;
 }
 
 .pictureCaption:focus{

@@ -163,6 +163,11 @@ export class RecipeViewComponent implements OnInit {
     this.core.navigate.toRecipe(this.model._id);
   }
 
+  printRecipe(){
+    this.core.helper.removeTooltips(this.core.zone);
+    window.print();
+  }
+
   goToHome(){
     this.core.navigate.toHome();
   }

@@ -15,7 +15,8 @@ export const enum CACHE_MEMBERS {
     MealTypes = "MEALTYPES",
     Units = "UNITS",
     LatestRecipes = "LATEST_RECIPES",
-    HomePageCarouselPictures = "HOME_PAGE_CAROUSEL_PICTURES"
+    HomePageCarouselPictures = "HOME_PAGE_CAROUSEL_PICTURES",
+    IngredientPictures = "INGREDIENT_PICTURES"
 };
 export const DEFAULT_API_RESULT = { error: null, payload: [] };
 
@@ -57,6 +58,7 @@ export class Cache extends CacheRepository {
         super.add(this.createCacheUnits());
         super.add(this.createCacheLatestRecipes());
         super.add(this.createCacheHomePagePictures());
+        super.add(this.createCacheIngredientPictures());
     }
 
     private refreshStaleCache(item: CacheItem): void {
@@ -75,7 +77,7 @@ export class Cache extends CacheRepository {
     }
 
     public invalidateAll(){
-        console.log("ALL CACHE INVALIDATED");
+        console.log("ALL CACHE ITEMS HAS BEEN INVALIDATED.");
         super.invalidate();
     }
 
@@ -186,6 +188,24 @@ export class Cache extends CacheRepository {
 
     public get homePagePictures(): any[] {
         let item: CacheItem = super.get(CACHE_MEMBERS.HomePageCarouselPictures);
+        this.refreshStaleCache(item);        
+        return item.value;
+    }
+    //#endregion
+
+    //#region Random Ingredient pictures
+    private createCacheIngredientPictures(): CacheItem {
+        let item: CacheItem = new CacheItem(CACHE_MEMBERS.IngredientPictures, this.UNLIKELY_TO_CHANGE_DURATION, []);
+        item.setRefreshCallback(this, this.refreshCacheIngredientPictures);
+        return item;
+    }
+
+    private refreshCacheIngredientPictures(): Promise<Object> {
+        return this.svcMedia.getRandomIngredientPictures(3).toPromise();
+    }
+
+    public get ingredientPictures(): any[] {
+        let item: CacheItem = super.get(CACHE_MEMBERS.IngredientPictures);
         this.refreshStaleCache(item);        
         return item.value;
     }

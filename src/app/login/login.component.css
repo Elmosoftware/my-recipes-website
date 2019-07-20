@@ -11,10 +11,6 @@ html, body {
     font-size: 1.5em;
 }
 
-.icon{
-    color: rgb(255, 193, 7);
-}
-
 .vertical-center {
     margin-bottom: 0; 
     min-height: 100%;
@@ -24,4 +20,3 @@ html, body {
     width: 100%;
     justify-content : center;
 }
-

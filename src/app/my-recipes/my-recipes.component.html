@@ -2,71 +2,118 @@
 <app-navigation-bar homePageFeaturesEnabled="true" adminMenuEnabled="true" searchBoxEnabled="true"></app-navigation-bar>
 
 <!-- My Recipes component -->
-<a id="topPage"></a>
-<div class="container formPositioning">
-  <div class="sticky-top alert alert-info">
-    <div class="row align-items-center">
-      <i id="tooltip1" class="fa fa-cutlery fa-2x" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Tipo de plato a servir."></i>
-      <div *ngFor="let mealType of cache.mealTypes" class="d-inline-flex ml-3 col-sm-6 col-md-4 col-lg-2">
-        <span>{{ mealType.name }}</span>
-        <mat-slide-toggle [disabled]="asyncInProgress" class="ml-1" color="primary" checked="false" (change)="toggleMealType(mealType._id)">
-          {{ getMealTypeFilterCountById(mealType._id) }}
-        </mat-slide-toggle>
+<a id="topSearch"></a>
+<div class="container-fluid formPositioning">
+  <div class="filterStickyToFront alert accentBackground">
+    <div class="row justify-content-between align-items-start">
+      <div class="col-2 pl-0">
+        <a class="ml-2 expander" href="javascript:void(0)" (click)="toggleFiltersVisibility()" data-toggle="tooltip"
+          data-placement="top" title="Haga click aqui para mostrar/ocultar las opciones de filtro.">
+          <i class="fa fa-1x" [ngClass]="{'fa-compress': filtersVisible, 'fa-expand': !filtersVisible}"></i>
+        </a>
+      </div>
+      <div class="col-10 align-self-center text-right">
+        <div *ngIf="svcInfScroll.model && svcInfScroll.model.length > 0">
+          <span>Mostrando {{ svcInfScroll.count }} resultados de un total de {{ svcInfScroll.totalCount }}
+            coincidencias.</span>
+          <button type="button" pageScroll href="#topSearch" class="btn btn-primary btn-sm mx-1" [disabled]="asyncInProgress"
+            (click)="fullScrollUp()" data-toggle="tooltip" data-placement="top"
+            title="Ir al primer resultado de la búsqueda.">
+            <i class="fa fa-chevron-up fa-1x"></i>
+          </button>
+          <button type="button" pageScroll href="#bottomSearch" class="btn btn-primary btn-sm mx-1"
+            [disabled]="asyncInProgress" (click)="fullScrollDown()" data-toggle="tooltip" data-placement="top"
+            title="Ir al final o buscar más resultados.">
+            <i class="fa fa-chevron-down fa-1x"></i>
+          </button>
+        </div>
       </div>
     </div>
-    <div class="row align-items-center mt-3">
-      <div class="d-inline-flex ml-3 col">
-        <span>Incluir solo mis recetas aún no publicadas</span>
-        <mat-slide-toggle [disabled]="asyncInProgress" class="ml-1" color="primary" checked="false" (change)="toggleNotPublishedOnly()">
-        </mat-slide-toggle>
+    <div @filterVisibilityTrigger *ngIf="filtersVisible">
+      <div class="row align-items-center mt-2">
+        <div class="col-auto align-self-start mx-3 filterIcon">
+          <i id="tooltip1" class="fa fa-cutlery fa-2x" aria-hidden="true" data-toggle="tooltip" data-placement="top"
+            title="Filtrar por tipo de plato."></i>
+        </div>
+        <div *ngFor="let mealType of cache.mealTypes" class="col mealtypeFiltersList">
+          <span>{{ mealType.name }}</span>
+          <mat-slide-toggle [disabled]="asyncInProgress" class="ml-1" color="primary"
+            [checked]="isMealtypeSelected(mealType._id)" (change)="toggleMealType(mealType._id)">
+            {{ getMealTypeFilterCountById(mealType._id) }}
+          </mat-slide-toggle>
+        </div>
       </div>
-    </div>
-  </div>
-  <div *ngIf="svcInfScroll.model && svcInfScroll.model.length > 0" class="mt-3">
-    <div class="card-deck justify-content-center" infinite-scrolling [scrollWindow]="true" (scrollEnd)="onScrollEndHandler($event)">
-      <div *ngFor="let recipe of svcInfScroll.model" class="card cardWidth mb-3 h-100">
-        <div class="card-body">
-          <h5 class="card-title recipeTitle" [innerHTML]="getShorterTitle(recipe)"></h5>
-          <p class="card-text recipeDescription" [innerHTML]="getShorterDescription(recipe)"></p>
-          <div class="row no-gutters mt-3 justify-content-between align-items-center">
-            <div class="mr-3">
-              <i id="tooltip1" class="fa fa-cutlery" aria-hidden="true" data-toggle="tooltip" data-placement="top"
-                title="Tipo de plato a servir."></i>
-              <small data-toggle="tooltip" data-placement="top" title="Tipo de plato a servir.">{{ recipe.mealType.name
-                }}</small>
-            </div>
-            <div class="mr-3">
-              <i class="fa fa-clock-o" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Tiempo de preparación."></i>
-              <small class="mr-3" data-toggle="tooltip" data-placement="top" title="Tiempo de preparación.">{{
-                getPreparationFriendlyTime(recipe) }}</small>
-            </div>
-            <div class="mr-3">
-              <i class="fa fa-signal" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Nivel de dificultad."></i>
-              <small class="mr-3" data-toggle="tooltip" data-placement="top" title="Nivel de dificultad.">
-                {{ recipe.level.name }}</small>
-            </div>
-          </div>
-          <div class="row no-gutters mt-1 justify-content-end">
-            <div class="col-1 mx-3">
-              <button id="btnViewRecipe" class="btn btn-primary" type="button" (click)="goToRecipeView(recipe._id)">
-                <i class="fa fa-file-text-o" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Ver todos los datos  de esta receta."></i>
-              </button>
-            </div>
-            <div class="col-1 mx-3">
-              <button id="btnEditRecipe" class="btn btn-primary" type="button" (click)="editRecipe(recipe._id)">
-                <i class="fa fa-pencil-square-o" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Editar esta receta."></i>
-              </button>
-            </div>
-          </div>
-          <div class="card-text mt-2"><small class="text-muted">{{ getFooter(recipe) }}</small></div>
-          <div class="card-text"><small class="text-muted" [ngClass]="{'badge badge-warning': !recipe.publishedOn, '': recipe.publishedOn}">Status
-              de publicación: {{ getFooterPublishingData(recipe) }}</small></div>
+      <div class="row align-items-center mt-2">
+        <div class="col-auto align-self-start mx-3 filterIcon">
+          <i id="tooltip1" class="fa fa-flag fa-2x" aria-hidden="true" data-toggle="tooltip" data-placement="top"
+            title="Filtrar por estado de publicación."></i>
+        </div>
+        <div class="col">
+          <span>Solo no publicadas</span>
+          <mat-slide-toggle [disabled]="asyncInProgress" class="ml-1" color="primary" [checked]="notPublishedOnlyFilter"
+            (change)="toggleNotPublishedOnly()">
+          </mat-slide-toggle>
         </div>
       </div>
     </div>
   </div>
-  <div *ngIf="isAnyFilterSet && svcInfScroll.model && svcInfScroll.model.length == 0" class="alert alert-warning formPositioning"
-    role="alert">
+  <div *ngIf="svcInfScroll.model && svcInfScroll.model.length > 0" class="mt-3">
+    <div class="card-deck justify-content-center contentStickyToBack" infinite-scrolling [scrollWindow]="true"
+      (scrollEnd)="onScrollEndHandler($event)">
+      <div *ngFor="let recipe of svcInfScroll.model" class="card cardWidth mb-3 h-100">
+        <div class="card-body recipeCard secondaryBackground">
+          <div class="card-title recipeTitle" [innerHTML]="getShorterTitle(recipe)"></div>
+          <div class="card-text recipeDescription" [innerHTML]="getShorterDescription(recipe)"></div>
+          <div class="row no-gutters mt-3 justify-content-between align-items-center">
+            <div class="mr-3">
+              <i id="tooltip1" class="fa fa-calendar" aria-hidden="true" data-toggle="tooltip" data-placement="top"
+                title="Fecha de creación o última actualización."></i>
+              <small class="px-1" data-toggle="tooltip" data-placement="top"
+                title="Fecha de creación o última actualización.">{{ getStatus(recipe) }}</small>
+            </div>
+            <div class="mr-3">
+              <i id="tooltip1" class="fa fa-cutlery" aria-hidden="true" data-toggle="tooltip" data-placement="top"
+                title="Tipo de plato a servir."></i>
+              <small class="px-1" data-toggle="tooltip" data-placement="top" title="Tipo de plato a servir.">{{ recipe.mealType.name
+                }}</small>
+            </div>
+            <div class="mr-3">
+              <i class="fa fa-clock-o" aria-hidden="true" data-toggle="tooltip" data-placement="top"
+                title="Tiempo de preparación."></i>
+              <small class="px-1" data-toggle="tooltip" data-placement="top" title="Tiempo de preparación.">{{
+                getPreparationFriendlyTime(recipe) }}</small>
+            </div>
+            <div class="mr-3">
+              <i class="fa fa-signal" aria-hidden="true" data-toggle="tooltip" data-placement="top"
+                title="Nivel de dificultad."></i>
+              <small class="px-1" data-toggle="tooltip" data-placement="top" title="Nivel de dificultad.">
+                {{ recipe.level.name }}</small>
+            </div>
+            <div class="mt-2"><small
+                [ngClass]="{'badge badge-primary': !recipe.publishedOn, 'text-muted': recipe.publishedOn}">Status
+                de publicación: {{ getFooterPublishingData(recipe) }}</small></div>
+          </div>
+          <hr>
+          <div class="row no-gutters mt-3 justify-content-end">
+            <div class="col-1 mx-3">
+              <button id="btnViewRecipe" class="btn btn-primary" type="button" (click)="goToRecipeView(recipe._id)">
+                <i class="fa fa-file-text-o" aria-hidden="true" data-toggle="tooltip" data-placement="top"
+                  title="Ver todos los datos  de esta receta."></i>
+              </button>
+            </div>
+            <div class="col-1 mx-3">
+              <button id="btnEditRecipe" class="btn btn-primary" type="button" (click)="editRecipe(recipe._id)">
+                <i class="fa fa-pencil-square-o" aria-hidden="true" data-toggle="tooltip" data-placement="top"
+                  title="Editar esta receta."></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="isAnyFilterSet && svcInfScroll.model && svcInfScroll.model.length == 0"
+    class="alert alert-warning formPositioning" role="alert">
     <div class="row">
       <div class="col-3 align-self-center text-center">
         <i class="fa fa-frown-o large-icon" aria-hidden="true"></i>
@@ -76,23 +123,11 @@
         <p>
           <strong>Parece que aún no agregaste ninguna receta de ese tipo!.</strong>
         </p>
-        <p>No te preocupes, puedes agregar una haciendo click <a href="javascript:void(0)" (click)="goToRecipe()">aqui</a>.
+        <p>No te preocupes, puedes agregar una haciendo click <a href="javascript:void(0)"
+            (click)="goToRecipe()">aqui</a>.
         </p>
       </div>
     </div>
   </div>
 </div>
-<a id="bottomPage"></a>
-<div *ngIf="svcInfScroll.model && svcInfScroll.model.length > 0" class="row align-items-center alert alert-info fixed-bottom">
-  <div class="col align-self-start">
-    Mostrando {{ svcInfScroll.count }} resultados de un total de {{ svcInfScroll.totalCount }} coincidencias.
-  </div>
-  <button type="button" pageScroll href="#topPage" class="btn btn-primary btn-sm" [disabled]="asyncInProgress" (click)="fullScrollUp()"
-    data-toggle="tooltip" data-placement="top" title="Ir al primer resultado de la búsqueda.">
-    <i class="fa fa-chevron-up fa-1x"></i>
-  </button>
-  <button type="button" pageScroll href="#bottomPage" class="btn btn-primary btn-sm ml-2" [disabled]="asyncInProgress"
-    (click)="fullScrollDown()" data-toggle="tooltip" data-placement="top" title="Ir al final o buscar más resultados.">
-    <i class="fa fa-chevron-down fa-1x"></i>
-  </button>
-</div>
+<a id="bottomSearch"></a>

@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { useAnimation, trigger, transition } from '@angular/animations';
 import { FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 
@@ -9,11 +10,22 @@ import { RecipeSubcomponentInterface } from '../recipe-subcomponent-interface';
 import { Recipe } from 'src/app/model/recipe';
 import { Entity } from 'src/app/model/entity';
 import { WordAnalyzerService } from "../../services/word-analyzer-service";
+import { horizontalSlideIn, horizontalSlideOut } from "../../static/animations";
 
 @Component({
   selector: 'app-recipe-directions',
   templateUrl: './recipe-directions.component.html',
-  styleUrls: ['./recipe-directions.component.css']
+  styleUrls: ['./recipe-directions.component.css'],
+  animations: [
+    trigger('filterVisibilityTrigger', [
+      transition(':enter', [
+        useAnimation(horizontalSlideIn, { params: { time: ".5s" }})
+      ]),
+      transition(':leave', [
+        useAnimation(horizontalSlideOut, { params: { time: ".5s ease-in" }})
+      ])
+    ])
+  ]
 })
 export class RecipeDirectionsComponent implements OnInit, RecipeSubcomponentInterface<any> {
 

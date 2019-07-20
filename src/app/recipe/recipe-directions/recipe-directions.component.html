@@ -1,43 +1,81 @@
 <form class="my-4" #directionsForm="ngForm">
-    <div class="form-group">
-      <div class="input-group-prepend">
-        <span class="input-group-text text-primary"
-          [ngClass]="{'validatorValid': (direction.valid && direction.dirty), 'validatorInvalid': (direction.invalid && direction.dirty)}"
-          data-toggle="tooltip" data-placement="right"
-          title="Toda receta debe poseer al menos un paso de preparación">Paso
-          de la Preparación</span>
-      </div>
-      <textarea required class="form-control"
-        placeholder="Ingrese aqui en forma detallada un paso de la preparación." [(ngModel)]="newDirection"
-        name="direction" #direction="ngModel" rows="3" maxlength="1024"></textarea>
+  <div class="form-group">
+    <div class="input-group-prepend">
+      <span class="standardInputLegend standardInputLegendRequired"
+        [ngClass]="{'validatorValid': (direction.valid && direction.dirty), 'validatorInvalid': (direction.invalid && direction.dirty)}"
+        data-toggle="tooltip" data-placement="right"
+        title="Toda receta debe poseer al menos un paso de preparación">Paso
+        de la Preparación</span>
     </div>
-    <div class="form-group">
-      <div class="d-flex justify-content-end">
-        <button class="btn btn-primary my-2 " type="button" [disabled]="!(directionsForm.form.valid)"
-          (click)="addDirection();directionsForm.form.reset()">Agregar
-          a la lista
-          <i class="fa fa-caret-down fa-lg ml-2" aria-hidden="true"></i>
-        </button>
-      </div>
-    </div>
-  </form>
-  <div class="alert alert-warning" role="alert"
-    *ngIf="!model.directions || model.directions.length == 0; else directionsList">
-    <strong>¡Aún no agregaste los pasos de la preparación!</strong> Completalos en forma detallada, indicando de
-    que forma debe incorporarse cada ingrediente.
+    <textarea required class="form-control standardInput"
+      placeholder="Ingrese aqui cada paso de la preparación. Recuerde hacerlo en forma detallada, asi cualquiera podrá reproducir su deliciosa creación!"
+      [(ngModel)]="newDirection" name="direction" #direction="ngModel" rows="3" maxlength="1024"></textarea>
   </div>
-  <ng-template #directionsList>
-    <div class="alert alert-warning" role="alert" *ngIf="missingIngredients && missingIngredients.length > 0">
-      <strong>Te faltan ingredientes!</strong> Los siguientes aún no han sido incluidos en la preparación:
-      <i>{{ missingIngredients.join(", ") }}</i>
+  <div class="form-group">
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-primary my-2 " type="button" [disabled]="!(directionsForm.form.valid)"
+        (click)="addDirection();directionsForm.form.reset()">Agregar
+        a la lista
+        <i class="fa fa-caret-down fa-lg ml-2" aria-hidden="true"></i>
+      </button>
     </div>
-    <div class="list-group-item" *ngFor="let dir of model.directions; let i = index">
+  </div>
+</form>
+<div class="alert alert-warning" role="alert"
+  *ngIf="!model.directions || model.directions.length == 0; else directionsList">
+  <strong>¡Aún no agregaste los pasos de la preparación!</strong> Completalos en forma detallada, indicando de
+  que forma debe incorporarse cada ingrediente.
+</div>
+<ng-template #directionsList>
+  <div class="alert alert-warning" role="alert" *ngIf="missingIngredients && missingIngredients.length > 0">
+    <strong>Te faltan ingredientes!</strong> Los siguientes aún no han sido incluidos en la preparación:
+    <i>{{ missingIngredients.join(", ") }}</i>
+  </div>
+  <ul class="list-group simpleList pb-3">
+    <li @filterVisibilityTrigger class="list-group-item" *ngFor="let dir of model.directions; let i = index">
+      <div class="row">
+        <div class="col-1">
+          <div class="bg-secondary rounded-circle roundedList">
+            <span class="text-center">{{ i + 1 }}</span>
+          </div>
+        </div>
+        <div class="col-auto no-wrap align-self-center">
+          <button class="btn btn-primary" type="button" (click)="removeDirection(i)" data-toggle="tooltip"
+            data-placement="top" title="Eliminar este paso de la preparación.">
+            <i class="fa fa-times"></i>
+          </button>
+          <button class="btn btn-primary mx-1" type="button" (click)="editDirection(i)" data-toggle="tooltip"
+            data-placement="top" title="Editar este paso de la preparación.">
+            <i class="fa fa-pencil" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="col text-right align-self-center">
+          <button class="btn btn-secondary mx-1" type="button" (click)="moveDirectionDown(i)"
+            [disabled]="i==(model.directions.length-1)" data-toggle="tooltip" data-placement="top"
+            [title]="(i==(model.directions.length-1)) ? 'No es posible mover este paso hacia abajo ahora.' : 'Convertir en Paso ' + (i+2)">
+            <i class="fa fa-chevron-down"></i>
+          </button>
+          <button class="btn btn-secondary mx-1" type="button" (click)="moveDirectionUp(i)" [disabled]="i==0"
+            data-toggle="tooltip" data-placement="top"
+            [title]="(i==0) ? 'No es posible mover este paso hacia arriba ahora.' : 'Convertir en Paso ' + i">
+            <i class="fa fa-chevron-up"></i>
+          </button>
+        </div>        
+      </div>
+      <div class="row">
+          <div class="col-1 align-self-start">
+          </div>
+          <div class="col-11" [innerHTML]="parseIngredientsInDirection(dir)"></div>
+      </div>
+    </li>
+  </ul>
+  <!-- <div class="list-group-item" *ngFor="let dir of model.directions; let i = index">
       <div class="input-group-prepend">
-        <button class="btn btn-secondary" type="button" (click)="removeDirection(i)" data-toggle="tooltip"
+        <button class="btn btn-primary" type="button" (click)="removeDirection(i)" data-toggle="tooltip"
           data-placement="top" title="Eliminar este paso de la preparación.">
           <i class="fa fa-times"></i>
         </button>
-        <button class="btn btn-secondary mx-1" type="button" (click)="editDirection(i)" data-toggle="tooltip"
+        <button class="btn btn-primary mx-1" type="button" (click)="editDirection(i)" data-toggle="tooltip"
           data-placement="top" title="Editar este paso de la preparación.">
           <i class="fa fa-pencil" aria-hidden="true"></i>
         </button>
@@ -54,5 +92,5 @@
         </button>
       </div>
       <div [innerHTML]="parseIngredientsInDirection(dir)"></div>
-    </div>
-  </ng-template>
+    </div> -->
+</ng-template>

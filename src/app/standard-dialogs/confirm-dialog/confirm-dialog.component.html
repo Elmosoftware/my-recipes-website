@@ -1,16 +1,15 @@
-<h1 mat-dialog-title>{{data.title}}</h1>
-<mat-dialog-content [innerHTML]="data.content">
-  
+<div mat-dialog-title class="dialogTitle">{{data.title}}</div>
+<mat-dialog-content [innerHTML]="data.content" class="dialogText">
 </mat-dialog-content>
 <mat-dialog-actions>
-  <div class="container">
-    <div class="row">
-      <div class="col-12 text-right">
-        <button class="btn btn-secondary mx-1" (click)="closeDlg(1)">{{data.firstButtonText}}</button>
-        <button class="btn btn-secondary mx-1" (click)="closeDlg(2)">{{data.secondButtonText}}</button>
+  <div class="container dialogActions">
+    <div class="row justify-content-between">
+      <div class="col-auto">
+        <button class="btn btn-primary" (click)="closeDlg(1)">{{data.firstButtonText}}</button>
+      </div>
+      <div class="col-auto">
+        <button class="btn btn-primary" (click)="closeDlg(2)">{{data.secondButtonText}}</button>
       </div>
     </div>
   </div>
 </mat-dialog-actions>
-
-<!-- {{data.content}} -->

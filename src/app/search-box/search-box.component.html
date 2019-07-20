@@ -3,7 +3,7 @@
     <input matInput [matAutocomplete]="auto" [formControl]="searchTextBox" type="text" class="form-control"
       [placeholder]="placeHolder" aria-label="Search" (keyup.enter)="startSearching()">
     <div class="input-group-append">
-      <button [disabled]="!svcSearch.termIsValid" class="btn btn-default" (click)="startSearching()">
+      <button [disabled]="!svcSearch.termIsValid" class="btn btn-secondary" (click)="startSearching()">
         <i class="fa fa-search"></i>
       </button>
     </div>

@@ -1,12 +1,18 @@
 .recipeTitle{
-    font-family: 'Bellefair';
-    font-size: 2.4em;
+    font-family: 'Montserrat';
+    font-size: 1.6em;
 }
 
 .recipeDescription{
-    font-family: 'Bellefair';
-    font-size: 1.2em;
+    font-family: Roboto;
+    font-size: 1em;
+    font-weight: 300;
     font-style: italic; 
+}
+
+.recipeDirections{
+    font-family: 'Montserrat';
+    font-size: 0.8em;
 }
 
 .recipeDirections article:not(:last-child) {
