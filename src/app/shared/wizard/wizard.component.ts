@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, ContentChildren, QueryList, AfterContentInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ContentChildren, QueryList, AfterContentInit } from '@angular/core';
 import { WizardStepComponent } from "./wizard-step.component";
 
 @Component({
@@ -11,6 +11,12 @@ export class WizardComponent implements AfterContentInit {
   @ContentChildren(WizardStepComponent)
   wizardSteps: QueryList<WizardStepComponent>;
 
+  /**
+   * Indicates if the buttons must remain hidden enabling the tabs as the only navigation method.
+   */
+  @Input("hide-buttons") hideButtons: boolean = false;
+  @Input("default-tab") defaultTab: string = ""
+
   private _steps: Array<WizardStepComponent> = [];
   private _isCompleted: boolean = false;
 
@@ -20,8 +26,32 @@ export class WizardComponent implements AfterContentInit {
   constructor() { }
 
   ngAfterContentInit() {
-    this.wizardSteps.forEach(step => this._steps.push(step));
-    this.steps[0].isActive = true;
+
+    let hasActiveStep: boolean = false
+
+    if (this.wizardSteps && this.wizardSteps.length > 0) {
+
+      this.wizardSteps.forEach((step) => {
+
+        if (this.hideButtons) {
+          step.isDisabled = false;
+        }
+
+        if (this.defaultTab && step.title == this.defaultTab) {
+          step.isActive = true;
+          hasActiveStep = true;
+        }
+
+        this._steps.push(step)
+      });
+
+      if (!hasActiveStep) {
+        this._steps[0].isActive = true; //By default, first tab will be the active one.
+      }
+    }
+    else {
+      throw new Error("The wizard has no steps added!");
+    }
   }
 
   get steps(): Array<WizardStepComponent> {
@@ -95,5 +125,4 @@ export class WizardComponent implements AfterContentInit {
     this._isCompleted = true;
     this.activeStep.onComplete.emit();
   }
-
 }

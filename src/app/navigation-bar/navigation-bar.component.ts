@@ -7,7 +7,6 @@ import { ConfirmDialogConfiguration } from "../standard-dialogs/standard-dialog.
 import { SearchServiceInterface } from "../services/search-service";
 import { PAGES } from "../services/navigation-service";
 import { Recipe } from '../model/recipe';
-import { SearchByIngredientService } from '../services/search-by-ingredient-service';
 import { SEARCH_TYPE } from "../services/search-type";
 import { SearchServiceFactory } from "../services/search-service-factory";
 
@@ -137,6 +136,10 @@ export class NavigationBarComponent implements OnInit {
 
   goToHome() {
     this.core.navigate.toHome();
+  }
+
+  goToCookbook(){
+    this.core.navigate.toCookbook();
   }
 
   goToSearchByIngredient(){

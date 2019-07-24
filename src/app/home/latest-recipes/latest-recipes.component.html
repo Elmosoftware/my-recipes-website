@@ -1,6 +1,13 @@
 <div *ngIf="model && model.length; else noData">
   <div class="container py-4">
     <app-recipe-item [model]="model"></app-recipe-item>
+    <div class="row mt-4 justify-content-center">
+      <div class="col-auto">
+        <button class="btn btn-primary" type="button" (click)="goToCookbook()">
+          Buscar más!
+        </button>
+      </div>
+    </div>
   </div>
 </div>
 <ng-template #noData>

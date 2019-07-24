@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Router, UrlSegment } from '@angular/router';
 import { SearchServiceInterface } from './search-service';
+import { COOKBOOK_TABS } from "../cookbook/cookbook-tabs";
 
 /**
  * This enums all the Pages in the app.
@@ -20,6 +21,7 @@ export const enum PAGES {
     UserPreferences = "user-preferences",
     UserDetails = "user-details",
     MyRecipes = "my-recipes",
+    Cookbook = "cookbook",
     About = "about"
 }
 
@@ -65,6 +67,8 @@ export class NavigationService {
                     return PAGES.MyRecipes
                 case PAGES.About:
                     return PAGES.About
+                case PAGES.Cookbook:
+                    return PAGES.Cookbook
                 default:
                     throw new Error(`Page "${url.path.toLowerCase()}" is not been defined yet in PAGES enumeration.`)
             }
@@ -139,6 +143,17 @@ export class NavigationService {
         }
         
         this.router.navigate([this.getRelativePath(PAGES.Search)], extras);
+    }
+
+    toCookbook(tab?: COOKBOOK_TABS): void {
+
+        let extras = { queryParams: {} };
+        
+        if (tab) {
+            (extras.queryParams as any).tab = tab;
+        }
+        
+        this.router.navigate([this.getRelativePath(PAGES.Cookbook)], extras);
     }
 
     toUserPreferences(): void {

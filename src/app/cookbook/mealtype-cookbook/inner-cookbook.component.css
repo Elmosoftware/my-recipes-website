@@ -1,0 +1,18 @@
+.filterStickyToFront{
+    position: sticky;
+    top: 0;
+    z-index: 900;
+}
+
+.contentStickyToBack{
+    position: sticky;
+    z-index: 800;
+}
+
+.noShadowAndWrap{
+    white-space: normal;
+}
+
+.noShadowAndWrap:hover{
+    box-shadow: none;
+}

@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { CoreService } from 'src/app/services/core-service';
 import { Cache } from "../../shared/cache/cache";
 import { Recipe } from "../../model/recipe";
+import { COOKBOOK_TABS } from "../../cookbook/cookbook-tabs";
 
 @Component({
   selector: 'app-latest-recipes',
@@ -23,5 +24,9 @@ export class LatestRecipesComponent implements OnInit {
 
   goToRecipe() {
     this.core.navigate.toRecipe();
+  }
+
+  goToCookbook(){
+    this.core.navigate.toCookbook(COOKBOOK_TABS.PublishingOrder);
   }
 }

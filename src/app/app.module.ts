@@ -49,6 +49,8 @@ import { FileDropperComponent } from './shared/file-dropper/file-dropper.compone
 import { TestNewStuffComponent } from './test-new-stuff/test-new-stuff.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { CookingAnimationComponent } from './cooking-animation/cooking-animation.component';
+import { CookbookComponent } from './cookbook/cookbook.component';
+import { InnerCookbookComponent } from './cookbook/mealtype-cookbook/inner-cookbook.component';
 
 //Services
 import { NavigationService } from './services/navigation-service';
@@ -110,7 +112,9 @@ import { LoginComponent } from './login/login.component';
     RecipeItemComponent,
     RecipePublishingComponent,
     LoginComponent,
-    CookingAnimationComponent
+    CookingAnimationComponent,
+    CookbookComponent,
+    InnerCookbookComponent
   ],
   imports: [
     FormsModule,

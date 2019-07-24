@@ -10,6 +10,9 @@
     </button>
     <div class="collapse navbar-collapse justify-content-between" id="navbarMain">
       <ul class="navbar-nav row">
+          <li *ngIf="homePageFeaturesEnabled" class="nav-item col-auto pr-0">
+              <a class="nav-link" href="javascript:void(0)" (click)="goToCookbook()">Recetario</a>
+          </li>
           <li *ngIf="homePageFeaturesEnabled && isAuthenticated" class="nav-item col-auto pr-0">
               <a class="nav-link" href="javascript:void(0)" (click)="goToMyRecipes()">Mis Recetas!</a>
           </li>

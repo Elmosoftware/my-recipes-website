@@ -1,0 +1,17 @@
+<!-- Navigation Bar -->
+<app-navigation-bar homePageFeaturesEnabled="true" adminMenuEnabled="true" searchBoxEnabled="true"></app-navigation-bar>
+
+<!-- Cookbook -->
+<div class="container formPositioning col-lg-8 col-sm">
+  <wizard (onStepChanged)="onStepChanged($event)" [hide-buttons]="true" [default-tab]="defaultTab" #wizard>
+    <wizard-step [title]="tabMealTypes" [isValid]="true" [isDirty]="false">
+      <app-inner-cookbook [tab]="tabMealTypes"></app-inner-cookbook>
+    </wizard-step>
+    <wizard-step [title]="tabLevels" [isValid]="true" [isDirty]="false">
+        <app-inner-cookbook [tab]="tabLevels"></app-inner-cookbook>
+    </wizard-step>
+    <wizard-step [title]="tabPublishing" [isValid]="true" [isDirty]="false">
+        <app-inner-cookbook [tab]="tabPublishing"></app-inner-cookbook>
+    </wizard-step>
+  </wizard>
+</div>

@@ -1,0 +1,64 @@
+<!-- Filters section -->
+<a [id]="topAnchor"></a>
+<div class="container ">
+  <div class="filterStickyToFront alert primaryBackground">
+    <div class="row mx-0">
+      <div *ngIf="!asyncInProgress; else inProgress" class="btn-group btn-group-toggle w-100">
+        <label *ngFor="let item of tabOptions" class="btn btn-outline-primary col"
+          [class.active]="item._id == ((selectedItem) ? selectedItem._id : '')">
+          <input type="radio" name="options" [value]="item._id" (change)="itemChange(item)">
+          {{ item.name }}
+        </label>
+      </div>
+      <ng-template #inProgress>
+        <div class="btn btn-outline-primary noShadowAndWrap w-100 mt-1">
+          <i class="fa fa-spinner fa-pulse fa-fw mx-2"></i>Buscando&hellip;&nbsp;Espera por favor.
+        </div>
+      </ng-template>
+    </div>
+    <div *ngIf="svcInfScroll.model && svcInfScroll.model.length > 0"
+      class="btn btn-outline-primary noShadowAndWrap w-100 mt-1">
+      <div class="row mx-0 align-items-center">
+        <div class="col-auto align-self-center">
+          <button type="button" pageScroll [href]="'#'+topAnchor" class="btn btn-outline-primary btn-sm mx-1"
+            [disabled]="asyncInProgress" (click)="fullScrollUp()" data-toggle="tooltip" data-placement="top"
+            title="Ir al primer resultado de la búsqueda.">
+            <i class="fa fa-chevron-up fa-1x"></i>
+          </button>
+          <button type="button" pageScroll [href]="'#'+bottomAnchor" class="btn btn-outline-primary btn-sm mx-1"
+            [disabled]="asyncInProgress" (click)="fullScrollDown()" data-toggle="tooltip" data-placement="top"
+            title="Ir al final o buscar más resultados.">
+            <i class="fa fa-chevron-down fa-1x"></i>
+          </button>
+        </div>
+        <div class="col text-right">
+          <span>Mostrando {{ svcInfScroll.count }} resultados de un total de {{ svcInfScroll.totalCount }}
+            coincidencias.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Data section -->
+  <div *ngIf="svcInfScroll.model && svcInfScroll.model.length > 0" infinite-scrolling [scrollWindow]="true"
+    (scrollEnd)="onScrollEndHandler($event)" class="contentStickyToBack">
+    <app-recipe-item [model]="svcInfScroll.model"></app-recipe-item>
+  </div>
+  <div *ngIf="svcInfScroll.model && svcInfScroll.model.length == 0" class="alert alert-warning formPositioning"
+    role="alert">
+    <div class="row">
+      <div class="col-3 align-self-center text-center">
+        <i class="fa fa-frown-o fa-5x" aria-hidden="true"></i>
+      </div>
+      <div class="col-9 align-self-start">
+        <h3>Oops!</h3>
+        <p>
+          <strong>Parece que aún no tenemos ninguna receta de ese tipo.</strong>
+        </p>
+        <p>
+          Intenta con otro &hellip;
+        </p>
+      </div>
+    </div>
+  </div>
+  <a [id]="bottomAnchor"></a>

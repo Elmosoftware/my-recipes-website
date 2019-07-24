@@ -18,6 +18,7 @@ import { AboutComponent } from './about/about.component';
 import { TestNewStuffComponent } from './test-new-stuff/test-new-stuff.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { DataLossPreventionGuard } from './services/data-loss-prevention-guard';
+import { CookbookComponent } from './cookbook/cookbook.component';
 
 const routes: Routes = [
   {
@@ -48,6 +49,10 @@ const routes: Routes = [
   {
     path: PAGES.Search,
     component: SearchComponent
+  },
+  {
+    path: PAGES.Cookbook,
+    component: CookbookComponent
   },
   {
     path: PAGES.Recipe,
