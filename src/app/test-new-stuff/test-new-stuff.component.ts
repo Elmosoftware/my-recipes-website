@@ -1,6 +1,7 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
-import { CoreService } from "../services/core-service";
+import { CoreService } from '../services/core-service';
 
 @Component({
   selector: 'app-test-new-stuff',
@@ -9,30 +10,8 @@ import { CoreService } from "../services/core-service";
 })
 export class TestNewStuffComponent implements OnInit {
 
-  constructor(private core: CoreService) { }
+  constructor(private core: CoreService, private route: ActivatedRoute) { }
  
-  message: string;
-
   ngOnInit() {
-    this.message = "Nec an eirmod instructior, no velit harum veritus mei. Ut salutandi assueverit appellantur sed. Saepe maiorum forensibus ne sit."
   }
-
-  ngAfterViewInit() {
-  }
-
-  showInfo(){
-    this.core.toast.showInformation(this.message, "Title of Info toast")
-  }
-  showWarn(){
-    this.core.toast.showWarning(this.message, "Title of Warn toast")
-  }
-  showErr(){
-    this.core.toast.showError(this.message, "Title of Error toast")
-  }
-  showSuc(){
-    this.core.toast.showSuccess(this.message, "Title of Success toast")
-  }
-
-
-  
 }

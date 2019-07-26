@@ -35,7 +35,6 @@ export class NavigationBarComponent implements OnInit {
 
   isVisible: boolean;
   currentPage: PAGES
-  adminMenuExpanded: boolean;
 
   get isHome(): boolean {
     return this.currentPage == PAGES.Home;
@@ -46,18 +45,12 @@ export class NavigationBarComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.adminMenuExpanded = false;
     this.isVisible = true;
     this.currentPage = this.core.navigate.parsePageURL(this.route.snapshot.url[0]);
   }
 
   onScrollHandler($event: number) {
     this.isVisible = (isNaN($event) || $event < 1);
-  }
-
-  toggleAdminMenu($event):void {
-    this.adminMenuExpanded = !this.adminMenuExpanded;
-    $event.preventDefault();
   }
 
   get isAdminUser() : boolean {
