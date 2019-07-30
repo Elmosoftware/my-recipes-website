@@ -17,5 +17,9 @@ export const environment = {
   appSettings: {
     contactEmail: "juancarlosgarcia_arg@hotmail.com",
     maxPicturesPerRecipe: 5
+  },
+  logging: {
+    dsn: "https://e48585636b8b47e9851a756c9b327a73@sentry.io/1515102",
+    source: "Mi Cocina - Web"
   }  
 };

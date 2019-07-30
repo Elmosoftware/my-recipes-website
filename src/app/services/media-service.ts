@@ -14,6 +14,7 @@ import { StaticAssets } from "../static/static-assets";
 import { AuthService } from './auth-service';
 import { RecipePicture } from "../model/recipe-picture";
 import { isArray } from 'util';
+import { LoggingService } from "../services/logging-service";
 
 export const enum TRANSF_IMAGE_FORMATS {
   KeepOriginal = "",
@@ -29,9 +30,11 @@ export class MediaService {
 
   private helper: Helper;
   private uploadPicturesSettings: any;
+  private logger: LoggingService;
 
   constructor(private http: HttpClient,
     private auth: AuthService) {
+    this.logger = new LoggingService(this.auth);
     this.helper = new Helper();
     this.uploadPicturesSettings = null;
   }
@@ -183,7 +186,7 @@ export class MediaService {
         catchError((err) => {
           //This svc must be error safe. So, if the call to the service fail in some way,
           //we can use the alternative site pictures for the Carousel in the assets folder:
-          console.warn(`There was an error trying to get dynamic carousel pictures. Falling back to the static ones.`)
+          this.logger.logWarn(`There was an error trying to get dynamic carousel pictures. Falling back to the static ones.`);
           return of({ error: null, payload: StaticAssets.homePageCarousel.fallbackPictures });
         }),
         map(data => {
@@ -209,7 +212,7 @@ export class MediaService {
         catchError((err) => {
           //This svc must be error safe. So, if the call to the service fail in some way,
           //we can use the alternative Ingredient pictures in the assets folder:
-          console.warn(`There was an error trying to get the dynamic ingredient pictures. Falling back to the static ones.`)
+          this.logger.logWarn(`There was an error trying to get the dynamic ingredient pictures. Falling back to the static ones.`);
           return of({ error: null, payload: StaticAssets.homePageIngredients.fallbackPictures });
         }),
         map(data => {

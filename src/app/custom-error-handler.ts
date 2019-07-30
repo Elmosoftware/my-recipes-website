@@ -7,7 +7,7 @@ import { ErrorLog } from './model/error-log'
 @Injectable()
 export class CustomErrorHandler implements ErrorHandler {
 
-  constructor(private subs: SubscriptionService) {
+  constructor(private subs: SubscriptionService) { 
   }
 
   /**
@@ -29,8 +29,8 @@ export class CustomErrorHandler implements ErrorHandler {
     var innerErr = null;
     let e = new ErrorLog;
 
+    e.error = error;
     e.location = location.href;
-    e.user = "anonymous";
     e.message = (error.message) ? error.message : "";
     e.stack = (error.stack) ? error.stack : ""
 
@@ -63,7 +63,6 @@ export class CustomErrorHandler implements ErrorHandler {
       }
     }
 
-    console.error(`MyRecipes App unhandled error:\n${JSON.stringify(e)}`);
     this.subs.emitGlobalErrorEvent(e);
   }
 

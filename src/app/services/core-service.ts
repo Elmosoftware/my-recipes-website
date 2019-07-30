@@ -8,6 +8,7 @@ import { Helper } from '../shared/helper';
 import { StandardDialogService } from '../standard-dialogs/standard-dialog.service';
 import { MediaService } from './media-service';
 import { NavigationService } from './navigation-service';
+import { LoggingService } from "./logging-service";
 
 /**
  * This core class help inject common services to the app. 
@@ -19,7 +20,7 @@ import { NavigationService } from './navigation-service';
 export class CoreService {
 
   private svcHelper: Helper
-  // globalErrorSubscription: any;
+  private svcLogging: LoggingService
 
   constructor(
     //Angular and 3rd party injected services:
@@ -35,9 +36,11 @@ export class CoreService {
 
       console.log(`CoreServices Created`)
       this.svcHelper = new Helper();
+      this.svcLogging = new LoggingService(this.injAuthService);
       this.injSubscriptionService.getGlobalErrorEmitter()
         .subscribe(item => {
           this.injToasterHelperService.showError(item);
+          this.svcLogging.logException(item);
         });
   }
 
@@ -75,5 +78,9 @@ export class CoreService {
 
   get navigate(): NavigationService {
     return this.injNavigationService;
+  }
+
+  get logger(): LoggingService {
+    return this.svcLogging;
   }
 }

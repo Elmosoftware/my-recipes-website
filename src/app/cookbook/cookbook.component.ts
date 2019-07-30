@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { COOKBOOK_TABS, parseCookbookTab } from "./cookbook-tabs";
 import { ActivatedRoute } from '@angular/router';
+import { CoreService } from '../services/core-service';
 
 @Component({
   selector: 'app-cookbook',
@@ -23,7 +24,7 @@ export class CookbookComponent implements OnInit {
 
   defaultTab: COOKBOOK_TABS;
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute, private core: CoreService) {
   }
 
   ngOnInit() {
@@ -35,7 +36,7 @@ export class CookbookComponent implements OnInit {
       try {
         this.defaultTab = parseCookbookTab(this.route.snapshot.queryParamMap.get("tab"));
       } catch (error) {
-        console.warn(`The tab supplied: ${this.route.snapshot.queryParamMap.get("tab")} is not valid. First tab will be the default one active.`)
+        this.core.logger.logWarn(`The tab supplied: ${this.route.snapshot.queryParamMap.get("tab")} is not valid. First tab will be the default one active.`);
       }
     }
   }

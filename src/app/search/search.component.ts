@@ -95,7 +95,7 @@ export class SearchComponent implements OnInit {
       try {
         searchType = parseSearchType(this.route.snapshot.queryParamMap.get("type"))
       } catch (error) {
-        console.warn(`The search type supplied: ${this.route.snapshot.queryParamMap.get("type")} is not valid. We are setting search type "${SEARCH_TYPE.Text}" instead.`)
+        this.core.logger.logWarn(`The search type supplied: ${this.route.snapshot.queryParamMap.get("type")} is not valid. We are setting search type "${SEARCH_TYPE.Text}" instead.`);
         searchType = SEARCH_TYPE.Text
       }
 
