@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { trigger, state, animate, transition, style } from '@angular/animations';
 
+import { Cache } from "../shared/cache/cache";
 import { CoreService } from '../services/core-service';
 import { ConfirmDialogConfiguration } from "../standard-dialogs/standard-dialog.service";
 import { SearchServiceInterface } from "../services/search-service";
@@ -41,7 +42,7 @@ export class NavigationBarComponent implements OnInit {
   }
 
   constructor(private core: CoreService, private route: ActivatedRoute, 
-    private svcSearchFac: SearchServiceFactory) {
+    private svcSearchFac: SearchServiceFactory, private cache: Cache) {
   }
 
   ngOnInit() {
