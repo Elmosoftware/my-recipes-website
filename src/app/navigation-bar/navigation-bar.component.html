@@ -59,41 +59,40 @@
                                     </div>
                                 </div>
                             </li>
-                            <li class="nav-item navbar-nav dropdown ml-2">
-                                <div class="nav-link dropdown-toggle navbar-link" data-toggle="dropdown" href="#"
-                                    aria-expanded="true" id="dropdown02">
-                                    <i *ngIf="isAuthenticated; else notAuthUserImage">
-                                        <img class="rounded-circle profile-picture" [src]="userPicture" [alt]="userName"
-                                            data-toggle="tooltip" data-placement="bottom" [title]="userNameAndAccount">
-                                    </i>
-                                    <ng-template #notAuthUserImage>
-                                        <i class="fa fa-user fa-fw"></i>
-                                    </ng-template>
-                                </div>
-                                <div class="dropdown-menu dropdown-user" aria-labelledby="dropdown02">
-                                    <div *ngIf="!isAuthenticated" class="dropdown-item">
-                                        <a class="nav-link" href="javascript:void(0)" (click)="login()">
-                                            <i class="fa fa-sign-in fa-fw pr-2"></i>Registrarse/Iniciar sesión</a>
-                                    </div>
-                                    <div *ngIf="isAuthenticated && !isSocial">
-                                        <div class="dropdown-item">
-                                            <a class="nav-link" href="javascript:void(0)" (click)="changePassword()">
-                                                <i class="fa fa-gear fa-fw pr-2"></i>Cambiar contraseña</a>
-                                        </div>
-                                        <div class="dropdown-item">
-                                            <a class="nav-link" href="javascript:void(0)"
-                                                (click)="goToUserPreferences()">
-                                                <i class="fa fa-gear fa-fw pr-2"></i>Preferencias</a>
-                                        </div>
-                                    </div>
-                                    <div *ngIf="isAuthenticated" class="dropdown-item">
-                                        <hr class="dropdown-menu-divider">
-                                        <a class="nav-link" href="javascript:void(0)" (click)="logout()">
-                                            <i class="fa fa-sign-out fa-fw pr-2"></i>Finalizar sesión</a>
-                                    </div>
-                                </div>
-                            </li>
                         </div>
+                        <li class="nav-item navbar-nav dropdown ml-2">
+                            <div class="nav-link dropdown-toggle navbar-link" data-toggle="dropdown" href="#"
+                                aria-expanded="true" id="dropdown02">
+                                <i *ngIf="isAuthenticated; else notAuthUserImage">
+                                    <img class="rounded-circle profile-picture" [src]="userPicture" [alt]="userName"
+                                        data-toggle="tooltip" data-placement="bottom" [title]="userNameAndAccount">
+                                </i>
+                                <ng-template #notAuthUserImage>
+                                    <i class="fa fa-user fa-fw"></i>
+                                </ng-template>
+                            </div>
+                            <div class="dropdown-menu dropdown-user" aria-labelledby="dropdown02">
+                                <div *ngIf="!isAuthenticated" class="dropdown-item">
+                                    <a class="nav-link" href="javascript:void(0)" (click)="login()">
+                                        <i class="fa fa-sign-in fa-fw pr-2"></i>Registrarse/Iniciar sesión</a>
+                                </div>
+                                <div *ngIf="isAuthenticated && !isSocial">
+                                    <div class="dropdown-item">
+                                        <a class="nav-link" href="javascript:void(0)" (click)="changePassword()">
+                                            <i class="fa fa-gear fa-fw pr-2"></i>Cambiar contraseña</a>
+                                    </div>
+                                    <div class="dropdown-item">
+                                        <a class="nav-link" href="javascript:void(0)" (click)="goToUserPreferences()">
+                                            <i class="fa fa-gear fa-fw pr-2"></i>Preferencias</a>
+                                    </div>
+                                </div>
+                                <div *ngIf="isAuthenticated" class="dropdown-item">
+                                    <hr class="dropdown-menu-divider">
+                                    <a class="nav-link" href="javascript:void(0)" (click)="logout()">
+                                        <i class="fa fa-sign-out fa-fw pr-2"></i>Finalizar sesión</a>
+                                </div>
+                            </div>
+                        </li>
                     </div>
                 </div>
                 <div class="d-inline-flex">
