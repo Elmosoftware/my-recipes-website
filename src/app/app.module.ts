@@ -42,6 +42,8 @@ import { AuthCallbackComponent } from './auth-callback/auth-callback.component';
 import { UserPreferencesComponent } from './user-preferences/user-preferences.component';
 import { UnauthorizedErrorPageComponent } from './error-pages/unauthorized/unauthorized.component';
 import { NotFoundErrorPageComponent } from "./error-pages/not-found/not-found.component";
+import { NetworkErrorPageComponent } from './error-pages/network-error/network-error.component';
+import { GoneFishingPageComponent } from './error-pages/gone-fishing/gone-fishing.component';
 import { MyRecipesComponent } from './my-recipes/my-recipes.component';
 import { CarouselComponent } from './shared/carousel/carousel.component';
 import { AboutComponent } from './about/about.component';
@@ -62,6 +64,7 @@ import { ToasterHelperService } from "./services/toaster-helper-service";
 import { AuthService } from "./services/auth-service";
 import { MediaService } from "./services/media-service";
 import { SearchServiceFactory } from "./services/search-service-factory";
+import { ConnectivityService } from './services/connectivity-service';
 
 //Guards
 import { AuthGuard } from './services/auth-guard';
@@ -104,6 +107,8 @@ import { LoginComponent } from './login/login.component';
     UserPreferencesComponent,
     UnauthorizedErrorPageComponent,
     NotFoundErrorPageComponent,
+    NetworkErrorPageComponent,
+    GoneFishingPageComponent,
     MyRecipesComponent,
     CarouselComponent,
     AboutComponent,
@@ -167,7 +172,8 @@ import { LoginComponent } from './login/login.component';
     ToasterHelperService,
     MediaService,
     SearchServiceFactory,
-    DataLossPreventionGuard
+    DataLossPreventionGuard,
+    ConnectivityService
   ],
   bootstrap: [AppComponent]
 })

@@ -49,7 +49,9 @@ export const StaticAssets = {
     ]
   },
   otherPictures: {
-    recipeCircleThumb: `${LOCAL_ASSETS_IMAGES_PATH}recipe-circlethumb.png`
+    recipeCircleThumb: `${LOCAL_ASSETS_IMAGES_PATH}recipe-circlethumb.png`,
+    potAnimationPot: `${LOCAL_ASSETS_IMAGES_PATH}cooking-pot.svg`,
+    potAnimationFlames: `${LOCAL_ASSETS_IMAGES_PATH}cooking-flames.svg`
   },
   homePageIngredients: {
     fallbackPictures: [

@@ -11,6 +11,8 @@ export const enum PAGES {
     Login = "login",
     AuthCallback = "auth-callback",
     Unauthorized = "error-unauthorized",
+    NetworkError = "network-error",
+    GoneFishing = "gone-fishing",
     Search = "search",
     Recipe = "recipe",
     RecipeView = "recipe-view",
@@ -45,6 +47,10 @@ export class NavigationService {
                     return PAGES.AuthCallback
                 case PAGES.Unauthorized:
                     return PAGES.Unauthorized
+                case PAGES.NetworkError:
+                    return PAGES.NetworkError
+                case PAGES.GoneFishing:
+                    return PAGES.GoneFishing
                 case PAGES.Search:
                     return PAGES.Search
                 case PAGES.Recipe:
@@ -80,6 +86,14 @@ export class NavigationService {
 
     toUnauthorizedAccess(): void {
         this.router.navigate([this.getRelativePath(PAGES.Unauthorized)]);
+    }
+
+    toNetworkError(): void {
+        this.router.navigate([this.getRelativePath(PAGES.NetworkError)]);
+    }
+
+    toGoneFishing(): void {
+        this.router.navigate([this.getRelativePath(PAGES.GoneFishing)]);
     }
 
     toHome(): void {

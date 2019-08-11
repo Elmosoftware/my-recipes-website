@@ -9,6 +9,8 @@ import { StandardDialogService } from '../standard-dialogs/standard-dialog.servi
 import { MediaService } from './media-service';
 import { NavigationService } from './navigation-service';
 import { LoggingService } from "./logging-service";
+import { ConnectivityService, ConnectivityStatus } from './connectivity-service';
+import { stat } from 'fs';
 
 /**
  * This core class help inject common services to the app. 
@@ -32,16 +34,44 @@ export class CoreService {
     private injToasterHelperService: ToasterHelperService,
     private injStandardDialogService: StandardDialogService,
     private injMediaService: MediaService,
-    private injNavigationService: NavigationService) {
+    private injNavigationService: NavigationService,
+    private injConnectivityService: ConnectivityService) {
 
       console.log(`CoreServices Created`)
+
       this.svcHelper = new Helper();
       this.svcLogging = new LoggingService(this.injAuthService);
+
       this.injSubscriptionService.getGlobalErrorEmitter()
         .subscribe(item => {
-          this.injToasterHelperService.showError(item);
-          this.svcLogging.logException(item);
+          //We must check connectivity issues in the case they are the error root cause:
+          this.injConnectivityService.updateStatus(item);
         });
+      
+      this.injSubscriptionService.getConnectivityStatusChangeEmitter()
+        .subscribe((status: ConnectivityStatus) => {
+
+          console.log(`Connectivity status change has been detected. Current status:
+          - Network is ${(status.networkOn) ? "online" : "offline"}.
+          - Internet ${(status.wwwOn) ? "is accessible" : "not available"}.
+          - Mi Cocina API is ${(status.apiOn) ? "up and ready" : "down"}.
+          Last error was: "${(status.lastError) ? this.helper.getShortText(status.lastError.message, 0, 60) : "No errors so far!"}".`)
+
+          if (status.isAllGood && status.lastError) {
+            //We show a toaster for the user indicating the error details:
+            this.injToasterHelperService.showError(status.lastError);
+            //Logging the exception:
+            this.svcLogging.logException(status.lastError);
+          }
+
+          if (status.isNetworkIssue) {
+            this.injNavigationService.toNetworkError();
+          }
+      
+          if (status.isAPIOffline) {
+            this.injNavigationService.toGoneFishing();
+          }
+        })
   }
 
   get zone() :NgZone {
@@ -82,5 +112,9 @@ export class CoreService {
 
   get logger(): LoggingService {
     return this.svcLogging;
+  }
+
+  get connectivity(): ConnectivityService {
+    return this.injConnectivityService;
   }
 }

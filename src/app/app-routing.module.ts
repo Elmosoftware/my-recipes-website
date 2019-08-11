@@ -14,6 +14,8 @@ import { AuthGuard } from "./services/auth-guard";
 import { UnauthorizedErrorPageComponent } from './error-pages/unauthorized/unauthorized.component';
 import { MyRecipesComponent } from './my-recipes/my-recipes.component';
 import { NotFoundErrorPageComponent } from './error-pages/not-found/not-found.component';
+import { NetworkErrorPageComponent } from './error-pages/network-error/network-error.component';
+import { GoneFishingPageComponent } from './error-pages/gone-fishing/gone-fishing.component';
 import { AboutComponent } from './about/about.component';
 import { TestNewStuffComponent } from './test-new-stuff/test-new-stuff.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
@@ -45,6 +47,14 @@ const routes: Routes = [
   {
     path: PAGES.Unauthorized,
     component: UnauthorizedErrorPageComponent
+  },
+  {
+    path: PAGES.NetworkError,
+    component: NetworkErrorPageComponent
+  },
+  {
+    path: PAGES.GoneFishing,
+    component: GoneFishingPageComponent
   },
   {
     path: PAGES.Search,

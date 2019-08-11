@@ -1,0 +1,50 @@
+html, body {
+    height: 100%;
+  }
+
+.mainText {
+    font-size: 4em;
+    font-weight: 500;
+}
+
+.secondaryText {
+    font-size: 1.5em;
+}
+
+.vertical-center {
+    margin-bottom: 0; 
+    min-height: 100%;
+    min-height: 100vh;
+    display: flex; 
+    align-items : center;
+    width: 100%;
+    justify-content : center;
+}
+
+.potContainer{
+    min-height:300px;
+    max-height:300px;
+    min-width: 300px;
+    max-width: 300px;
+}
+
+.pot{
+    width: 300px;
+}
+
+@keyframes flamesAnimation {
+    from {left: -1%;}
+    to {left: 10%;}
+}
+
+.potFlame {
+    position: absolute;
+    top: 10px;
+    width: 300px;
+    animation-name: flamesAnimation;
+    animation-delay: 1s;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-timing-function: ease-in-out;
+}
