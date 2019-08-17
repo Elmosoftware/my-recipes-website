@@ -10,7 +10,8 @@ import { ErrorLog } from '../model/error-log';
 export class LoggingService {
 
     private initOptions:any = {
-        dsn: environment.logging.dsn
+        dsn: environment.logging.dsn,
+        environment: environment.logging.environment
     }
 
     constructor(private auth: AuthService) {

@@ -10,7 +10,6 @@ import { MediaService } from './media-service';
 import { NavigationService } from './navigation-service';
 import { LoggingService } from "./logging-service";
 import { ConnectivityService, ConnectivityStatus } from './connectivity-service';
-import { stat } from 'fs';
 
 /**
  * This core class help inject common services to the app. 

@@ -20,7 +20,8 @@ export const environment = {
   },
   logging: {
     dsn: "https://a4ceb0478d5b47ad941bd909b9cb5451@sentry.io/1515105",
-    source: "Mi Cocina - Web"
+    source: "Mi Cocina - Web",
+    environment: 'staging'
   },
   connectivityCheck: {
     apiManagementFunction: "config-status/", 

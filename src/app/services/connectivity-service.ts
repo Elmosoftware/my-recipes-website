@@ -132,9 +132,11 @@ export class ConnectivityService implements OnDestroy {
       if (item.url == "API") {
         s.apiOn = !Boolean(item.error);
       }
-    });
 
-    s.lastError = data.lastError;
+      if (item.lastError) {
+        s.lastError = item.lastError;
+      }      
+    });    
 
     return s;
   }
@@ -168,7 +170,7 @@ export class ConnectivityStatus {
    * @param lastError ErrorLog objectthat contains the information for the last error sent to this service.
    */
   constructor(networkOn: boolean = window.navigator.onLine, apiOn: boolean = false,
-    wwwOn: boolean = false, lastError?: ErrorLog) {
+    wwwOn: boolean = false, lastError: ErrorLog = null) {
     this.networkOn = networkOn;
     this.apiOn = apiOn;
     this.wwwOn = wwwOn;

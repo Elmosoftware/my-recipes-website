@@ -20,6 +20,13 @@ export const environment = {
   },
   logging: {
     dsn: "https://e48585636b8b47e9851a756c9b327a73@sentry.io/1515102",
-    source: "Mi Cocina - Web"
-  }  
+    source: "Mi Cocina - Web",
+    environment: 'production'
+  },
+  connectivityCheck: {
+    apiManagementFunction: "config-status/", 
+    apiMethod: "GET",
+    wwwURL: "http://res.cloudinary.com/elmosoftware/image/upload/sample.jpg",
+    wwwMethod: "HEAD"
+  } 
 };
