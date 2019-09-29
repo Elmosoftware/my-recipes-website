@@ -1,54 +1,72 @@
 <!-- Navigation Bar -->
-<app-navigation-bar searchBoxEnabled="false" homePageFeaturesEnabled="false" adminMenuEnabled="false"></app-navigation-bar>
+<app-navigation-bar searchBoxEnabled="false" homePageFeaturesEnabled="false" adminMenuEnabled="false">
+</app-navigation-bar>
 
 <!-- Content -->
 <div class="container formPositioning pt-md-5 pt-sm-0 pt-0">
-  <h2>¿Qué es "Mi Cocina"?</h2>
-  <p class="lead my-5">Este sitio fue creado con el propósito de aprender nuevas, pero ya bien establecidas,
-    tecnologías de
-    desarrollo de sitios web y también nuevos servicios ahora disponibles que facilitan integrar
-    funcionalidad provista por terceros.
-  </p>
-  <p class="mt-3">
-    Utilizamos <a href="https://angular.io/docs">Angular</a>, una plataforma de Google para construir aplicaciones
-    web. <a href="https://getbootstrap.com/">Bootstrap</a> en nuestro frontend nos ayuda a crear un diseño moderno
-    y mobile oriented, y otros tantos componentes creados por la comunidad open source de desarrolladores y
-    disponibles en el repositorio público de <a href="https://www.npmjs.com/">NPM</a> nos ayudaron a crear "Mi Cocina".
-  </p>
-  <p class="mt-3">
-    Nuestro backend es un conjunto de REST web services desarrollados con <a href="https://nodejs.org/en/">Node.js</a>
-    y <a href="https://expressjs.com/">Express.js</a>. Para almacenar los datos de nuestros usuarios y en función
-    del tipo de información que vamos a almacenar, decidimos implementar <a href="https://www.mongodb.com/what-is-mongodb">Mongo
-      DB</a>, una base de datos escalable y orientada a documentos.
-  </p>
-  <p class="mt-3">
-    Nuestro código es open source, (no podía ser de otra forma), utilizamos un repositorio público de 
-    <a href="https://github.com/">GitHub</a>, el cual puede accederse <a href="https://github.com/Elmosoftware">aquí</a>.
-  </p>
-  <p class="mt-3">
-    Hacemos a su vez un uso intensivo de diferentes servicios en la nube que son muy interesantes a la vez que
-    generosos al ofrecernos una versión gratuita sin límite de tiempo.
-  </p>
-  <p class="mt-3">
-    Te invitamos a conocerlos e incorporarlos en tu próximo proyecto.
-  </p>
-  <div class="mt-4">
-    <ul>
-      <li class="mb-4"><a href="https://www.heroku.com/">HEROKU</a>: Serverless deployments en forma simple.</li>
-      <li class="mb-4"><a href="https://auth0.com/">Auth0</a>: Gestión de Autenticación y Autorización de
-        usuarios
-        completa ofreciendo también conectores a redes sociales.</li>
-      <li class="mb-4"><a href="https://www.mongodb.com/cloud/atlas">Mongo DB Atlas</a>: Nuestra Base de datos
-        en la nube.
-        ¡Incluyendo en la versión gratuita 500MB de espacio libre y un cluster!</li>
-      <li class="mb-4"><a href="https://cloudinary.com/">Cloudinary</a>: Manejo de imágenes y video en la nube
-        y posibilidad de uso como CDN.</li>
-    </ul>
+  <h2 class="mainText text-center">¿Qué es "Mi Cocina"?</h2>
+  <div class="col-auto text-center my-5">
+    <img src="../../assets/images/mi-cocina.svg" alt="Mi Cocina" class="logo">
   </div>
-  <p class="mt-4">
-      Pero lo más importante: <strong>¡Poder crear tus recetas y compartirlas con el mundo!</strong>
-  </p>
-  <p class="mt-3">
-      <a href="javascript:void(0)" (click)="goToHome()">Volver a nuestra home page</a>.
-  </p>
+  <div class="secondaryText text-justify my-5">Este sitio fue creado con el propósito de aprender 
+    nuevas, pero ya bien establecidas, tecnologías de
+    desarrollo de sitios web y también conocer e implementar servicios disponibles y gratuitos y su 
+    integración en aplicaciones Web modernas.
+  </div>
 </div>
+<p class="mt-3 mx-3">
+  Utilizamos <a href="https://angular.io/docs" target="_blank">Angular</a>, una plataforma de Google para construir aplicaciones
+  web. <a href="https://getbootstrap.com/" target="_blank">Bootstrap</a> en nuestro frontend nos ayuda a crear un diseño moderno
+  y mobile oriented, y otros tantos componentes creados por la comunidad open source de desarrolladores y
+  disponibles en el repositorio público de <a href="https://www.npmjs.com/" target="_blank">NPM</a> nos ayudaron a crear "Mi Cocina".
+</p>
+<p class="mt-3 mx-3">
+  Nuestro backend es un conjunto de REST web services desarrollados con <a href="https://nodejs.org/en/" target="_blank">Node.js</a>
+  y <a href="https://expressjs.com/" target="_blank">Express.js</a>. Para almacenar los datos de nuestros usuarios y en función
+  del tipo de información que vamos a almacenar, decidimos implementar <a
+    href="https://www.mongodb.com/what-is-mongodb" target="_blank">Mongo
+    DB</a>, una base de datos escalable y orientada a documentos.
+</p>
+<p class="mt-3 mx-3">
+  Nuestro código es open source, (no podía ser de otra forma), utilizamos un repositorio público de
+  <a href="https://github.com/" target="_blank">GitHub</a>, el cual puede 
+  accederse <a href="https://github.com/Elmosoftware" target="_blank">aquí</a>.
+</p>
+<p class="mt-3 mx-3">
+  Hacemos a su vez un uso intensivo de diferentes servicios en la nube que son muy interesantes a la vez que
+  generosos al ofrecernos una versión gratuita sin límite de tiempo.
+</p>
+<p class="mt-3 mx-3">
+  Te invitamos a conocerlos e incorporarlos en tu próximo proyecto.
+</p>
+<div class="mt-4 mx-3">
+  <ul>
+    <li class="mb-4"><a href="https://www.heroku.com/" target="_blank">HEROKU</a>: Serverless deployments 
+      en forma simple.</li>
+    <li class="mb-4"><a href="https://auth0.com/" target="_blank">Auth0</a>: Gestión de Autenticación y 
+      Autorización de usuarios completa ofreciendo también conectores a redes sociales.</li>
+    <li class="mb-4"><a href="https://www.mongodb.com/cloud/atlas" target="_blank">Mongo DB Atlas</a>: 
+      Nuestra Base de datos en la nube.
+      ¡Incluyendo en la versión gratuita 500MB de espacio libre y un cluster!</li>
+    <li class="mb-4"><a href="https://cloudinary.com/" target="_blank">Cloudinary</a>: Manejo de imágenes 
+      y video en la nube y posibilidad de uso como CDN.</li>
+    <li class="mb-4"><a href="https://trello.com/" target="_blank">Trello</a>: A traves de listas 
+      personalizables te permite fácilmente organizar las tareas de tu proyecto.</li>
+    <li class="mb-4"><a href="https://www.qatouch.com/" target="_blank">QA Touch</a>: Herramienta online 
+      para administrar tus ciclos de testing.</li>
+    <li class="mb-4"><a href="https://inkscape.org/" target="_blank">Inkscape</a>: Crea tus propios SVG!, 
+      El logo de este sitio fué creado con esta herramienta.</li>
+    <li class="mb-4"><a href="https://sentry.io" target="_blank">Sentry</a>: Te ayuda a registrar los errores de tu aplicación
+      en forma sencilla, categorizandolos y agrupandolos por sus ocurrencias. Se integra fácilmente
+      con aplicaciones Node.JS y Angular.</li>
+  </ul>
+</div>
+<p class="mt-4 mx-3">
+  Pero lo más importante:
+</p>
+<p class="mt-4 mx-3 text-center">
+  <span class="secondaryText"><strong>¡Poder crear tus recetas y compartirlas con el mundo!</strong></span>
+</p>
+<p class="mt-4 mx-3">
+  <a href="javascript:void(0)" (click)="goToHome()">Volver a nuestra home page</a>.
+</p>
