@@ -2,13 +2,17 @@ import { SEARCH_TYPE } from "./search-type";
 import { SearchServiceFactory } from "./search-service-factory";
 import { SearchServiceInterface } from "./search-service";
 import { Recipe } from '../model/recipe';
+import { EntityServiceFactory } from './entity-service-factory';
 
 describe("SearchService Class", () => {
 
   let ss: SearchServiceInterface<Recipe>; 
 
   beforeEach(() => {
-    let sf = new SearchServiceFactory(null);
+    let mockEntityServiceFactory = {
+      getService: (entityName) => { return new Object(); }
+    }
+    let sf = new SearchServiceFactory((mockEntityServiceFactory as EntityServiceFactory), null);
     ss = sf.getService(SEARCH_TYPE.Text);
   });
 
