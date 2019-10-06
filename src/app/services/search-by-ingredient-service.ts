@@ -52,16 +52,22 @@ export class SearchByIngredientService extends SearchServiceBase<Recipe> {
                     let recipes: Recipe[] = [];
 
                     parser.entities.forEach((item: RecipeIngredient) => {
-                        //Because we are searching "RecipeIngredients", even when we populate the results, the 
-                        //ingredient data is below 2nd level subdocument so didn´t get populated. 
-                        //Then we need to copy this data from the RecipeIngredient to the Recipe:
-                        item.recipe.ingredients = [];
-                        item.recipe.ingredients.push(new RecipeIngredient());
-                        item.recipe.ingredients[0].ingredient = item.ingredient;
-                        item.recipe.ingredients[0].amount = item.amount;
-                        item.recipe.ingredients[0].unit = item.unit;
 
-                        recipes.push(item.recipe);
+                        //If for some reason the target Recipe was deleted, (maybe manually), we must 
+                        //avoid the page to be broken. 
+                        //For that reason we will skip the search result if the recipe id is not there:
+                        if (item.recipe) {
+                            //Because we are searching "RecipeIngredients", even when we populate the results, the 
+                            //ingredient data is below 2nd level subdocument so didn´t get populated. 
+                            //Then we need to copy this data from the RecipeIngredient to the Recipe:
+                            item.recipe.ingredients = [];
+                            item.recipe.ingredients.push(new RecipeIngredient());
+                            item.recipe.ingredients[0].ingredient = item.ingredient;
+                            item.recipe.ingredients[0].amount = item.amount;
+                            item.recipe.ingredients[0].unit = item.unit;
+
+                            recipes.push(item.recipe);
+                        }
                     })
 
                     if (highlightKeywords) {
