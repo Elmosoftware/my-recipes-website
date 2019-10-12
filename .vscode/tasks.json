@@ -25,11 +25,5 @@
             "type": "npm",
             "script": "startStage"
         }
-        // {
-        //     "label": "Staging Build and Run",
-        //     "type": "npm",
-        //     "script": "buildAndRunStage",
-        //     "problemMatcher": []
-        // }
     ]
 }
