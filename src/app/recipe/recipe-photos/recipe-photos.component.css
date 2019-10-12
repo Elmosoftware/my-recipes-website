@@ -15,9 +15,9 @@
     position: relative;
     left: 390px;
     top: 15px;
-    max-height: fit-content;
+    max-height: 31px;
     z-index: 1000;
-    box-shadow: 1px 1px 12px 7px rgba(182,182,182,0.75);
+    box-shadow: 0px 0px 5px 9px rgba(182,182,182,0.75);
 }
 
 .coverImageOption{
@@ -29,7 +29,7 @@
 }
 
 ::ng-deep .mat-radio-container {
-    box-shadow: 1px 1px 12px 7px rgba(182,182,182,0.75);
+    box-shadow: 0px 0px 5px 9px rgba(182,182,182,0.75);
 }
 
 .pictureCaption{
