@@ -63,8 +63,8 @@ export class RecipeIngredientsComponent implements OnInit, RecipeSubcomponentInt
   newRecipeIngredient: RecipeIngredient;
   compatibleUnits: Entity[];
 
-  constructor(private core: CoreService,
-    private cache: Cache) { }
+  constructor(public core: CoreService,
+    public cache: Cache) { }
 
   ngOnInit() {
     this.compatibleUnits = [];
@@ -167,12 +167,6 @@ export class RecipeIngredientsComponent implements OnInit, RecipeSubcomponentInt
       else {
         ingredientId = recipeIngredient.ingredient._id;
       }
-
-      // //If the ingredient was already saved, we need to mark it for deletion as soon the Recipe is saved:
-      // if (id == ingredientId && recipeIngredient._id) {
-      //   this.itemDeleted.emit(recipeIngredient);
-      //   this.setAsDirty();
-      // }
 
       if (ingredientId == id) {
         //If the ingredient was already saved, we need to mark it for deletion as soon the Recipe is saved:

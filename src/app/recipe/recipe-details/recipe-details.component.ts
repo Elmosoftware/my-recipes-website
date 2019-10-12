@@ -7,7 +7,6 @@ import { Recipe } from 'src/app/model/recipe';
 import { CoreService } from "../../services/core-service";
 import { Cache } from "../../shared/cache/cache";
 import { RECIPE_TABS } from '../recipe-tabs';
-// import { Level } from 'src/app/model/level';
 
 @Component({
   selector: 'app-recipe-details',
@@ -89,8 +88,8 @@ export class RecipeDetailsComponent implements OnInit, RecipeSubcomponentInterfa
     }
   }
 
-  constructor(private core: CoreService,
-    private cache: Cache) {
+  constructor(public core: CoreService,
+    public cache: Cache) {
   }
 
   ngOnInit() {

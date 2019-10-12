@@ -15,10 +15,21 @@
             "script": "startProd"
         },
         {
-            "label": "Staging Build and Run",
+            "label": "Staging Build",
             "type": "npm",
-            "script": "buildAndRunStage",
+            "script": "buildStage",
             "problemMatcher": []
+        },
+        {
+            "label": "Staging RUN",
+            "type": "npm",
+            "script": "startStage"
         }
+        // {
+        //     "label": "Staging Build and Run",
+        //     "type": "npm",
+        //     "script": "buildAndRunStage",
+        //     "problemMatcher": []
+        // }
     ]
 }

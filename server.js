@@ -1,6 +1,7 @@
 const path = require('path');
 const express = require('express');
 const app = express();
+const outputFolder = "/dist/Website"
 
 /*
 // If an incoming request uses
@@ -24,12 +25,12 @@ app.use(forceSSL());
 
 // Run the app by serving the static files
 // in the dist directory
-app.use(express.static(__dirname + '/dist'));
+app.use(express.static(__dirname + outputFolder));
 
 // For all GET requests, send back index.html
 // so that PathLocationStrategy can be used
 app.get('/*', function(req, res) {
-  res.sendFile(path.join(__dirname + '/dist/index.html'));
+  res.sendFile(path.join(__dirname + outputFolder + '/index.html'));
 });
 
 // Start the app by listening on the default
@@ -46,7 +47,7 @@ app.listen(process.env.PORT || 8080, () => {
       =============================================================\n`)
   }
 
-  console.log(`Executing on folder: ${__dirname}`);
+  console.log(`Executing on folder: ${__dirname + outputFolder}`);
   console.log(`Executing script: ${__filename}`);
   console.log(`\nServer is ready!\n`);
 });
