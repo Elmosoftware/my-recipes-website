@@ -8,7 +8,7 @@ import { CoreService } from "../services/core-service";
 import { DataLossPreventionInterface } from "../services/data-loss-prevention-guard";
 import { WizardComponent } from "../shared/wizard/wizard.component";
 import { EntityService } from "../services/entity-service";
-import { APIQueryParams, QUERY_PARAM_OWNER } from "../services/api-query-params";
+import { APIQueryParams, QUERY_PARAM_OWNER, QUERY_PARAM_PUB } from "../services/api-query-params";
 import { APIResponseParser } from "../services/api-response-parser";
 import { Recipe } from "../model/recipe";
 import { RecipeIngredient } from "../model/recipe-ingredient";
@@ -95,6 +95,7 @@ export class RecipeComponent implements OnInit, DataLossPreventionInterface {
 
     let q: APIQueryParams = new APIQueryParams();
     q.pop = "true";
+    q.pub = QUERY_PARAM_PUB.all;
     q.owner = QUERY_PARAM_OWNER.me; //We need to ensure the user can edit only his own recipes.
 
     this.isNewRecipe = !this.route.snapshot.paramMap.get("id") || forceNewRecipe;
