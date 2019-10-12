@@ -3,7 +3,7 @@ import { ActivatedRoute } from "@angular/router";
 
 import { CoreService } from "../services/core-service";
 import { EntityService } from "../services/entity-service";
-import { APIQueryParams, QUERY_PARAM_PUB } from "../services/api-query-params";
+import { APIQueryParams, QUERY_PARAM_PUB, QUERY_PARAM_OWNER } from "../services/api-query-params";
 import { Entity } from "../model/entity";
 import { APIResponseParser } from "../services/api-response-parser";
 import { ConfirmDialogConfiguration } from "../standard-dialogs/standard-dialog.service";
@@ -64,7 +64,10 @@ export class EntitiesComponent implements OnInit {
 
     if (entityId) {
 
-      let query = new APIQueryParams("false")
+      let query = new APIQueryParams();
+      query.pop = "false";
+      query.pub = QUERY_PARAM_PUB.all;
+      query.owner = QUERY_PARAM_OWNER.any;
 
       this.svc.get(entityId, query)
         .subscribe(data => {
