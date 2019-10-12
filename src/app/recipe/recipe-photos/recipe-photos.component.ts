@@ -82,6 +82,12 @@ export class RecipePhotosComponent implements OnInit, RecipeSubcomponentInterfac
 
     return ret;
   }
+  set selectedCoverId(value: string) {
+    //This is related to: BUG #78 Error when trying to select the picture as cover, 
+    //(https://trello.com/c/n6oVl8Cu/90-78-error-when-trying-to-select-the-picture-as-cover)
+    //This was not able to reproduce but the setter was added to avoid it in the future.
+    //Change in the selected cover id is made by the "selectedCoverChange" method.
+  }
 
   constructor(private core: CoreService) {
     this.core.subscription.getGlobalErrorEmitter()
