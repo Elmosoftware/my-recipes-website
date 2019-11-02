@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 
@@ -27,16 +27,16 @@ export class RecipePublishingComponent implements OnInit, RecipeSubcomponentInte
   @Output("dataChanged") dataChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   get isValid(): boolean {
-    return this.form.valid;
+    return (this.form) ? this.form.valid : true;
   };
 
   get isDirty(): boolean {
-    return this.form.dirty;
+    return (this.form) ? this.form.dirty : false;
   }
 
   //#endregion
 
-  @ViewChild("publishedForm") form: FormGroup;
+  @ViewChild("publishedForm", { static: false }) form: FormGroup;
 
   set isPublished(value: boolean) {
 
@@ -70,19 +70,20 @@ export class RecipePublishingComponent implements OnInit, RecipeSubcomponentInte
   }
 
   ngOnInit() {
-
-    this.form.valueChanges
-      .subscribe((value) => {
-        if (this.isDirty) {
-          this.dataChanged.emit(true);
-        }
-      })
-
     if (this.resetSignal) {
       this.resetSignal
         .subscribe(() => {
           this.form.reset();
         })
     }
+  }
+
+  ngAfterviewInit() {
+    this.form.valueChanges
+      .subscribe((value) => {
+        if (this.isDirty) {
+          this.dataChanged.emit(true);
+        }
+      })
   }
 }

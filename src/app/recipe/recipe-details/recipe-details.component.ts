@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, AfterViewInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 
@@ -28,16 +28,16 @@ export class RecipeDetailsComponent implements OnInit, RecipeSubcomponentInterfa
   @Output("dataChanged") dataChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   get isValid(): boolean {
-    return this.form.valid;
+    return (this.form) ? this.form.valid : true;
   };
 
   get isDirty(): boolean {
-    return this.form.dirty;
+    return (this.form) ? this.form.dirty : false;
   }
 
   //#endregion
 
-  @ViewChild("detailsForm") form: FormGroup;
+  @ViewChild("detailsForm", { static: false }) form: FormGroup;
 
   get preparationFriendlyTime(): string {
     let ret: string = "";
@@ -58,7 +58,7 @@ export class RecipeDetailsComponent implements OnInit, RecipeSubcomponentInterfa
     }
     else {
       this.model.level = value;
-    }    
+    }
   }
 
   get modelLevel(): any {
@@ -68,7 +68,7 @@ export class RecipeDetailsComponent implements OnInit, RecipeSubcomponentInterfa
     else {
       return this.model.level;
     }
-  
+
   }
   set modelMealtype(value) {
     if (this.model._id) {
@@ -76,7 +76,7 @@ export class RecipeDetailsComponent implements OnInit, RecipeSubcomponentInterfa
     }
     else {
       this.model.mealType = value;
-    }    
+    }
   }
 
   get modelMealtype(): any {
@@ -94,11 +94,11 @@ export class RecipeDetailsComponent implements OnInit, RecipeSubcomponentInterfa
 
   ngOnInit() {
 
-    this.form.valueChanges.subscribe((value) => {
-      if (this.isDirty) {
-        this.dataChanged.emit(true);
-      }
-    })
+    // this.form.valueChanges.subscribe((value) => {
+    //   if (this.isDirty) {
+    //     this.dataChanged.emit(true);
+    //   }
+    // })
 
     if (this.resetSignal) {
       this.resetSignal
@@ -106,5 +106,13 @@ export class RecipeDetailsComponent implements OnInit, RecipeSubcomponentInterfa
           this.form.reset();
         })
     }
+  }
+
+  ngAfterViewInit() {
+    this.form.valueChanges.subscribe((value) => {
+      if (this.isDirty) {
+        this.dataChanged.emit(true);
+      }
+    })
   }
 }

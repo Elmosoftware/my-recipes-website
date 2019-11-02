@@ -57,7 +57,7 @@ export class RecipeIngredientsComponent implements OnInit, RecipeSubcomponentInt
 
   //#endregion
 
-  @ViewChild("ingredientsForm") form: FormGroup;
+  @ViewChild("ingredientsForm", {static: false}) form: FormGroup;
 
   svcIngredient: EntityService;
   newRecipeIngredient: RecipeIngredient;

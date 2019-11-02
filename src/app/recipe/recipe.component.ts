@@ -23,7 +23,7 @@ import { ConfirmDialogConfiguration } from '../standard-dialogs/standard-dialog.
 })
 export class RecipeComponent implements OnInit, DataLossPreventionInterface {
 
-  @ViewChild('wizard') wizard: WizardComponent;
+  @ViewChild('wizard', {static: false}) wizard: WizardComponent;
 
   activeTab: RECIPE_TABS;
   activatedTabSignal: BehaviorSubject<RECIPE_TABS>;

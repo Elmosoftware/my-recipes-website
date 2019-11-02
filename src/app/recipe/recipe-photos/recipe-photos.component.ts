@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { Observable } from 'rxjs';
@@ -38,7 +38,7 @@ export class RecipePhotosComponent implements OnInit, RecipeSubcomponentInterfac
   @Output("dataChanged") dataChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   get isValid(): boolean {
-    return this.form.valid;
+    return (this.form) ? this.form.valid : true;
   };
 
   private _isDirty: boolean = false;
@@ -49,7 +49,7 @@ export class RecipePhotosComponent implements OnInit, RecipeSubcomponentInterfac
 
   //#endregion
 
-  @ViewChild("photosForm") form: FormGroup;
+  @ViewChild("photosForm", { static: false }) form: FormGroup;
   uploadProgress: number;
   uploadStatus: UPLOAD_STATUS;
 
@@ -85,7 +85,7 @@ export class RecipePhotosComponent implements OnInit, RecipeSubcomponentInterfac
   set selectedCoverId(value: string) {
     //This is related to: BUG #78 Error when trying to select the picture as cover, 
     //(https://trello.com/c/n6oVl8Cu/90-78-error-when-trying-to-select-the-picture-as-cover)
-    //This was not able to reproduce but the setter was added to avoid it in the future.
+    //I was not able to reproduce but the setter was added to avoid it in the future.
     //Change in the selected cover id is made by the "selectedCoverChange" method.
   }
 
@@ -96,14 +96,7 @@ export class RecipePhotosComponent implements OnInit, RecipeSubcomponentInterfac
 
   ngOnInit() {
     this.uploadStatus = UPLOAD_STATUS.Ready;
-    
-    this.form.valueChanges
-      .subscribe((value) => {
-        if (this.form.dirty) {
-          this.setAsDirty();
-        }
-      })
-    
+
     if (this.resetSignal) {
       this.resetSignal
         .subscribe(() => {
@@ -111,6 +104,15 @@ export class RecipePhotosComponent implements OnInit, RecipeSubcomponentInterfac
           this.form.reset();
         })
     }
+  }
+
+  ngAfterViewInit() {
+    this.form.valueChanges
+      .subscribe((value) => {
+        if (this.form.dirty) {
+          this.setAsDirty();
+        }
+      })
   }
 
   setAsDirty(): void {
