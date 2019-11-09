@@ -26,7 +26,7 @@ export const environment = {
   connectivityCheck: {
     apiManagementFunction: "config-status/", 
     apiMethod: "GET",
-    wwwURL: "http://res.cloudinary.com/elmosoftware/image/upload/sample.jpg",
+    wwwURL: "https://res.cloudinary.com/elmosoftware/image/upload/sample.jpg",
     wwwMethod: "HEAD"
   } 
 };
