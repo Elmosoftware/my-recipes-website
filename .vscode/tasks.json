@@ -6,7 +6,7 @@
         {
             "label": "Production Build",
             "type": "npm",
-            "script": "postinstall",
+            "script": "heroku-postbuild",
             "problemMatcher": []
         },
         {
