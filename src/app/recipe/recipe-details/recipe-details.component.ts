@@ -94,12 +94,6 @@ export class RecipeDetailsComponent implements OnInit, RecipeSubcomponentInterfa
 
   ngOnInit() {
 
-    // this.form.valueChanges.subscribe((value) => {
-    //   if (this.isDirty) {
-    //     this.dataChanged.emit(true);
-    //   }
-    // })
-
     if (this.resetSignal) {
       this.resetSignal
         .subscribe(() => {
