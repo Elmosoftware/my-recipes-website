@@ -124,6 +124,6 @@ export class Helper {
             ret = sep + fileName.split(sep).pop();
         }
 
-        return ret;
+        return ret.toLowerCase();
     }
 }

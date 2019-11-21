@@ -54,6 +54,9 @@ describe("Helper Class", () => {
         it("Must return the file extension on a file without name", () => {
             expect(h.getFileExtension(".ext")).toBe(".ext");
         });
+        it("Must return the file extension always in lowercase", () => {
+            expect(h.getFileExtension("filewithextension.EXT")).toBe(".ext");
+        });
     });
 });
 
