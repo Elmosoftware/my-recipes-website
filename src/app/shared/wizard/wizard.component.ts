@@ -62,6 +62,10 @@ export class WizardComponent implements AfterContentInit {
     return this._isCompleted;
   }
 
+  get isDirty(): boolean {
+    return Boolean(this.steps.find(step => step.isDirty));
+  }
+
   get activeStep(): WizardStepComponent {
     return this.steps.find(step => step.isActive);
   }

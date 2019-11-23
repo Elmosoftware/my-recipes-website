@@ -10,22 +10,22 @@
           [resetSignal]="getResetSignal()" #recipeDetails>
         </app-recipe-details>
       </wizard-step>
-      <wizard-step [title]="ingredientsTabName"
-        [isValid]="recipeIngredients.isValid" [isDirty]="recipeIngredients.isDirty">
+      <wizard-step [title]="ingredientsTabName" [isValid]="recipeIngredients.isValid"
+        [isDirty]="recipeIngredients.isDirty">
         <app-recipe-ingredients [model]="model" (dataChanged)="onDataChangedHandler($event)"
-          (itemDeleted)="onRecipeIngredientDeleted($event)" [resetSignal]="getResetSignal()" 
+          (itemDeleted)="onRecipeIngredientDeleted($event)" [resetSignal]="getResetSignal()"
           [activationSignal]="getActivatedTabSignal()" #recipeIngredients>
         </app-recipe-ingredients>
       </wizard-step>
-      <wizard-step [title]="directionsTabName"
-        [isValid]="recipeDirections.isValid" [isDirty]="recipeDirections.isDirty">
+      <wizard-step [title]="directionsTabName" [isValid]="recipeDirections.isValid"
+        [isDirty]="recipeDirections.isDirty">
         <app-recipe-directions [model]="model" (dataChanged)="onDataChangedHandler($event)"
           [activationSignal]="getActivatedTabSignal()" [resetSignal]="getResetSignal()" #recipeDirections>
         </app-recipe-directions>
       </wizard-step>
       <wizard-step [title]="photosTabName" [isDirty]="recipePhotos.isDirty">
-        <app-recipe-photos [model]="model" (dataChanged)="onDataChangedHandler($event)" 
-        (itemDeleted)="onRecipePictureDeleted($event)" [resetSignal]="getResetSignal()" #recipePhotos>
+        <app-recipe-photos [model]="model" (dataChanged)="onDataChangedHandler($event)"
+          (itemDeleted)="onRecipePictureDeleted($event)" [resetSignal]="getResetSignal()" #recipePhotos>
         </app-recipe-photos>
       </wizard-step>
       <wizard-step [title]="publishingTabName" [isDirty]="recipePublishing.isDirty">
@@ -50,15 +50,30 @@
               <div class="align-self-center py-3">
                 <div class="alert alert-info px-5 my-3" role="alert">
                   <div class="row justify-content-center">
-                    <h3 class="alert-heading my-4">¡Perfecto, ya casi terminamos!</h3>
+                    <div *ngIf="modelIsDirty; else noChanges">
+                      <h3 class="alert-heading my-4">¡Perfecto, ya casi terminamos!</h3>
+                    </div>
+                    <ng-template #noChanges>
+                      <h3 class="alert-heading my-4">No has hecho ningún cambio a tu receta.</h3>
+                    </ng-template>
                   </div>
                   <p *ngIf="isNewRecipe; else updatedRecipe">
                     Un simple click en el botón finalizar y guardaremos tu nueva receta.
                   </p>
                   <ng-template #updatedRecipe>
-                    <p>
+                      <div *ngIf="modelIsDirty; else noChangesUpdate">
+                          <p>
+                              Un simple click en el botón finalizar y actualizaremos tu receta con los cambios que realizaste.
+                            </p>
+                        </div>
+                        <ng-template #noChangesUpdate>
+                            <p>
+                                Puedes hacer click en el botón Anterior para volver sobre las imágenes, ingredientes, pasos y detalles de tu preparación.
+                              </p>
+                        </ng-template>
+                    <!-- <p>
                       Un simple click en el botón finalizar y actualizaremos tu receta con los cambios que realizaste.
-                    </p>
+                    </p> -->
                   </ng-template>
                 </div>
               </div>

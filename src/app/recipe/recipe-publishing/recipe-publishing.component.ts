@@ -78,7 +78,7 @@ export class RecipePublishingComponent implements OnInit, RecipeSubcomponentInte
     }
   }
 
-  ngAfterviewInit() {
+  ngAfterViewInit() {
     this.form.valueChanges
       .subscribe((value) => {
         if (this.isDirty) {

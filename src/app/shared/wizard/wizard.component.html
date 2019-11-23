@@ -13,6 +13,6 @@
   <div *ngIf="!(hideButtons || isCompleted)" class="card-footer">
       <button type="button" class="btn btn-primary float-left" (click)="previous()" [hidden]="!hasPrevStep || !activeStep.showPrev">Anterior</button>
       <button type="button" class="btn btn-primary float-right" (click)="next()" [disabled]="!activeStep.isValid" [hidden]="!hasNextStep || !activeStep.showNext">Siguiente</button>
-      <button type="button" class="btn btn-primary float-right" (click)="complete()" [disabled]="!activeStep.isValid" [hidden]="hasNextStep">Finalizar</button>
+      <button type="button" class="btn btn-primary float-right" (click)="complete()" [disabled]="!activeStep.isValid || !isDirty" [hidden]="hasNextStep">Finalizar</button>
   </div>
 </div>
