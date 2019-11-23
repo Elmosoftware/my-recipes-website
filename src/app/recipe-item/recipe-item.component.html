@@ -4,7 +4,7 @@
       <img [src]="getCover(recipe)">
     </div>
     <div class="col">
-      <div class="recipeTitle" [innerHtml]="recipe.name"></div>
+      <a class="recipeTitle" href="javascript:void(0)" (click)="goToRecipeView(recipe)" [innerHtml]="recipe.name"></a>
       <div class="recipeDescription" [innerHtml]="getDescription(recipe)"></div>
       <ul *ngIf="options.displayIngredients" class="mt-1">
         <li *ngFor="let ing of recipe.ingredients">
@@ -31,9 +31,9 @@
           (click)="goToUserDetails(recipe)">{{ recipe.createdBy.name }}</a></small>
     </div>
     <div class="col-auto">
-      <button *ngIf="!options.hideLink" class="btn btn-secondary" type="button" (click)="goToRecipeView(recipe)">
-        <i class="fa fa-file-text-o" aria-hidden="true" data-toggle="tooltip" data-placement="top"
-          title="Ver todos los datos  de esta receta."></i>
+      <button *ngIf="!options.hideLink && isOwner(recipe)" class="btn btn-primary" type="button" (click)="editRecipe(recipe)">
+        <i class="fa fa-pencil-square-o" aria-hidden="true" data-toggle="tooltip" data-placement="top"
+          title="Editar esta receta."></i>
       </button>
     </div>
   </div>

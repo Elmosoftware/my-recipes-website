@@ -31,6 +31,17 @@ export class RecipeItemComponent implements OnInit {
     }
   }
 
+  isOwner(recipe: Recipe) :boolean {
+    let ret: boolean = false;
+
+    if (this.core.auth.isAuthenticated) {
+      ret = recipe.createdBy._id == this.core.auth.userProfile.user._id;
+    }
+    
+    return ret;
+  }
+
+
   getDescription(recipe: Recipe): string {
     return (this.options.displayFullDescription) ? recipe.description : this.core.helper.getShortText(recipe.description);
   }
@@ -47,5 +58,10 @@ export class RecipeItemComponent implements OnInit {
   goToRecipeView(recipe: Recipe) {
     this.core.helper.removeTooltips(this.core.zone);
     this.core.navigate.toRecipeView(recipe._id);
+  }
+
+  editRecipe(recipe: Recipe){
+    this.core.helper.removeTooltips(this.core.zone);
+    this.core.navigate.toRecipe(recipe._id);
   }
 }
