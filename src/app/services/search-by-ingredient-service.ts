@@ -144,8 +144,6 @@ export class SearchByIngredientService extends SearchServiceBase<Recipe> {
         q.filter = JSON.stringify({ name: { $regex: text, $options: "i" } });
         q.top = "5"
 
-        console.log(`Value:${text}, Search type:${this.searchType}`);
-
         return this.svcIngredients.get("", q)
             .pipe(
                 map(data => {

@@ -121,7 +121,6 @@ export class RecipePhotosComponent implements OnInit, RecipeSubcomponentInterfac
   }
 
   handleFileDrop($event: FileList) {
-    console.log("DROPPED!!!");
 
     if ($event.length > this.remainingPictures) {
       this.core.toast.showWarning(`Intentaste agregar ${$event.length} imagenes, mientras que tu limite restante es de solo ${this.remainingPictures} ${(this.remainingPictures > 1) ? "imagenes" : "imagen"}.`,
@@ -135,7 +134,6 @@ export class RecipePhotosComponent implements OnInit, RecipeSubcomponentInterfac
     this.core.media.uploadPictures($event, MediaTransformations.uploadedPicturesView, (respData) => {
 
       if (respData.progress) {
-        console.log(`Isdone:${respData.progress.isDone}, %:${respData.progress.percentage}, total:${respData.progress.totalBytes}`);
         this.uploadProgress = respData.progress.percentage;
       }
       else {

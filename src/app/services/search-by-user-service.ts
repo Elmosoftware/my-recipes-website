@@ -107,8 +107,6 @@ export class SearchByUserService extends SearchServiceBase<Recipe> {
         q.filter = JSON.stringify({ name: { $regex: text, $options: "i" } });
         q.top = "5"
 
-        console.log(`Value:${text}, Search type:${this.searchType}`);
-
         return this.svcAuth.getUsersInfo("", q)
             .pipe(
                 map(data => {

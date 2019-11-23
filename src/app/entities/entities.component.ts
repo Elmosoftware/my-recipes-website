@@ -60,7 +60,6 @@ export class EntitiesComponent implements OnInit {
   openDialog(entityId: string): void {
 
     this.core.helper.removeTooltips(this.core.zone);
-    console.log(`Received Entity ID: "${entityId}"`);
 
     if (entityId) {
 
@@ -94,18 +93,12 @@ export class EntitiesComponent implements OnInit {
 
     this.core.dialog.showEditEntityDialog(this.type, entity)
       .subscribe(result => {
-
-        console.log(`Dialog closed. Result: "${result}" `);
-
         //If the user does not cancelled the dialog:
         if (typeof result === "object") {
-          console.log(`DATA: Name= "${result.name}"`);
           this.svc.save(result)
             .subscribe(data => {
 
               let respData = new APIResponseParser(data);
-              console.log(`After Save`);
-              console.log(`Error:"${respData.error}", Payload:"${respData.entities}"`);
 
               if (!respData.error) {
                 this.core.toast.showSuccess("Los cambios se guardaron con éxito!");
@@ -123,16 +116,11 @@ export class EntitiesComponent implements OnInit {
       "¿Confirma la eliminación del item seleccionado?"))
       .subscribe(result => {
 
-        console.log(`Dialog closed. Result: "${result}" `);
-
         if (result == 1) {
           this.svc.delete(entityId)
             .subscribe(data => {
 
               let respData = new APIResponseParser(data);
-
-              console.log(`After Delete`);
-              console.log(`Error:"${respData.error}", Payload:"${respData.entities}"`);
 
               if (!respData.error) {
                 this.core.toast.showSuccess("El elemento ha sido eliminado.");

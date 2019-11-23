@@ -69,7 +69,6 @@ export class MyRecipesComponent implements OnInit {
   }
 
   onScrollEndHandler(e: SCROLL_POSITION) {
-    console.log(`Scrolling! ${e}`);
     this.svcInfScroll.onScrollEndHandler(e);
   }
 
@@ -99,7 +98,6 @@ export class MyRecipesComponent implements OnInit {
       delete this.mealTypesFilter[id];
     }
 
-    console.log("STARTING NEW SEARCH!");
     this.reset();
   }
 
@@ -115,7 +113,6 @@ export class MyRecipesComponent implements OnInit {
 
   toggleNotPublishedOnly() {
     this.notPublishedOnlyFilter = !this.notPublishedOnlyFilter;
-    console.log("STARTING NEW SEARCH!");
     this.reset();
   }
 

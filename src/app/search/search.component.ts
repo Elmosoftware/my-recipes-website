@@ -118,7 +118,6 @@ export class SearchComponent implements OnInit {
   }
 
   onScrollEndHandler(e: SCROLL_POSITION): void {
-    console.log(`Scrolling! ${e}`);
     this.svcInfScroll.onScrollEndHandler(e);
   }
 
@@ -127,14 +126,12 @@ export class SearchComponent implements OnInit {
   }
 
   onSearchHandler($event: SearchServiceInterface<Recipe>) {
-    console.log(`onSearchHandler() type:"${$event.searchType}", term:"${$event.term}", id:"${$event.id}"`);
     this.svcSearch.term = $event.term;
     this.svcSearch.id = $event.id;
     this.search();
   }
 
   search() {
-    console.log("STARTING NEW SEARCH!");
     this.resetSearch();
     this.fetchData(this.svcInfScroll.pageSize, 0);
   }

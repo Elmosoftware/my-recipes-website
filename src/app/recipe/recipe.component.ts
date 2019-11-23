@@ -218,7 +218,6 @@ export class RecipeComponent implements OnInit, DataLossPreventionInterface {
     //Perform here any initialization required when moving from one step to other:
     this.activeTab = parseRecipeTab(step.title);
     this.activatedTabSignal.next(this.activeTab);
-    console.log(`Tab "${this.activeTab}" is now active.`)
   }
 
   onDataChangedHandler($event) {

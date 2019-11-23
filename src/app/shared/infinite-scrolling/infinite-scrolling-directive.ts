@@ -73,20 +73,15 @@ export class InfiniteScrollingDirective {
       this._prevPerc = this._perc
       this._perc = this._getScrollingPercent(event);
 
-      // console.log(`perc: ${this._perc}, _prevPerc:${this._prevPerc}`)
-
       if (this._perc <= this.scrollUpTrigger && this._prevPerc > this.scrollUpTrigger) {
-        // console.log("TRIGGERING TOP!!!")
         this.scrollEnd.emit(SCROLL_POSITION.Top)
       }
       else if (this._perc >= this.scrollDownTrigger && this._prevPerc < this.scrollDownTrigger) {
-        // console.log("TRIGGERING BOTTOM!!!")
         this.scrollEnd.emit(SCROLL_POSITION.Bottom)
       }
 
       //If there was an effective scroll:
       if (this._perc != this._prevPerc) {
-        // console.log("Emiting 'scroll' event")
         this.scroll.emit(this._perc); 
       }
     }

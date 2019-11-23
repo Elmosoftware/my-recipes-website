@@ -43,6 +43,5 @@ export class CookbookComponent implements OnInit {
 
   onStepChanged(step) {
     //Perform here any initialization required when moving from one step to other:
-    console.log(`Tab "${step.title}" is now active.`)
   }
 }

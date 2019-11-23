@@ -65,14 +65,14 @@ export class Cache extends CacheRepository {
         if (!item.isValid) {
             item.refresh().then(data => {
                 item.value = data;
-                console.log(`CACHE REFRESHED for: ${item.key}`)
+                console.log(`Cache refreshed for: ${item.key}`)
             });
         }
     }
 
     public invalidateOne(key: CACHE_MEMBERS){
         let item: CacheItem = super.get(key);
-        console.log(`CACHE INVALIDATED for: ${item.key}`)
+        console.log(`Cache invalidated for: ${item.key}`)
         item.invalidate();
     }
 

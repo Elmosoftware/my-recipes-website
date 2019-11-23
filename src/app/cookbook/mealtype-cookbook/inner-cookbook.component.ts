@@ -82,12 +82,10 @@ export class InnerCookbookComponent implements OnInit {
 
   itemChange(ing: Ingredient) {
     this._selectedItem = ing;
-    console.log(`Active item id is: ${this._selectedItem.name} (${this._selectedItem._id}).`);
     this.search();
   }
 
   onScrollEndHandler(e: SCROLL_POSITION): void {
-    console.log(`Scrolling! ${e}`);
     this.svcInfScroll.onScrollEndHandler(e);
   }
 
