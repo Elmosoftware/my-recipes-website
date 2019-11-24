@@ -83,6 +83,8 @@ import { EditRecipeDirectionDialog } from "./standard-dialogs/edit-recipe-direct
 import { RecipeItemComponent } from './recipe-item/recipe-item.component';
 import { RecipePublishingComponent } from './recipe/recipe-publishing/recipe-publishing.component';
 import { LoginComponent } from './login/login.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -152,7 +154,8 @@ import { LoginComponent } from './login/login.component';
     NgxPageScrollCoreModule,
     InfiniteScrollingModule,
     DragDropModule,
-    MatRadioModule
+    MatRadioModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   entryComponents: [
     ConfirmDialogComponent,
