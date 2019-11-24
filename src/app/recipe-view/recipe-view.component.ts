@@ -8,6 +8,7 @@ import { Recipe } from "../model/recipe";
 import { RecipePicture } from '../model/recipe-picture';
 import { ConfirmDialogConfiguration } from "../standard-dialogs/standard-dialog.service";
 import { CarouselItem } from '../shared/carousel/carousel.component';
+import { APIQueryParams, QUERY_PARAM_PUB, QUERY_PARAM_OWNER } from '../services/api-query-params';
 
 @Component({
   selector: 'app-recipe-view',
@@ -28,13 +29,22 @@ export class RecipeViewComponent implements OnInit {
     private route: ActivatedRoute) { }
 
   ngOnInit() {
+
+    let q: APIQueryParams = new APIQueryParams();
+
     this.preparationMode = false;
     this.lastStepDone = 0;
     this.shoppingList = [];
     this.modelIsReady = false; //This acts like a flag to know when data retrieval process is ready or not.
     this.svc = this.core.entityFactory.getService("Recipe");
 
-    this.svc.get(this.route.snapshot.paramMap.get("id"), null)
+    q.pop = "true";
+
+    if (this.core.auth.isAuthenticated) {
+      q.pub = QUERY_PARAM_PUB.all;
+    }
+    
+    this.svc.get(this.route.snapshot.paramMap.get("id"), q)
       .subscribe(
         data => {
           let response: APIResponseParser = new APIResponseParser(data);
@@ -53,20 +63,20 @@ export class RecipeViewComponent implements OnInit {
           throw err
         });
   }
- 
-  get isOwner() :boolean {
+
+  get isOwner(): boolean {
     let ret: boolean = false;
 
     if (this.model && this.core.auth.isAuthenticated) {
       ret = this.model.createdBy._id == this.core.auth.userProfile.user._id;
     }
-    
+
     return ret;
   }
 
   get preparationFriendlyTime(): string {
     let ret: string = "";
-    
+
     if (this.model && this.model.estimatedTime) {
       ret = this.core.helper.estimatedFriendlyTime(this.model.estimatedTime);
     }
@@ -78,14 +88,14 @@ export class RecipeViewComponent implements OnInit {
     this.carouselPictures = [];
 
     if (this.model && this.model.pictures) {
-      
+
       this.model.pictures.forEach((pic: RecipePicture) => {
         let item: CarouselItem = new CarouselItem();
 
         item.imageSrc = this.core.media.getTransformationURL(pic.pictureId.publicId, pic.pictureId.cloudName)
         item.captionText = pic.caption
         this.carouselPictures.push(item);
-      })   
+      })
     }
   }
 
@@ -157,18 +167,18 @@ export class RecipeViewComponent implements OnInit {
     `);
     popupWin.document.close();
   }
-  
-  editRecipe(){
+
+  editRecipe() {
     this.core.helper.removeTooltips(this.core.zone);
     this.core.navigate.toRecipe(this.model._id);
   }
 
-  printRecipe(){
+  printRecipe() {
     this.core.helper.removeTooltips(this.core.zone);
     window.print();
   }
 
-  goToHome(){
+  goToHome() {
     this.core.navigate.toHome();
   }
 }
