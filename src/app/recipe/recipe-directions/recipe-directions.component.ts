@@ -219,15 +219,20 @@ export class RecipeDirectionsComponent implements OnInit, RecipeSubcomponentInte
 
   parseIngredientsInDirection(direction: string): string {
 
+    let words: Map<string, string>;
+
+    words = new Map();
+
     this.getRecipeIngredientsList().forEach((ingredient, i) => {
 
       let amount: number = this.model.ingredients[i].amount;
       let unit = this.getUnitFromCache(this.model.ingredients[i].unit)
       let unitAbbrev: string = (unit) ? (unit as any).abbrev : "";
 
-      direction = this.wordAnalyzer.searchAndReplaceWord(direction,
-        new Map([[ingredient, `<abbr title="Utilizando ${amount}${unitAbbrev} en esta preparación.">${ingredient}</abbr>`]]));
+      words.set(ingredient, `<abbr title="Utilizando ${amount}${unitAbbrev} en esta preparación.">${ingredient}</abbr>`);
     })
+
+    direction = this.wordAnalyzer.searchAndReplaceWord(direction, words);
 
     return direction;
   }

@@ -28,8 +28,12 @@
 </div>
 <ng-template #directionsList>
   <div class="alert alert-warning" role="alert" *ngIf="missingIngredients && missingIngredients.length > 0">
-    <strong>Te faltan ingredientes!</strong> Los siguientes aún no han sido incluidos en la preparación:
-    <i>{{ missingIngredients.join(", ") }}</i>
+    <strong>Es posible que te falten algunos ingredientes.</strong> No podemos encontrar los siguientes:
+    <ul class="mt-2 mb-2">
+        <li>{{ missingIngredients.join(", ") }}</li>
+    </ul>
+    <p>Recordá que este mensaje es solo una ayuda para que no se te olvide ninguno. 
+      Vas a poder guardar tu receta de todas formas, incluso cuando aún no esté terminada.</p>
   </div>
   <ul class="list-group simpleList pb-3">
     <li @filterVisibilityTrigger class="list-group-item" *ngFor="let dir of model.directions; let i = index">

@@ -24,6 +24,8 @@ describe("WordAnalyzer Class", () => {
 
         let word: string = "word";
         let word2: string = "secondword";
+        let expression: string = "composed word";
+        let expression2: string = "word";
 
         it("SINGLE WORD - Must return no matches if the argument 'text' is an empty string", () => {
             expect(w.searchWord("", word)).toEqual([]);
@@ -106,6 +108,15 @@ describe("WordAnalyzer Class", () => {
             expect(w.searchWord(`This is ${word2} and ${word} in a same sentence. And repeating here: ${word}, ${word2}.`, [word, word2],
                 { maxOcurrences: 1 }))
                 .toEqual([new SearchWordResults(word2, 8), new SearchWordResults(word, 23)]);
+        });
+        it(`EXPRESSION - Single match for ['${expression}', '${expression2}'] in text: 'This is a ${expression} in the middle.' -> Output: [{ word:'${expression}', position:10 }]`, () => {
+            expect(w.searchWord(`This is a ${expression} in the middle.`, [expression, expression2])).toEqual([new SearchWordResults(expression, 10)]);
+        });
+        it(`EXPRESSION - Multiple matches for ['${expression}', '${expression2}'] in text: 'This is ${expression} and ${expression2} in a same sentence. And repeating here: ${expression2}, ${expression}.' -> Output: [{ word:'${expression}', position:8 }, { word:'${expression2}', position:26 }, { word:'${expression}', position:71 }, { word:'${expression2}', position:86 }]`, () => {
+            expect(w.searchWord(`This is ${expression} and ${expression2} in a same sentence. And repeating here: ${expression}, ${expression2}.`, [expression, expression2]))
+                .toEqual([
+                    new SearchWordResults(expression, 8), new SearchWordResults(expression2, 26),
+                    new SearchWordResults(expression, 71), new SearchWordResults(expression2, 86)]);
         });
     });
     describe("searchAndReplaceWord()", () => {

@@ -65,6 +65,40 @@ export class WordAnalyzerService {
     }
 
     /**
+     * Return a boolean value that indicates if the provided index is part of the list of matches already found.
+     * @param index index to find.
+     * @param matches Collection of search word results already matched.
+     */
+    public isAlreadyMatched(index: number, matches: SearchWordResults[]): boolean {
+
+        let ret: boolean = false;
+
+        if (index >= 0 && matches && matches.find((value: SearchWordResults) => {
+                //If a previous match already cover the same area from the test, we must return true.
+                return value.position <= index && (value.position + value.word.length) - 1 >= index; 
+            })) {
+            ret = true;
+        }
+
+        return ret;
+    }
+
+    /**
+     * For comparison purposes is better to remove any accents and other diacritics like cedilla, 
+     * acute, grave, circumflex, diaeresis, etc.
+     * This function returns a new string without any of this special characters.
+     * @param text Text to normalize and remove accents and other diacritics.
+     */
+    public normalizeAndRemoveDiacritics(text: string): string {
+        //credit: https://stackoverflow.com/questions/990904/remove-accents-diacritics-in-a-string-in-javascript/37511463#37511463
+        if (!text) {
+            text = "";
+        }
+
+        return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    /**
      * Returns a number array with all the positions where the word appears in the specified text.
      * @param text Text to seek
      * @param word Word to find or an Array of words to find.
@@ -101,12 +135,26 @@ export class WordAnalyzerService {
         if (typeof words == "string") {
             words = new Array<string>(words);
         }
-        
+
         this.parseOptions(options);
 
         if (!options.caseSensitiveSearch) {
             text = text.toLowerCase();
         }
+
+        //We remove accents and other sort of special characters from the text to search:
+        text = this.normalizeAndRemoveDiacritics(text);
+
+        /*
+            We sort words to search by his length. In this way, we will have a fair chance to match 
+            all the words or expressions in the list.
+
+            e.g.: Suppose you have the following expressions to search for: ["error","error safe"]
+            In the following text: "The procedure is error safe in order to avoid an unexpected error."
+            By ordering by length, we will find first "error safe" in position 17th and then "error" in 60th.
+            If we do otherwise, we will first try for "error" and we assume is in both 17th and 60th.  
+        */
+        words = words.sort((a, b) => { return b.length - a.length })
 
         words.forEach((w, i) => {
 
@@ -115,6 +163,7 @@ export class WordAnalyzerService {
             let previousMatches: number;
 
             w = (!options.caseSensitiveSearch) ? w.toLowerCase() : w;
+            w = this.normalizeAndRemoveDiacritics(w);
             index = text.indexOf(w);
             previousMatches = matches.length;
 
@@ -134,17 +183,21 @@ export class WordAnalyzerService {
                     wordMatch = false;
                 }
 
-                if (wordMatch) {
+                //We need to check if this new index is already a match. 
+                //If that's the case, means that there is another word longer than this one and maybe 
+                //composed by parts of this one that was already identified. 
+                //Therefore this index is not valid:
+                if (wordMatch && !this.isAlreadyMatched(index, matches)) {
                     //We have a match!, adding it to our list of matches:
                     matches.push(new SearchWordResults(words[i], index));
                 }
 
-                //If we already found the maximim matches specified for each word search, we stop the search:
+                //If we already found the maximum matches specified for each word search, we stop the search:
                 if (options.maxOcurrences > 0 && matches.length == (previousMatches + options.maxOcurrences)) {
                     index = -1
                 }
-                else { 
-                    index = text.indexOf(w, index + w.length); //We continue looking for the word.
+                else {
+                    index = text.indexOf(w, index + w.length); //We continue looking for next occurrence of the word.
                 }
             }
         });
@@ -177,6 +230,9 @@ export class WordAnalyzerService {
 
         let ret: string = text;
         let pos: number = null;
+
+        word = this.normalizeAndRemoveDiacritics(word);
+        text = this.normalizeAndRemoveDiacritics(text);
 
         while (pos != -1) {
 
@@ -220,7 +276,7 @@ export class WordAnalyzerService {
         let matches: SearchWordResults[];
         let wordKeys: string[] = [];
         let ret: string = "";
-       
+
         if (!text || typeof text != "string") {
             return text;
         }
@@ -234,7 +290,7 @@ export class WordAnalyzerService {
         })
 
         this.parseOptions(options);
-        
+
         matches = this.searchWord(text, wordKeys, options);
 
         matches.forEach((match: SearchWordResults, i) => {
@@ -250,7 +306,7 @@ export class WordAnalyzerService {
             ret += text.slice(prev, match.position) + caseNewWord;
         });
 
-        ret += text.slice((matches[matches.length - 1] != undefined ? 
+        ret += text.slice((matches[matches.length - 1] != undefined ?
             matches[matches.length - 1].position + matches[matches.length - 1].word.length : 0));
 
         return ret;
@@ -337,9 +393,9 @@ export class WordAnalyzerService {
         }
 
         this.parseOptions(options);
-        
+
         matches = this.searchWord(text, words, options);
-        
+
         for (let i = 0; i < matches.length; i++) {
             let leftSep: string = options.matchesSeparator;
             let rightSep: string = options.matchesSeparator;
