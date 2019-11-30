@@ -4,6 +4,7 @@
 <!-- My Recipes component -->
 <a id="topSearch"></a>
 <div class="container-fluid formPositioning pt-md-5 pt-sm-0 pt-0">
+  
   <div class="filterStickyToFront alert accentBackground">
     <div class="row justify-content-between align-items-start">
       <div class="col-2 pl-0">
@@ -16,8 +17,8 @@
         <div *ngIf="svcInfScroll.model && svcInfScroll.model.length > 0">
           <span>Mostrando {{ svcInfScroll.count }} resultados de un total de {{ svcInfScroll.totalCount }}
             coincidencias.</span>
-          <button type="button" pageScroll href="#topSearch" class="btn btn-primary btn-sm mx-1" [disabled]="asyncInProgress"
-            (click)="fullScrollUp()" data-toggle="tooltip" data-placement="top"
+          <button type="button" pageScroll href="#topSearch" class="btn btn-primary btn-sm mx-1"
+            [disabled]="asyncInProgress" (click)="fullScrollUp()" data-toggle="tooltip" data-placement="top"
             title="Ir al primer resultado de la búsqueda.">
             <i class="fa fa-chevron-up fa-1x"></i>
           </button>
@@ -35,11 +36,11 @@
           <i id="tooltip1" class="fa fa-cutlery fa-2x" aria-hidden="true" data-toggle="tooltip" data-placement="top"
             title="Filtrar por tipo de plato."></i>
         </div>
-        <div *ngFor="let mealType of cache.mealTypes" class="col mealtypeFiltersList">
-          <span>{{ mealType.name }}</span>
+        <div *ngFor="let item of mealtypesFilter" class="col mealtypeFiltersList">
+          <span>{{ item.name }}</span>
           <mat-slide-toggle [disabled]="asyncInProgress" class="ml-1" color="primary"
-            [checked]="isMealtypeSelected(mealType._id)" (change)="toggleMealType(mealType._id)">
-            {{ getMealTypeFilterCountById(mealType._id) }}
+            [checked]="isMealtypeSelected(item.id)" (change)="toggleMealType(item.id)">
+            {{ getMealTypeFilterCountById(item.id) }}
           </mat-slide-toggle>
         </div>
       </div>

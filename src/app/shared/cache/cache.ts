@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 
 import { EntityServiceFactory } from "../../services/entity-service-factory";
 import { APIQueryParams } from "../../services/api-query-params";
@@ -29,6 +29,8 @@ export class Cache extends CacheRepository {
     private svcUnit: EntityService;
     private svcRecipe: EntityService;
 
+    private onRefresh: EventEmitter<CACHE_MEMBERS> = new EventEmitter();
+    
     private readonly DEFAULT_DURATION: number = (10 * 60); //Default 10 minutes cache duration.
     private readonly UNLIKELY_TO_CHANGE_DURATION: number = (60 * 60); //Default 60 minutes cache duration.
 
@@ -65,6 +67,7 @@ export class Cache extends CacheRepository {
         if (!item.isValid) {
             item.refresh().then(data => {
                 item.value = data;
+                this.onRefresh.emit(item.key as CACHE_MEMBERS);
                 console.log(`Cache refreshed for: ${item.key}`)
             });
         }
@@ -79,6 +82,10 @@ export class Cache extends CacheRepository {
     public invalidateAll(){
         console.log("ALL CACHE ITEMS HAS BEEN INVALIDATED.");
         super.invalidate();
+    }
+
+    public getRefreshEmitter(): EventEmitter<CACHE_MEMBERS> {
+        return this.onRefresh;
     }
 
     //#region Levels
@@ -115,6 +122,7 @@ export class Cache extends CacheRepository {
         this.refreshStaleCache(item);
         return new APIResponseParser(item.value).entities
     }
+
     //#endregion
     
     //#region Units
