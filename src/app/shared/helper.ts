@@ -105,6 +105,20 @@ export class Helper {
     }
 
     /**
+     * This method replace standard line breaks in textm ("\n") with HTML line breaks, ("<br />").
+     * @param text Text in which we are going to replace the line breaks.
+     */
+    lineBreaksToHTML(text: string): string {
+        let ret: string = text;
+
+        if (text) {
+            ret =  text.replace(/\n/g, `<br />`);
+        }
+
+        return ret;
+    }
+
+    /**
      * Returns a random integer between the specified interval.
      * @param {number} min Minimum random integer to include in the results.
      * @param {number} max Maximum random integer to include in the results.

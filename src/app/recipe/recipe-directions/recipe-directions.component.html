@@ -69,32 +69,8 @@
       <div class="row">
           <div class="col-1 align-self-start">
           </div>
-          <div class="col-11" [innerHTML]="parseIngredientsInDirection(dir)"></div>
+          <div class="col-11" [innerHTML]="parseIngredientsInDirection(dir, true)"></div>
       </div>
     </li>
   </ul>
-  <!-- <div class="list-group-item" *ngFor="let dir of model.directions; let i = index">
-      <div class="input-group-prepend">
-        <button class="btn btn-primary" type="button" (click)="removeDirection(i)" data-toggle="tooltip"
-          data-placement="top" title="Eliminar este paso de la preparación.">
-          <i class="fa fa-times"></i>
-        </button>
-        <button class="btn btn-primary mx-1" type="button" (click)="editDirection(i)" data-toggle="tooltip"
-          data-placement="top" title="Editar este paso de la preparación.">
-          <i class="fa fa-pencil" aria-hidden="true"></i>
-        </button>
-        <span class="input-group-text mx-3">Paso {{ i + 1 }}</span>
-        <button class="btn btn-secondary mx-1" type="button" (click)="moveDirectionDown(i)"
-          [disabled]="i==(model.directions.length-1)" data-toggle="tooltip" data-placement="top"
-          [title]="(i==(model.directions.length-1)) ? 'No es posible mover este paso hacia abajo ahora.' : 'Convertir en Paso ' + (i+2)">
-          <i class="fa fa-chevron-down"></i>
-        </button>
-        <button class="btn btn-secondary mx-1" type="button" (click)="moveDirectionUp(i)" [disabled]="i==0"
-          data-toggle="tooltip" data-placement="top"
-          [title]="(i==0) ? 'No es posible mover este paso hacia arriba ahora.' : 'Convertir en Paso ' + i">
-          <i class="fa fa-chevron-up"></i>
-        </button>
-      </div>
-      <div [innerHTML]="parseIngredientsInDirection(dir)"></div>
-    </div> -->
 </ng-template>

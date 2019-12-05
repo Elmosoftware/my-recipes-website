@@ -435,7 +435,7 @@ input[type=range]:focus::-ms-fill-upper {
 .roundedList{
     font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-weight: 800;
-    font-size: 1em;
+    font-size: 1.2em;
     height: 3em;
     width: 3em;
     align-items: center!important;

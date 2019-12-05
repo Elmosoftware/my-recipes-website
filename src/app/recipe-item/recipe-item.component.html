@@ -18,7 +18,7 @@
                 <div class="bg-secondary rounded-circle roundedList row align-items-center justify-content-center">
                   <span class="text-center">{{ i + 1 }}</span></div>
               </div>
-              <div class="col" [innerHTML]="dir">
+              <div class="col" [innerHTML]="this.core.helper.lineBreaksToHTML(dir)">
               </div>
           </section>
         </article>

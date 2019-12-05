@@ -217,7 +217,7 @@ export class RecipeDirectionsComponent implements OnInit, RecipeSubcomponentInte
       });
   }
 
-  parseIngredientsInDirection(direction: string): string {
+  parseIngredientsInDirection(direction: string, lineBreaksToHTML: boolean = false): string {
 
     let words: Map<string, string>;
 
@@ -233,6 +233,10 @@ export class RecipeDirectionsComponent implements OnInit, RecipeSubcomponentInte
     })
 
     direction = this.wordAnalyzer.searchAndReplaceWord(direction, words);
+
+    if (lineBreaksToHTML) {
+      direction = this.core.helper.lineBreaksToHTML(direction);
+    }
 
     return direction;
   }

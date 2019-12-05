@@ -27,8 +27,8 @@
               title="Imprimir esta receta... Piensa en el medio ambiente antes :-(."></i>
           </button>
         </div>
-        <div class="recipeDescription mt-4 mb-2 mb-sm-4 mb-md-4 mb-lg-0">
-          {{ model.description }}
+        <div class="recipeDescription mt-4 mb-2 mb-sm-4 mb-md-4 mb-lg-0" 
+          [innerHTML]="this.core.helper.lineBreaksToHTML(model.description)">
         </div>
       </div>
       <div class="col-md-12 col-lg-6 text-center d-print-none">
@@ -101,11 +101,14 @@
             </button></div>
           <div class="col recipeListTitle text-center">Preparación</div>
         </div>
-        <div class="mb-3 recipeList" *ngFor="let dir of model.directions; let i = index">
-          <button [disabled]="!preparationMode" class="btn btn-primary rounded-circle text-center roundedList"
-            type="button" (click)="stepDone(i+1)"
-            [ngClass]="{'stepMarkedAsDone': lastStepDone >= (i+1)}">{{ i + 1 }}</button>
-          {{ dir }}
+        <div class="row mb-3" *ngFor="let dir of model.directions; let i = index">
+          <div class="col-auto align-self-start">
+            <button [disabled]="!preparationMode" class="btn btn-primary rounded-circle text-center roundedList" type="button"
+              (click)="stepDone(i+1)" [ngClass]="{'stepMarkedAsDone': lastStepDone >= (i+1)}">{{ i + 1 }}</button>
+          </div>
+          <div class="col recipeList">
+            <div [innerHTML]="this.core.helper.lineBreaksToHTML(dir)"></div>
+          </div>
         </div>
       </div>
     </div>
