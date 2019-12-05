@@ -30,6 +30,7 @@ export class RecipeComponent implements OnInit, DataLossPreventionInterface {
   resetSignal: Subject<void>;
   isNewRecipe: boolean;
   isCompleted: boolean;
+  isCompletedWithError: boolean;
   modelIsReady: boolean;
   modelIsDirty: boolean;
   model: Recipe;
@@ -75,6 +76,7 @@ export class RecipeComponent implements OnInit, DataLossPreventionInterface {
     this.activatedTabSignal = new BehaviorSubject(this.activeTab);
     this.resetSignal = new Subject<void>();
     this.isCompleted = false;
+    this.isCompletedWithError = false;
     this.modelIsReady = false; //This acts like a flag to know when data retrieval process is ready or not.
     this.modelIsDirty = false;
     this.svcRecipe = this.core.entityFactory.getService("Recipe");
@@ -108,6 +110,7 @@ export class RecipeComponent implements OnInit, DataLossPreventionInterface {
     }
 
     this.isCompleted = false;
+    this.isCompletedWithError = false;
     this.modelIsDirty = false;
 
     if (!this.isNewRecipe) {
@@ -208,8 +211,12 @@ export class RecipeComponent implements OnInit, DataLossPreventionInterface {
             this.cache.invalidateOne(CACHE_MEMBERS.LatestRecipes);
           }
           this.isCompleted = true; //Mark as completed, indicating data has been already persisted.
+          this.isCompletedWithError = false;
         }
       }, err => {
+        this.isCompleted = false;
+        this.isCompletedWithError = true;
+        this.wizard.completedWithError();
         throw err
       });
   }

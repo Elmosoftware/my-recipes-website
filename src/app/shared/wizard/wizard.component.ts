@@ -129,4 +129,8 @@ export class WizardComponent implements AfterContentInit {
     this._isCompleted = true;
     this.activeStep.onComplete.emit();
   }
+
+  public completedWithError(): void {
+    this._isCompleted = false;
+  }
 }

@@ -45,7 +45,20 @@
           </div>
         </div>
         <ng-template #recipePreview>
-          <div class="container my-4">
+          <div class="container my-3 p-3" *ngIf="isCompletedWithError; else notCompleted">
+            <div class="row justify-content-center alert-danger">
+              <div class="align-self-center text-center my-3 px-2">
+                <h3>Ocurrió un error al guardar tu receta</h3>
+              </div>
+              <div class="align-self-center my-1 px-2">
+                Probablemente es temporario, suele pasar que alguien desenchufa el servidor :-)
+              </div>
+              <div class="align-self-center my-2 px-2">
+                Por favor, espera unos segundos y vuelve a intentar con el botón finalizar.
+              </div>
+            </div>
+          </div>
+          <ng-template class="container my-4" #notCompleted>
             <div class="row justify-content-center">
               <div class="align-self-center py-3">
                 <div class="alert alert-info px-5 my-3" role="alert">
@@ -61,24 +74,22 @@
                     Un simple click en el botón finalizar y guardaremos tu nueva receta.
                   </p>
                   <ng-template #updatedRecipe>
-                      <div *ngIf="modelIsDirty; else noChangesUpdate">
-                          <p>
-                              Un simple click en el botón finalizar y actualizaremos tu receta con los cambios que realizaste.
-                            </p>
-                        </div>
-                        <ng-template #noChangesUpdate>
-                            <p>
-                                Puedes hacer click en el botón Anterior para volver sobre las imágenes, ingredientes, pasos y detalles de tu preparación.
-                              </p>
-                        </ng-template>
-                    <!-- <p>
-                      Un simple click en el botón finalizar y actualizaremos tu receta con los cambios que realizaste.
-                    </p> -->
+                    <div *ngIf="modelIsDirty; else noChangesUpdate">
+                      <p>
+                        Un simple click en el botón finalizar y actualizaremos tu receta con los cambios que realizaste.
+                      </p>
+                    </div>
+                    <ng-template #noChangesUpdate>
+                      <p>
+                        Puedes hacer click en el botón Anterior para volver sobre las imágenes, ingredientes, pasos y
+                        detalles de tu preparación.
+                      </p>
+                    </ng-template>
                   </ng-template>
                 </div>
               </div>
             </div>
-          </div>
+          </ng-template>
         </ng-template>
       </wizard-step>
     </wizard>
