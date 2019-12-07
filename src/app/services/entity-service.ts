@@ -53,9 +53,10 @@ export class EntityService {
    * @param id The Object Id of the entity to retrieve. If this value is null or empty the method will return all 
    * the documents at least there is any contraint defined in the query parameters.
    * @param query Query parameters for the API like top, sort, filter and others. 
+   * @param ignoreLoadingBar Allows to not show the load bar for certain requests in the UI.
    */
-  get(id: string = "", query: APIQueryParams): Observable<Object> {
-    return this.http.get(this.getUrl(id, query), { headers: this.buildAPIHeaders() });
+  get(id: string = "", query: APIQueryParams, ignoreLoadingBar: boolean = false): Observable<Object> {
+    return this.http.get(this.getUrl(id, query), { headers: this.buildAPIHeaders(ignoreLoadingBar) });
   }
 
   /**
@@ -107,13 +108,17 @@ export class EntityService {
     return `${environment.apiURL}${this.entityDef.apiFunction}/${param}?${queryText}`;
   }
 
-  private buildAPIHeaders(): HttpHeaders {
+  private buildAPIHeaders(ignoreLoadingBar: boolean = false): HttpHeaders {
 
     let ret: HttpHeaders = new HttpHeaders()
       .set("Content-Type", "application/json");
 
     if (this.auth.isAuthenticated) {
       ret = ret.append("Authorization", "Bearer " + this.auth.userProfile.accessToken);
+    }
+
+    if (ignoreLoadingBar) {
+      ret = ret.append("ignoreLoadingBar", "");
     }
 
     return ret;

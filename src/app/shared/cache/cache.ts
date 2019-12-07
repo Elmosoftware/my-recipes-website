@@ -31,8 +31,20 @@ export class Cache extends CacheRepository {
 
     private onRefresh: EventEmitter<CACHE_MEMBERS> = new EventEmitter();
     
-    private readonly DEFAULT_DURATION: number = (10 * 60); //Default 10 minutes cache duration.
-    private readonly UNLIKELY_TO_CHANGE_DURATION: number = (60 * 60); //Default 60 minutes cache duration.
+    /**
+     * Default cache item duration. After this time the value will be considered stale.
+     */
+    private readonly DEFAULT_DURATION: number = (20 * 60); //20 minutes.
+
+    /**
+     * Cache item duration for items that are unlikely to change.
+     */
+    private readonly UNLIKELY_TO_CHANGE_DURATION: number = (60 * 60); //60 minutes.
+
+    /**
+     * Indicate if we must hide the loading bar in UI on each cache item refresh.
+     */
+    private readonly HIDE_LOAD_BAR_ON_CACHE_REFRESH: boolean = true; 
 
     constructor(private svcFactory: EntityServiceFactory, private svcMedia: MediaService) {
         super();
@@ -96,7 +108,7 @@ export class Cache extends CacheRepository {
     }
 
     private refreshCacheLevels(): Promise<Object> {
-        return this.svcLevel.get("", null).toPromise();
+        return this.svcLevel.get("", null, this.HIDE_LOAD_BAR_ON_CACHE_REFRESH).toPromise();
     }
 
     public get levels(): Entity[] {
@@ -114,7 +126,7 @@ export class Cache extends CacheRepository {
     }
 
     private refreshCacheMealTypes(): Promise<Object> {
-        return this.svcMealType.get("", null).toPromise();
+        return this.svcMealType.get("", null, this.HIDE_LOAD_BAR_ON_CACHE_REFRESH).toPromise();
     }
 
     public get mealTypes(): Entity[] {
@@ -133,7 +145,7 @@ export class Cache extends CacheRepository {
     }
 
     private refreshCacheUnits(): Promise<Object> {
-        return this.svcUnit.get("", null).toPromise();
+        return this.svcUnit.get("", null, this.HIDE_LOAD_BAR_ON_CACHE_REFRESH).toPromise();
     }
 
     public get units(): Entity[] {
@@ -151,7 +163,7 @@ export class Cache extends CacheRepository {
     }
 
     private refreshCacheIngredients(): Promise<Object> {
-        return this.svcIngredient.get("", null).toPromise();
+        return this.svcIngredient.get("", null, this.HIDE_LOAD_BAR_ON_CACHE_REFRESH).toPromise();
     }
 
     public get ingredients(): Entity[] {
@@ -173,7 +185,7 @@ export class Cache extends CacheRepository {
         q.pop = "true";
         q.top = "3";
         q.sort = "-publishedOn";
-        return this.svcRecipe.get("", q).toPromise();
+        return this.svcRecipe.get("", q, this.HIDE_LOAD_BAR_ON_CACHE_REFRESH).toPromise();
     }
 
     public get latestRecipes(): Entity[] {
