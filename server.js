@@ -1,4 +1,5 @@
 const path = require('path');
+var compression = require('compression')
 const express = require('express');
 const app = express();
 const outputFolder = "/dist/Website"
@@ -23,6 +24,9 @@ const forceSSL = function() {
 app.use(forceSSL());
 */
 
+//Applies standard GZIP compression encoding
+app.use(compression());
+
 // Run the app by serving the static files
 // in the dist directory
 app.use(express.static(__dirname + outputFolder));
@@ -33,9 +37,7 @@ app.get('/*', function(req, res) {
   res.sendFile(path.join(__dirname + outputFolder + '/index.html'));
 });
 
-// Start the app by listening on the default
-// Heroku port
-//app.listen(process.env.PORT || 8080);
+// Start the app by listening on the default Heroku port
 app.listen(process.env.PORT || 8080, () => {
   console.log(`Mi Cocina website running over Node.JS server is listening on port: ${process.env.PORT || 8080}`);
   console.log(`Environment is: ${(!process.env.NODE_ENV) ? "Not defined" : process.env.NODE_ENV}`);
