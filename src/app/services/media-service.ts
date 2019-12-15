@@ -17,12 +17,12 @@ import { isArray } from 'util';
 import { LoggingService } from "../services/logging-service";
 
 export const enum TRANSF_IMAGE_FORMATS {
-  KeepOriginal = "",
-  PNG = ".PNG",
-  JPEG = ".JPG",
-  GIF = ".GIF",
-  WEBP = ".WebP",
-  PDF = ".PDF"
+  Auto = "auto",
+  PNG = "png",
+  JPEG = "jpg",
+  GIF = "gif",
+  WEBP = "webp",
+  PDF = "pdf"
 }
 
 @Injectable()
@@ -68,17 +68,17 @@ export class MediaService {
    * @param imageFormat As part of the transformation we can convert the original image format. If this 
    * parameter is not specified, the original image format will be used.
    */
-  getTransformationURL(publicId: string, cloudName: string, mediaTransformation: object = MediaTransformations.none,
-    imageFormat: TRANSF_IMAGE_FORMATS = TRANSF_IMAGE_FORMATS.KeepOriginal): string {
+  getTransformationURL(publicId: string, cloudName: string, mediaTransformation: any = MediaTransformations.none,
+    imageFormat: TRANSF_IMAGE_FORMATS = TRANSF_IMAGE_FORMATS.Auto): string {
 
     let url: string;
     let cl = new Cloudinary({ cloud_name: cloudName, secure: true });
 
-    url = cl.url(publicId, mediaTransformation);
+      if (!mediaTransformation.fetch_format) {
+        mediaTransformation.fetch_format = imageFormat;
+      }
 
-    if (imageFormat) {
-      url = url + imageFormat.toLowerCase();
-    }
+    url = cl.url(publicId, mediaTransformation);
 
     return url;
   }
@@ -119,7 +119,7 @@ export class MediaService {
       //If there is a cover, we transform it to a circle thumbnail:
       if (cover) {
         ret = this.getTransformationURL(cover.pictureId.publicId, cover.pictureId.cloudName,
-          MediaTransformations.circleThumbGrayBorder, TRANSF_IMAGE_FORMATS.PNG);
+          MediaTransformations.circleThumbGrayBorder);
       }
     }
 
@@ -219,7 +219,7 @@ export class MediaService {
           let respData = new APIResponseParser(data, false);
 
           return this.buildCarouselItems(respData.entities, false,
-            MediaTransformations.circleThumbBigGrayBorder, TRANSF_IMAGE_FORMATS.PNG);
+            MediaTransformations.circleThumbBigGrayBorder);
         })
       );
   }
@@ -270,7 +270,7 @@ export class MediaService {
    */
   private buildCarouselItems(pictures: any[], includeRandomCaptionData?: boolean,
     mediaTransformation: object = MediaTransformations.none,
-    imageFormat: TRANSF_IMAGE_FORMATS = TRANSF_IMAGE_FORMATS.KeepOriginal): CarouselItem[] {
+    imageFormat: TRANSF_IMAGE_FORMATS = TRANSF_IMAGE_FORMATS.Auto): CarouselItem[] {
 
     let captionIndex: number = this.getCaptionsStartIndex();
     let ret: CarouselItem[] = [];
@@ -280,12 +280,7 @@ export class MediaService {
       let item = new CarouselItem();
 
       //If there is any image transformation set and the image is not a static one, (i mean, proceed from the CDN):
-      if (mediaTransformation != MediaTransformations.none && pic.publicId) {
-        item.imageSrc = this.getTransformationURL(pic.publicId, pic.cloudName, mediaTransformation, imageFormat);
-      }
-      else {
-        item.imageSrc = pic.url;
-      }
+      item.imageSrc = this.getTransformationURL(pic.publicId, pic.cloudName, mediaTransformation, imageFormat);
 
       //If the image includes metadata:
       if (pic.metadata) {
