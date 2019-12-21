@@ -6,9 +6,12 @@ import { EntityService } from "../services/entity-service";
 import { APIQueryParams, QUERY_PARAM_PUB, QUERY_PARAM_OWNER } from "../services/api-query-params";
 import { APIResponseParser } from "../services/api-response-parser";
 import { Recipe } from "../model/recipe";
+import { RecipeIngredient } from '../model/recipe-ingredient';
+import { RecipePicture } from '../model/recipe-picture';
+import { MealType } from '../model/mealtype';
 import { InfiniteScrollingService, SCROLL_POSITION, PagingHelper } from "../shared/infinite-scrolling/infinite-scrolling-module";
 import { Cache, CACHE_MEMBERS } from '../shared/cache/cache';
-import { MealType } from '../model/mealtype';
+import { ConfirmDialogConfiguration } from '../standard-dialogs/standard-dialog.service';
 
 /**
  * Size of each data page.
@@ -38,6 +41,8 @@ export class MyRecipesComponent implements OnInit {
 
   asyncInProgress: boolean;
   svcRecipe: EntityService;
+  svcRecipeIngredient: EntityService;
+  svcRecipePicture: EntityService;
   svcInfScroll: InfiniteScrollingService<Recipe>;
   onDataFeed: EventEmitter<PagingHelper>;
   mealtypesFilter: any[];
@@ -51,6 +56,9 @@ export class MyRecipesComponent implements OnInit {
   ngOnInit() {
     //Initializing:
     this.svcRecipe = this.core.entityFactory.getService("Recipe");
+    this.svcRecipeIngredient = this.core.entityFactory.getService("RecipeIngredient");
+    this.svcRecipePicture = this.core.entityFactory.getService("RecipePicture");
+
     this.filtersVisible = true;
     this.mealtypesFilter = [];
     this.cacheRefreshSubscription = this.cache.getRefreshEmitter();
@@ -314,7 +322,7 @@ export class MyRecipesComponent implements OnInit {
     q.count = "true";
     q.top = String(top);
     q.skip = String(skip);
-    q.fields = "-ingredients -directions";
+    q.fields = "-ingredients -pictures -directions";
     q.filter = JSON.stringify({
       mealType: { $in: this.getMealTypesFilter() }
     });
@@ -347,6 +355,109 @@ export class MyRecipesComponent implements OnInit {
   editRecipe(id: string) {
     this.core.helper.removeTooltips(this.core.zone);
     this.core.navigate.toRecipe(id);
+  }
+
+  deleteRecipe(id: string) {
+
+    let q: APIQueryParams;
+
+    this.core.helper.removeTooltips(this.core.zone);
+
+    this.core.dialog.showConfirmDialog(new ConfirmDialogConfiguration("Eliminar Receta",
+      `¿Estás seguro de eliminar esta receta?
+      <p class="mt-2 mb-0">Tené en cuenta que <strong>¡esta operación no puede deshacerse!</strong> por lo cual esta 
+      receta se irá.... para siempre.</p>`,
+      "Si, deseo eliminar esta receta", "No, lo voy a pensar mejor...")).subscribe(result => {
+
+        if (result == 1) {
+          q = new APIQueryParams();
+          q.pop = "true";
+          q.fields = "ingredients pictures";
+          // q.pub = (this.notPublishedOnlyFilter) ? QUERY_PARAM_PUB.notpub : QUERY_PARAM_PUB.all;
+          // q.owner = QUERY_PARAM_OWNER.me;
+          this.asyncInProgress = true;
+          this.core.helper.removeTooltips(this.core.zone);
+          
+          this.svcRecipe.get(id, q) 
+          .subscribe(data => {
+            let response: APIResponseParser = new APIResponseParser(data);
+            
+            if (response.entities && response.entities.length == 1) {
+              this.deleteRecipeFull((response.entities[0] as Recipe));
+            }
+            else{
+              //If the recipe already gone, we just refresh data:
+              this.reset();
+            }
+            
+            this.asyncInProgress = false;
+            
+          }, err => {
+            this.asyncInProgress = false;
+            throw err;
+          });
+          
+        }
+      }, err => {
+        throw err
+      });
+  }
+
+  deleteRecipeFull(r: Recipe){
+     /*
+            Recipe deletion process:
+              - Get The Recipe with only ingredientes and pictures.
+              IF the Recipe still exists:
+                - Delete Recipe.
+                  If deletion was Successfull:
+                    - We need to delete the collection of *"RecipeIngredients"*
+                    - We need to delete the collection of *"RecipePictures"*
+                    - We must try to delete the actual pictures in the CDN.
+                    - Call to reset() to refresh data.
+                If Deletion was unsuccessful:
+                  Report the error. 
+                  Do not Refresh data.
+              IF The Recipe doen't exists
+                Report the error.              
+          */
+
+    this.asyncInProgress = true;
+
+    this.svcRecipe.delete(r._id)
+    .subscribe(data => {
+      //If deletion was successfull:
+      
+      //Refreshing data to reflect changes:
+      this.asyncInProgress = false;
+      this.reset();
+      
+      //Deleting Ingredients from the recipe:
+      r.ingredients.forEach((ri: RecipeIngredient) => {
+        this.svcRecipeIngredient.delete(ri._id)
+          .subscribe(data => {
+            console.log(`The RecipeIngredient with id:${ri._id}, was successfully deleted.`)
+          }, (err) => {
+            console.error(`We were unable to delete the RecipeIngredient with id:${ri._id}. This is not a critical issue.`)
+          })
+      })
+
+      //Deleting Pictures from the recipe:
+      r.pictures.forEach((rp: RecipePicture) => {
+        this.svcRecipePicture.delete(rp._id)
+          .subscribe (data => {
+            console.log(`The RecipePicture with id:${rp._id}, was successfully deleted.`)
+          }, (err) => {
+            console.error(`We were unable to delete the RecipePicture with id:${rp._id}. This is not a critical issue.`)
+          })
+      })
+
+      //Deleting picture files from the CDN:
+      //This is not implemented yet, because in case of restore a deleted recipe, all pictures will be gone.
+      //Maybe in the future... :-)
+    }, err => {
+      this.asyncInProgress = false;
+      throw err;
+    }) 
   }
 
   goToRecipe() {

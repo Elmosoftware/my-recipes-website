@@ -96,10 +96,16 @@
           </div>
           <hr>
           <div class="row no-gutters mt-3 justify-content-end">
+            <div class="col">
+              <button id="btnDeleteRecipe" class="btn btn-primary" type="button" (click)="deleteRecipe(recipe._id)">
+                <i class="fa fa-times" aria-hidden="true" data-toggle="tooltip" data-placement="top"
+                  title="Eliminar esta receta. Cuidado!, esta operación no puede deshacerse."></i>
+              </button>
+            </div>
             <div class="col-1 mx-3">
               <button id="btnViewRecipe" class="btn btn-primary" type="button" (click)="goToRecipeView(recipe._id)">
                 <i class="fa fa-file-text-o" aria-hidden="true" data-toggle="tooltip" data-placement="top"
-                  title="Ver todos los datos  de esta receta."></i>
+                  title="Ver todos los datos de esta receta."></i>
               </button>
             </div>
             <div class="col-1 mx-3">
