@@ -17,15 +17,17 @@
       <div class="col-md-12 col-lg-6 text-center">
         <div class="recipeTitle">
           {{ model.name }}
+        </div>
+        <div class="mt-4 text-center d-print-none">
           <button *ngIf="isOwner" id="btnEditRecipe" class="btn btn-primary ml-2 d-print-none" type="button"
-            (click)="editRecipe()">
-            <i class="fa fa-pencil-square-o" aria-hidden="true" data-toggle="tooltip" data-placement="top"
-              title="Editar esta receta."></i>
-          </button>
-          <button id="btnPrintRecipe" class="btn btn-primary ml-2 d-print-none" type="button" (click)="printRecipe()">
-            <i class="fa fa-print" aria-hidden="true" data-toggle="tooltip" data-placement="top"
-              title="Imprimir esta receta... Piensa en el medio ambiente antes :-(."></i>
-          </button>
+              (click)="editRecipe()">
+              <i class="fa fa-2x fa-pencil-square-o" aria-hidden="true" data-toggle="tooltip" data-placement="top"
+                title="Editar esta receta."></i>
+            </button>
+            <button id="btnPrintRecipe" class="btn btn-primary ml-2 d-print-none" type="button" (click)="printRecipe()">
+              <i class="fa fa-2x fa-print" aria-hidden="true" data-toggle="tooltip" data-placement="top"
+                title="Imprimir esta receta... Piensa en el medio ambiente antes :-(."></i>
+            </button>
         </div>
         <div class="recipeDescription mt-4 mb-2 mb-sm-4 mb-md-4 mb-lg-0" 
           [innerHTML]="this.core.helper.lineBreaksToHTML(model.description)">
@@ -73,12 +75,6 @@
     <div class="row mt-4">
       <div class="col-12 col-md-5">
         <div class="row align-self-center py-3 mb-4 mx-2 border border-left-0 border-right-0 border-dark">
-          <div class="col-auto align-self-start recipeListTitle">
-            <button *ngIf="shoppingList.length > 0" class="btn btn-primary text-center d-print-none" type="button"
-              [hidden]="!preparationMode" (click)="printShoppingList()">
-              <i class="fa fa-print d-print-none" aria-hidden="true" data-toggle="tooltip" data-placement="top"
-                title='Imprimir mi lista de compras!.'></i>
-            </button></div>
           <div class="col recipeListTitle text-center">Ingredientes</div>
         </div>
         <div class="recipeList">
@@ -88,6 +84,8 @@
               <i class="mx-1 fa fa-cart-arrow-down d-print-none" aria-hidden="true" data-toggle="tooltip"
                 data-placement="top" title='Agrega este ingrediente a tu lista de compras.'></i>
             </mat-slide-toggle>{{ ing.ingredient.name + ", " + ing.amount.toString() + ing.unit.abbrev }}
+            <span *ngIf="preparationMode && itemIsInShoppingList(ing.ingredient.name + ', ' + ing.amount.toString() + ing.unit.abbrev)" 
+              class="d-none d-print-inline badge badge-pill badge-primary">Comprar!</span>
           </div>
         </div>
       </div>

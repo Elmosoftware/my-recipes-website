@@ -275,6 +275,10 @@ input[type=range]:focus::-ms-fill-upper {
   background-color: #ff5106;
 }
 
+.badge-pill {
+  vertical-align: text-bottom;
+}
+
 .alert-warning {
   color: #87854a;
   background-color: #fcdb9f;

@@ -139,35 +139,7 @@ export class RecipeViewComponent implements OnInit {
       return (listItem == item)
     })) ? true : false;
   }
-
-  printShoppingList() {
-
-    let popupWin;
-    let content: string;
-
-    content = `<p><h3>Lista de compras:</h3></p><p><ul>`;
-
-    this.shoppingList.forEach((item) => {
-      content += `<li>${item}</li>`;
-    })
-
-    content += `</ul></p>`
-
-    popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
-    popupWin.document.open();
-    popupWin.document.write(`
-    <!doctype html>
-    <html>
-    <head>
-      <meta charset="utf-8">
-      <title>Mi lista de compras</title>
-    </head>
-    <body onload="window.print();window.close()">${content}</body>
-    </html>
-    `);
-    popupWin.document.close();
-  }
-
+  
   editRecipe() {
     this.core.helper.removeTooltips(this.core.zone);
     this.core.navigate.toRecipe(this.model._id);
