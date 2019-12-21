@@ -1,4 +1,5 @@
 import { Injectable, NgZone } from '@angular/core';
+import { Title } from '@angular/platform-browser'
 
 import { EntityServiceFactory } from './entity-service-factory';
 import { SubscriptionService } from './subscription.service';
@@ -10,6 +11,7 @@ import { MediaService } from './media-service';
 import { NavigationService } from './navigation-service';
 import { LoggingService } from "./logging-service";
 import { ConnectivityService, ConnectivityStatus } from './connectivity-service';
+import { environment } from "../../environments/environment";
 
 /**
  * This core class help inject common services to the app. 
@@ -34,7 +36,8 @@ export class CoreService {
     private injStandardDialogService: StandardDialogService,
     private injMediaService: MediaService,
     private injNavigationService: NavigationService,
-    private injConnectivityService: ConnectivityService) {
+    private injConnectivityService: ConnectivityService,
+    private injTitle: Title) {
 
       console.log(`CoreServices Created`)
 
@@ -115,5 +118,27 @@ export class CoreService {
 
   get connectivity(): ConnectivityService {
     return this.injConnectivityService;
+  }
+
+  getPageTitle(): string {
+    return this.injTitle.getTitle();
+  }
+
+  setPageTitle(value: any | string, showVersion: boolean = false) {
+    let title: string = ""
+    let ver: boolean = showVersion;
+
+    if (value && value.title) {
+      title = String(value.title);
+    }
+    else if (typeof value == "string") {
+      title = value;
+    }
+   
+    if (value && !(value.showVersionInTitle == null || value.showVersionInTitle == undefined)) {
+      ver = Boolean(value.showVersionInTitle);
+    }
+
+    this.injTitle.setTitle(`${environment.appName}${(ver) ? " v" + environment.appVersion : ""}${(title) ? " - " + title : ""}`);
   }
 }

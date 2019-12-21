@@ -28,6 +28,7 @@ export class CookbookComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.core.setPageTitle(this.route.snapshot.data);
     this.parseQueryparams();
   }
 

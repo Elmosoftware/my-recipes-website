@@ -1,11 +1,13 @@
 export const environment = {
   production: true,
+  appName: "Mi Cocina",
+  appVersion: "1.0.2",
   appURL: "https://micocina.herokuapp.com",
   apiURL: "https://micocina-api.herokuapp.com/api/",
   apiManagementEndpoint: "management/",
   apiMediaEndpoint: "media/",
   authSettings: {
-    clientID: 'z2pX8Q7bn1ceLi03OpG11ACfQ2g0xZ2o', //Mis Recetas
+    clientID: 'z2pX8Q7bn1ceLi03OpG11ACfQ2g0xZ2o', //Prod
     domain: 'elmosoftware.auth0.com',
     audience: 'https://elmosoftware.auth0.com/api/v2/', 
     dbConnection: "Username-Password-Authentication",

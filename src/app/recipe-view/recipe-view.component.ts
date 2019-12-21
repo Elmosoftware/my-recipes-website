@@ -31,7 +31,8 @@ export class RecipeViewComponent implements OnInit {
   ngOnInit() {
 
     let q: APIQueryParams = new APIQueryParams();
-
+    
+    this.core.setPageTitle(this.route.snapshot.data);
     this.preparationMode = false;
     this.lastStepDone = 0;
     this.shoppingList = [];
@@ -54,6 +55,7 @@ export class RecipeViewComponent implements OnInit {
           }
           else {
             this.model = (response.entities[0] as Recipe);
+            this.core.setPageTitle(this.model.name);
             this.buildCarouselPictureList();
           }
 

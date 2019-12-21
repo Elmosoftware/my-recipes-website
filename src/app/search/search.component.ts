@@ -38,6 +38,7 @@ export class SearchComponent implements OnInit {
 
   ngOnInit() {
     //Initializing:
+    this.core.setPageTitle(this.route.snapshot.data);
     this.wordAnalyzer = new WordAnalyzerService();
     this.resetSearch();
     this.parseQueryparams();

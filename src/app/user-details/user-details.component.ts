@@ -25,9 +25,9 @@ export class UserDetailsComponent implements OnInit {
     private svcSearchFac: SearchServiceFactory) { }
 
   ngOnInit() {
-
     let q: APIQueryParams;
 
+    this.core.setPageTitle(this.route.snapshot.data);
     this.svc = this.core.entityFactory.getService("Recipe");
     this.model = {
       userId: this.route.snapshot.paramMap.get("id"),

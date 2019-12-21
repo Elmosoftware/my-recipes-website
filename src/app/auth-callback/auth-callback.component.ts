@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { CoreService } from "../services/core-service";
 
@@ -9,9 +10,10 @@ import { CoreService } from "../services/core-service";
 })
 export class AuthCallbackComponent implements OnInit {
 
-  constructor(public core: CoreService) { }
+  constructor(public core: CoreService, private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.core.setPageTitle(this.route.snapshot.data);
     this.core.auth.handleAuthentication();
   }
 

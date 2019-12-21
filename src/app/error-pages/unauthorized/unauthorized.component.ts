@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { CoreService } from 'src/app/services/core-service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-unauthorized',
@@ -9,9 +10,10 @@ import { CoreService } from 'src/app/services/core-service';
 })
 export class UnauthorizedErrorPageComponent implements OnInit {
 
-  constructor(private core: CoreService) { }
+  constructor(private core: CoreService, private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.core.setPageTitle(this.route.snapshot.data);
   }
 
   goToHome() {

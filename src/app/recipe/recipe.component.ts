@@ -71,6 +71,7 @@ export class RecipeComponent implements OnInit, DataLossPreventionInterface {
 
   ngOnInit() {
     //Initializing:
+    this.core.setPageTitle(this.route.snapshot.data);
     this.precaching();
     this.activeTab = RECIPE_TABS.Details; //Setting the initial tab here.
     this.activatedTabSignal = new BehaviorSubject(this.activeTab);
@@ -124,6 +125,7 @@ export class RecipeComponent implements OnInit, DataLossPreventionInterface {
             }
             else {
               this.model = (response.entities[0] as Recipe);
+              this.core.setPageTitle(`Editando "${this.model.name}" ...`);
             }
 
             this.modelIsReady = true;

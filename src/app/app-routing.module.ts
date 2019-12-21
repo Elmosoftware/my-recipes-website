@@ -34,40 +34,69 @@ const routes: Routes = [
   },
   {
     path: PAGES.Home,
-    component: HomeComponent
+    component: HomeComponent,
+    data: {
+      title: "Inicio",
+      showVersionInTitle: true
+    }
   },
   {
     path: PAGES.Login,
-    component: LoginComponent
+    component: LoginComponent,
+    data: {
+      title: "Iniciando sesión",
+      showVersionInTitle: true
+    }
   },
   {
     path: PAGES.AuthCallback,
-    component: AuthCallbackComponent
+    component: AuthCallbackComponent,
+    data: {
+      title: "Iniciando sesión",
+      showVersionInTitle: true
+    }
   },
   {
     path: PAGES.Unauthorized,
-    component: UnauthorizedErrorPageComponent
+    component: UnauthorizedErrorPageComponent,
+    data: {
+      title: "Acceso no autorizado",
+      showVersionInTitle: true
+    }
   },
   {
     path: PAGES.NetworkError,
-    component: NetworkErrorPageComponent
+    component: NetworkErrorPageComponent,
+    data: {
+      title: "Error de conectividad"
+    }
   },
   {
     path: PAGES.GoneFishing,
-    component: GoneFishingPageComponent
+    component: GoneFishingPageComponent,
+    data: {
+      title: "Actualización en progreso ..."
+    }
   },
   {
     path: PAGES.Search,
-    component: SearchComponent
+    component: SearchComponent,
+    data: {
+      title: "Buscar en el recetario"
+    }
   },
   {
     path: PAGES.Cookbook,
-    component: CookbookComponent
+    component: CookbookComponent,
+    data: {
+      title: "Recetario"
+    }
   },
   {
     path: PAGES.Recipe,
     component: RecipeComponent,
     data: {
+      title: "Crear una Receta",
       authGuard: {
         adminOnly: false,
         allowSocialUsers: true
@@ -80,6 +109,7 @@ const routes: Routes = [
     path: `${PAGES.Recipe}/:id`,
     component: RecipeComponent,
     data: {
+      title: "Editar una Receta",
       authGuard: {
         adminOnly: false,
         allowSocialUsers: true
@@ -90,7 +120,10 @@ const routes: Routes = [
   },
   {
     path: `${PAGES.RecipeView}/:id`,
-    component: RecipeViewComponent
+    component: RecipeViewComponent,
+    data: {
+      title: "Ver una Receta"
+    }
   },
   {
     path: PAGES.Level,
@@ -98,6 +131,7 @@ const routes: Routes = [
     data: {
       type: "Level",
       title: "Niveles de dificultad",
+      showVersionInTitle: true,
       defaultSort: "name",
       authGuard: {
         adminOnly: true,
@@ -112,6 +146,7 @@ const routes: Routes = [
     data: {
       type: "MealType",
       title: "Platos",
+      showVersionInTitle: true,
       defaultSort: "name",
       authGuard: {
         adminOnly: true,
@@ -126,6 +161,7 @@ const routes: Routes = [
     data: {
       type: "Unit",
       title: "Unidades de medida",
+      showVersionInTitle: true,
       defaultSort: "abbrev",
       authGuard: {
         adminOnly: true,
@@ -140,6 +176,7 @@ const routes: Routes = [
     data: {
       type: "Ingredient",
       title: "Ingredientes",
+      showVersionInTitle: true,
       defaultSort: "name",
       authGuard: {
         adminOnly: true,
@@ -152,6 +189,7 @@ const routes: Routes = [
     path: PAGES.UserPreferences,
     component: UserPreferencesComponent,
     data: {
+      title: "Preferencias",
       authGuard: {
         adminOnly: false,
         allowSocialUsers: false
@@ -161,12 +199,16 @@ const routes: Routes = [
   },
   {
     path: `${PAGES.UserDetails}/:id`,
-    component: UserDetailsComponent
+    component: UserDetailsComponent,
+    data: {
+      title: "Detalles del Usuario"
+    }
   },
   {
     path: PAGES.MyRecipes,
     component: MyRecipesComponent,
     data: {
+      title: "Mis Recetas!",
       authGuard: {
         adminOnly: false,
         allowSocialUsers: true
@@ -176,7 +218,10 @@ const routes: Routes = [
   },
   {
     path: PAGES.About,
-    component: AboutComponent
+    component: AboutComponent,
+    data: {
+      title: "Acerca de este sitio"
+    }
   },
   {
     path: '**',

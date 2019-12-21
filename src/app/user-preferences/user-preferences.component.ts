@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { CoreService } from "../services/core-service";
 import { User } from "../model/user";
@@ -10,7 +11,8 @@ import { User } from "../model/user";
 })
 export class UserPreferencesComponent implements OnInit {
 
-  constructor(private core: CoreService) {
+  constructor(private core: CoreService,
+    private route: ActivatedRoute) {
   }
 
   private originalEmail: string = "";
@@ -29,6 +31,7 @@ export class UserPreferencesComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.core.setPageTitle(this.route.snapshot.data);
     this.dataRefresh();
   }
 

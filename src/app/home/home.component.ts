@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { CoreService } from "../services/core-service";
 import { SearchServiceInterface } from "../services/search-service";
@@ -15,11 +16,15 @@ import { Recipe } from '../model/recipe';
 export class HomeComponent implements OnInit {
 
   public procastinationRandomUrl: string;
+  
 
-  constructor(private core: CoreService, public cache: Cache) {
+  constructor(private core: CoreService, 
+    public cache: Cache,
+    private route: ActivatedRoute) {
   }
 
   ngOnInit() {
+    this.core.setPageTitle(this.route.snapshot.data);
     this.procastinationRandomUrl = procastinationData.urls[this.core.helper.getRandomNumberFromInterval(0, 
       procastinationData.urls.length - 1)];
   } 
@@ -33,6 +38,10 @@ export class HomeComponent implements OnInit {
 
   get contactEmailLink(): string {
     return `mailto:${environment.appSettings.contactEmail}`
+  }
+
+  get appNameAndVersion(): string {
+    return `${environment.appName} v${environment.appVersion}`
   }
 
   goToAbout() {

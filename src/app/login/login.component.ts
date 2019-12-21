@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { CoreService } from '../services/core-service';
 import { ActivatedRoute } from '@angular/router';
+
+import { CoreService } from '../services/core-service';
 
 @Component({
   selector: 'app-login',
@@ -13,6 +14,7 @@ export class LoginComponent implements OnInit {
     private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.core.setPageTitle(this.route.snapshot.data);
   }
 
   ngAfterViewInit() {

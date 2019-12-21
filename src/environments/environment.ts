@@ -1,11 +1,13 @@
 export const environment = {
   production: false,
+  appName: "Mi Cocina - Dev/Stage",
+  appVersion: "1.0.2",
   appURL: "http://localhost:8080",
   apiURL: "http://localhost:3000/api/",
   apiManagementEndpoint: "management/",
   apiMediaEndpoint: "media/",
   authSettings: {
-    clientID: 'IbLockBJXrOl9ozFMrqWTr0rH0IAlobF', //Mis Recetas - Stage
+    clientID: 'IbLockBJXrOl9ozFMrqWTr0rH0IAlobF', //Stage
     domain: 'elmosoftware-stage.auth0.com',
     audience: 'https://elmosoftware-stage.auth0.com/api/v2/', 
     dbConnection: "Username-Password-Authentication",

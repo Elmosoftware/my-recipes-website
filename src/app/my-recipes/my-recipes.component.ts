@@ -1,5 +1,6 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { trigger, state, animate, transition, style } from '@angular/animations';
+import { ActivatedRoute } from '@angular/router';
 
 import { CoreService } from "../services/core-service";
 import { EntityService } from "../services/entity-service";
@@ -50,11 +51,13 @@ export class MyRecipesComponent implements OnInit {
   filtersVisible: boolean
 
   constructor(public core: CoreService,
-    public cache: Cache) {
+    public cache: Cache,
+    private route: ActivatedRoute) {
   }
 
   ngOnInit() {
     //Initializing:
+    this.core.setPageTitle(this.route.snapshot.data);
     this.svcRecipe = this.core.entityFactory.getService("Recipe");
     this.svcRecipeIngredient = this.core.entityFactory.getService("RecipeIngredient");
     this.svcRecipePicture = this.core.entityFactory.getService("RecipePicture");

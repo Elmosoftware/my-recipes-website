@@ -29,8 +29,9 @@ export class EntitiesComponent implements OnInit {
     this.type = this.route.snapshot.data['type'];
     this.title = this.route.snapshot.data['title'];
     this.defaultSort = this.route.snapshot.data['defaultSort'];
-    this.svc = this.core.entityFactory.getService(this.type);
 
+    this.svc = this.core.entityFactory.getService(this.type);
+    this.core.setPageTitle(this.route.snapshot.data);
     this.dataRefresh();
   }
 
