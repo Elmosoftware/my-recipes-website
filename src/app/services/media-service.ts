@@ -279,6 +279,12 @@ export class MediaService {
 
       let item = new CarouselItem();
 
+      // If there is no specified transformation, we will apply image auto-cropping to get more 
+      //efficient image sizes:
+      if (mediaTransformation == MediaTransformations.none) {
+        mediaTransformation = MediaTransformations.autoCropping(this.helper.getScreenSize().height, pic.height)
+      }
+
       //If there is any image transformation set and the image is not a static one, (i mean, proceed from the CDN):
       item.imageSrc = this.getTransformationURL(pic.publicId, pic.cloudName, mediaTransformation, imageFormat);
 
@@ -353,6 +359,17 @@ export class MediaService {
 }
 
 /**
+ * To avoid extra transformations in the CDN, we defined this default image sizes that can be 
+ * selected based on the screen size for a most efficient resource usage.
+ */
+export enum DefaultImageHeights {
+  VeryHigh = 1200,
+  High = 	800,
+  Medium = 500,
+  Low =	350  
+}
+
+/**
  * Media Transformation objects.
  * They have the required information to transform the image as required. 
  * This can be to change the image format, his size, shape, apply filters, etc.
@@ -378,5 +395,19 @@ export const MediaTransformations = {
     radius: "max",
     crop: "thumb",
     border: "2px_solid_rgb:626262"
+  },
+  autoCropping(viewportHeight: number, imageHeight: number): any{
+    let ret: any = MediaTransformations.none;
+
+    if (imageHeight > viewportHeight) {
+      Object.keys(DefaultImageHeights).forEach((key) => {
+        if (DefaultImageHeights[key] >= viewportHeight) {
+          ret.height = DefaultImageHeights[key];
+          ret.crop = "scale";
+        }
+      })
+    }
+
+    return ret;
   }
 };

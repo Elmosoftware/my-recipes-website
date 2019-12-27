@@ -130,6 +130,10 @@ export class Helper {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
+    /**
+     * return the file name extension
+     * @param fileName File name
+     */
     getFileExtension(fileName: string) :string {
         const sep: string = ".";
         let ret: string = "";
@@ -139,5 +143,20 @@ export class Helper {
         }
 
         return ret.toLowerCase();
+    }
+
+    /**
+     * Returns and object with the actual screen size.
+     */
+    getScreenSize(): any{
+
+        let ret = { height: 0, width: 0}
+
+        if (screen && screen.height && screen.width) {
+            ret.height = screen.height;
+            ret.width = screen.width;
+        }
+
+        return ret;
     }
 }
