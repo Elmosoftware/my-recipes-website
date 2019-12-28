@@ -1,23 +1,21 @@
 <!-- Navigation Bar -->
 <app-navigation-bar homePageFeaturesEnabled="true" adminMenuEnabled="true" searchBoxEnabled="true"></app-navigation-bar>
+<!-- This is just to add a scrolling event used for animations -->
+<div infinite-scrolling [scrollWindow]="true" (scroll)="onScrollHandler($event)"></div>
 
 <!-- 1st Section: Site name, logo Photo Carousel -->
 <app-carousel [items]="cache.homePagePictures" fixedHeight="90"></app-carousel>
 
-<!-- 2nd Section: New Recipes -->
+<!-- 2nd Section: Latest Recipes -->
 <a id="recently-added"></a>
-<div class="home-page-section latest-recipes-section">
-  <div class="py-4">
-    <app-latest-recipes></app-latest-recipes>
-  </div>
-</div>
+<app-latest-recipes></app-latest-recipes>
 
 <!-- 3rd Section: Search by ingredients -->
 <div class="home-page-section secondaryBackground py-4">
   <a id="search-by-ingredient"></a>
   <div class="container">
     <div class="row justify-content-around my-4">
-      <div *ngFor="let item of cache.ingredientPictures" class="col-auto">
+      <div [@isScrollingAnimSearchByIngredient]="isScrollingAnim" *ngFor="let item of cache.ingredientPictures" class="col-auto">
         <img class="m-1" [src]="item.imageSrc">
       </div>
     </div>
