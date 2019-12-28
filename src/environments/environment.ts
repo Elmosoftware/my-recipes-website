@@ -1,7 +1,7 @@
 export const environment = {
   production: false,
   appName: "Mi Cocina - Dev/Stage",
-  appVersion: "1.0.2",
+  appVersion: "1.0.3",
   appURL: "http://localhost:8080",
   apiURL: "http://localhost:3000/api/",
   apiManagementEndpoint: "management/",
