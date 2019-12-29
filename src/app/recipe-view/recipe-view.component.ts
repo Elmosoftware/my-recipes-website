@@ -14,7 +14,7 @@ import { MediaTransformations } from '../services/media-service';
 /**
  * Size of each data page.
  */
-const CAROUSEL_HEIGHT_PERC: number = 60;
+export const CAROUSEL_HEIGHT_PERC: number = 60;
 
 @Component({
   selector: 'app-recipe-view',
@@ -30,6 +30,10 @@ export class RecipeViewComponent implements OnInit {
   lastStepDone: number;
   shoppingList: string[];
   carouselPictures: CarouselItem[];
+
+  get carouselHeightPercentage() {
+    return CAROUSEL_HEIGHT_PERC;
+  }
 
   constructor(private core: CoreService,
     private route: ActivatedRoute) { }
