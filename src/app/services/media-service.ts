@@ -396,8 +396,12 @@ export const MediaTransformations = {
     crop: "thumb",
     border: "2px_solid_rgb:626262"
   },
-  autoCropping(viewportHeight: number, imageHeight: number): any{
+  autoCropping(viewportHeight: number, imageHeight: number = -1): any{
     let ret: any = MediaTransformations.none;
+
+    if (imageHeight <= 0) {
+      imageHeight = viewportHeight + 1;
+    }
 
     if (imageHeight > viewportHeight) {
       Object.keys(DefaultImageHeights).forEach((key) => {

@@ -35,7 +35,7 @@
       </div>
       <div class="col-md-12 col-lg-6 text-center d-print-none">
         <div *ngIf="carouselPictures && carouselPictures.length > 0" class="justify-content-center">
-          <app-carousel [items]="carouselPictures" fixedHeight="60" borderRadius="20px"></app-carousel>
+          <app-carousel [items]="carouselPictures" [fixedHeight]="CAROUSEL_HEIGHT_PERC" borderRadius="20px"></app-carousel>
         </div>
       </div>
     </div>

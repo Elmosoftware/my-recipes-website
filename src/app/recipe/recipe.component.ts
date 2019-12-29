@@ -15,6 +15,7 @@ import { RecipeIngredient } from "../model/recipe-ingredient";
 import { RecipePicture } from "../model/recipe-picture";
 import { Cache, CACHE_MEMBERS } from "../shared/cache/cache";
 import { ConfirmDialogConfiguration } from '../standard-dialogs/standard-dialog.service';
+import { MediaTransformations } from '../services/media-service';
 
 @Component({
   selector: 'app-recipe',
@@ -124,7 +125,17 @@ export class RecipeComponent implements OnInit, DataLossPreventionInterface {
               this.model = null;
             }
             else {
-              this.model = (response.entities[0] as Recipe);
+
+              let recipe: Recipe = (response.entities[0] as Recipe);
+
+              //Preprocessing recipe pictures:
+              if (recipe.pictures && recipe.pictures.length > 0) {
+                recipe.pictures.forEach((p: RecipePicture) => {
+                  p.transformationURL = this.core.media.getTransformationURL(p.pictureId.publicId, p.pictureId.cloudName, MediaTransformations.uploadedPicturesView);
+                })
+              }
+
+              this.model = recipe;
               this.core.setPageTitle(`Editando "${this.model.name}" ...`);
             }
 

@@ -9,6 +9,12 @@ import { RecipePicture } from '../model/recipe-picture';
 import { ConfirmDialogConfiguration } from "../standard-dialogs/standard-dialog.service";
 import { CarouselItem } from '../shared/carousel/carousel.component';
 import { APIQueryParams, QUERY_PARAM_PUB, QUERY_PARAM_OWNER } from '../services/api-query-params';
+import { MediaTransformations } from '../services/media-service';
+
+/**
+ * Size of each data page.
+ */
+const CAROUSEL_HEIGHT_PERC: number = 60;
 
 @Component({
   selector: 'app-recipe-view',
@@ -88,13 +94,15 @@ export class RecipeViewComponent implements OnInit {
 
   buildCarouselPictureList(): void {
     this.carouselPictures = [];
+    let screenHeight: number = this.core.helper.getScreenSize().height * (CAROUSEL_HEIGHT_PERC/100);
 
     if (this.model && this.model.pictures) {
 
       this.model.pictures.forEach((pic: RecipePicture) => {
         let item: CarouselItem = new CarouselItem();
 
-        item.imageSrc = this.core.media.getTransformationURL(pic.pictureId.publicId, pic.pictureId.cloudName)
+        item.imageSrc = this.core.media.getTransformationURL(pic.pictureId.publicId, pic.pictureId.cloudName,
+          MediaTransformations.autoCropping(screenHeight, pic.attributes.height));
         item.captionText = pic.caption
         this.carouselPictures.push(item);
       })
