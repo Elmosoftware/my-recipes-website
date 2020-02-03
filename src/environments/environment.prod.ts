@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
   appName: "Mi Cocina",
-  appVersion: "1.0.3",
+  appVersion: "1.0.4",
   appURL: "https://micocina.herokuapp.com",
   apiURL: "https://micocina-api.herokuapp.com/api/",
   apiManagementEndpoint: "management/",
