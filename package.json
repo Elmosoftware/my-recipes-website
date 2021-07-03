@@ -42,7 +42,7 @@
     "ngx-page-scroll": "^6.0.2",
     "ngx-page-scroll-core": "^6.0.2",
     "ngx-select-ex": "^3.7.6",
-    "ngx-toastr": "^9.2.0",
+    "ngx-toastr": "^11.3.3",
     "rxjs": "^6.5.4",
     "tslib": "^1.9.0",
     "zone.js": "~0.9.1"
