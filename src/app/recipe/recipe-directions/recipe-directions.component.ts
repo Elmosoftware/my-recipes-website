@@ -55,7 +55,7 @@ export class RecipeDirectionsComponent implements OnInit, RecipeSubcomponentInte
 
   //#endregion
 
-  @ViewChild("directionsForm", {static: false}) form: FormGroup;
+  @ViewChild("directionsForm") form: FormGroup;
   newDirection: string;
   missingIngredients: string[];
   wordAnalyzer: WordAnalyzerService;

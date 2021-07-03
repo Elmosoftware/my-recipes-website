@@ -36,7 +36,7 @@ export class RecipePublishingComponent implements OnInit, RecipeSubcomponentInte
 
   //#endregion
 
-  @ViewChild("publishedForm", { static: false }) form: FormGroup;
+  @ViewChild("publishedForm") form: FormGroup;
 
   set isPublished(value: boolean) {
 

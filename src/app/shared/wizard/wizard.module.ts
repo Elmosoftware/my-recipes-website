@@ -43,7 +43,7 @@ export * from './wizard-step.component';
   ]
 })
 export class WizardModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<WizardModule> {
     return {
       ngModule: WizardModule
     };

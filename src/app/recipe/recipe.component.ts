@@ -24,7 +24,7 @@ import { MediaTransformations } from '../services/media-service';
 })
 export class RecipeComponent implements OnInit, DataLossPreventionInterface {
 
-  @ViewChild('wizard', {static: false}) wizard: WizardComponent;
+  @ViewChild('wizard') wizard: WizardComponent;
 
   activeTab: RECIPE_TABS;
   activatedTabSignal: BehaviorSubject<RECIPE_TABS>;

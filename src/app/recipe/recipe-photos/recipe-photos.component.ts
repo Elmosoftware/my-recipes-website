@@ -49,7 +49,7 @@ export class RecipePhotosComponent implements OnInit, RecipeSubcomponentInterfac
 
   //#endregion
 
-  @ViewChild("photosForm", { static: false }) form: FormGroup;
+  @ViewChild("photosForm") form: FormGroup;
   uploadProgress: number;
   uploadStatus: UPLOAD_STATUS;
 

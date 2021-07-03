@@ -37,7 +37,7 @@ export class RecipeDetailsComponent implements OnInit, RecipeSubcomponentInterfa
 
   //#endregion
 
-  @ViewChild("detailsForm", { static: false }) form: FormGroup;
+  @ViewChild("detailsForm") form: FormGroup;
 
   get preparationFriendlyTime(): string {
     let ret: string = "";
