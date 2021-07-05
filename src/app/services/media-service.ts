@@ -13,7 +13,6 @@ import { CarouselItem } from "../shared/carousel/carousel.component";
 import { StaticAssets } from "../static/static-assets";
 import { AuthService } from './auth-service';
 import { RecipePicture } from "../model/recipe-picture";
-import { isArray } from 'util';
 import { LoggingService } from "../services/logging-service";
 
 export const enum TRANSF_IMAGE_FORMATS {
@@ -111,7 +110,7 @@ export class MediaService {
     //will fallback to this static placeholder.
     let cover: RecipePicture;
 
-    if (pictures && isArray(pictures) && pictures.length > 0) {
+    if (pictures && Array.isArray(pictures) && pictures.length > 0) {
       cover = pictures.find((p: RecipePicture) => {
         return p.isCover; //Find the Cover picture.
       })
