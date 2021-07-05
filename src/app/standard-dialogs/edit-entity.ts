@@ -30,7 +30,7 @@ export class EditEntity {
       
         But the proposed solution is to change manually the CSS file, i think the best is to override the value dinamically. 
         */
-        this.dialogRef.afterOpen().subscribe(() => {
+        this.dialogRef.afterOpened().subscribe(() => {
 
             let dlg = document.getElementsByTagName("mat-dialog-container");
 
